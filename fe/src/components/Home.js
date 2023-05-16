@@ -16,59 +16,33 @@ export default function Home() {
                         <button type="button" data-bs-target="#demo" data-bs-slide-to={1} />
                         <button type="button" data-bs-target="#demo" data-bs-slide-to={2} />
                     </div>
-                    {/* The slideshow/carousel */}
                     <div className="carousel-inner">
                         <div className="carousel-item active">
                             <img
-                                src="https://file.hstatic.net/200000259653/file/beaux-slider-bg3_e8a7791f2e494ae_cd6b728ecdfe4ce1bc3bed52000a01e4.jpg"
+                                src="dieucosmetics.png"
                                 alt="New York"
                                 className="d-block"
                                 style={{ width: "100%", height: 600, backgroundSize: 'cover' }}
                             />
 
-                            {/* <div className="carousel-caption">
-                                <h2 className="text-slide text-start">KHU NGHỈ DƯỠNG ẨM THỰC </h2>
-                                <h2 className="text-slide text-start">
-                                    TỌA LẠC TẠI BÃI BIỂN ĐÀ NẴNG{" "}
-                                </h2>
-                                <h2 className="text-slide text-start">
-                                    MỘT TRONG 6 BÃI BIỂN ĐẸP NHẤT THẾ GIỚI{" "}
-                                </h2>
-                            </div> */}
+                    
                         </div>
                         <div className="carousel-item">
                             <img
-                                src="https://tronhouse.com/assets/data/editor/source/bi-quyet-chup-hinh-my-pham-gay-an-tuong-voi-nguoi-xem/chup-hinh-my-pham-8.jpg"
+                                src="https://theme.hstatic.net/1000373343/1000671881/14/slideshow_1.jpg?v=81"
                                 alt=""
                                 className="d-block"
                                 style={{ width: "100%", height: 600, backgroundSize: 'cover' }}
                             />
-                            {/* <div className="carousel-caption">
-                                <h2 className="text-slide text-start">KHU NGHỈ DƯỠNG ẨM THỰC </h2>
-                                <h2 className="text-slide text-start">
-                                    TỌA LẠC TẠI BÃI BIỂN ĐÀ NẴNG{" "}
-                                </h2>
-                                <h2 className="text-slide text-start">
-                                    MỘT TRONG 6 BÃI BIỂN ĐẸP NHẤT THẾ GIỚI{" "}
-                                </h2>
-                            </div> */}
+                         
                         </div>
                         <div className="carousel-item">
                             <img
-                                src="https://ressmedia.com/wp-content/uploads/2021/07/ANH-2-22.jpg"
+                                src="https://theme.hstatic.net/1000373343/1000671881/14/slideshow_3.jpg?v=81"
                                 alt=""
                                 className="d-block"
                                 style={{ width: "100%", height: 600, backgroundSize: 'cover' }}
                             />
-                            {/* <div className="carousel-caption">
-                                <h2 className="text-slide text-start">KHU NGHỈ DƯỠNG ẨM THỰC </h2>
-                                <h2 className="text-slide text-start">
-                                    TỌA LẠC TẠI BÃI BIỂN ĐÀ NẴNG{" "}
-                                </h2>
-                                <h2 className="text-slide text-start">
-                                    MỘT TRONG 6 BÃI BIỂN ĐẸP NHẤT THẾ GIỚI{" "}
-                                </h2>
-                            </div> */}
                         </div>
                     </div>
                     <button
@@ -90,7 +64,7 @@ export default function Home() {
                 </div>
             </div>
             <section class="service-policy-area section-space container">
-                <div ><h2 className='text-center bg-home text-secondary py-3'>HOT TRONG THÁNG QUA</h2></div>
+                <div ><h2 className='text-center bg-home text-secondary py-3'>SẢN PHẨM KHUYẾN MÃI</h2></div>
                 <hr className='mx-5' />
                 <div className='container'>
                     <div id="carouselExampleControls" class="carousel carousel-dark slide " data-bs-ride="carousel">
@@ -191,9 +165,9 @@ export default function Home() {
             <div className="container px-0">
                 <div className="row mx-0 mt-2 mb-5 ms-5">
                     <div className="col-4">
-                        <h3 style={{ color: 'GrayText', marginTop: 20 }}>
-                        Tất cả đều là Mỹ phẩm Thảo dược và nó được bào chế, sử dụng các thành phần mỹ phẩm thảo dược được phép khác nhau, là các sản phẩm 100% từ Thảo dược nguyên chất và an toàn.
-                        </h3>
+                        <h4 style={{ color: 'GrayText', marginTop: 20 }}>
+                            Tất cả đều là Mỹ phẩm Thảo dược và nó được bào chế, sử dụng các thành phần mỹ phẩm thảo dược được phép khác nhau, là các sản phẩm 100% từ Thảo dược nguyên chất và an toàn.
+                        </h4>
                     </div>
                     <div className="col-4">
                         <img
@@ -203,21 +177,21 @@ export default function Home() {
                         />
                     </div>
                     <div className="col-4">
-                        <h3 style={{ textAlign: "center", color: 'GrayText', paddingTop: 20}}>
+                        <h3 style={{ textAlign: "center", color: 'GrayText', paddingTop: 20 }}>
                             KEM DƯỠNG MẶT THẢO DƯỢC
                         </h3>
                         <h6 style={{
-                                color: 'black',
-                                lineHeight: 2,
-                                fontFamily: '"Cormorant Infant", "serif"'
-                            }}>
-                           Chứa thành phần dưỡng chất của Aloe Vera, Vitamin E và Vitamin B5, do đó nó làm dịu và làm mềm làn da của bạn và mang lại cho bạn một làn da sáng tự nhiên trên khuôn mặt của bạn.
+                            color: 'black',
+                            lineHeight: 2,
+                            fontFamily: '"Cormorant Infant", "serif"'
+                        }}>
+                            Chứa thành phần dưỡng chất của Aloe Vera, Vitamin E và Vitamin B5, do đó nó làm dịu và làm mềm làn da của bạn và mang lại cho bạn một làn da sáng tự nhiên trên khuôn mặt của bạn.
                         </h6>
                     </div>
                 </div>
                 <div className="row mx-0 bg-home text-white shadow">
                     <div className="row container mx-0 px-0">
-                        <div className="col-6 px-0">
+                        <div className="column col-6 px-0 figure" id="zoomIn">
                             <img className="w-100 h-100 " src="https://theme.hstatic.net/200000384051/1000742014/14/home_about_img.jpg?v=1609" />
                         </div>
                         <div className="col-6 mt-2">
@@ -238,7 +212,7 @@ export default function Home() {
 
                 <div className="row mx-0 shadow">
                     <div className="row container mx-0 px-0 ">
-                        <div className="col-6 mt-2 px-0">
+                        <div className="col-6 mt-2 px-0" >
                             <h3 style={{ textAlign: "center", color: 'GrayText', paddingTop: 30 }}>PHÂN PHỐI ĐA DẠNG CÁC DÒNG SẢN PHẨM</h3>
                             <h6 style={{
                                 color: 'black',
@@ -250,7 +224,7 @@ export default function Home() {
                             }}>
                                 DieuCosmetics hiện đang phân phối các dòng mỹ phẩm trang điểm: Kem lót, kem nền, phấn nước cushion, kem che khuyết điểm, phấn phủ, bút kẻ chân mày, phấn má hồng, chì kẻ mắt, mascara, phấn mắt, kem chống nắng, son môi. Một vài sản phẩm skin care: Serum dưỡng dài mi, các sản phẩm nước tẩy trang (dạng nước, dạng dầu, dạng kem), sữa rửa mặt. Dịu nhẹ, thích hợp với da nhạy cảm, mụn dầu của các cô gái Á Đông. Giúp bạn thoải mái trang điểm mà không lo đổ dầu, nổi mụn hay kích ứng, lâu trôi.                            </h6>
                         </div>
-                        <div className="col-6 px-0">
+                        <div className="col-6 px-0 column figure" id="zoomIn">
                             <img className="w-100 h-100 " src="https://file.hstatic.net/200000259653/file/3_c36448acd2764e8a8d49c4fd740a8523.jpg" />
                         </div>
                     </div>

@@ -7,6 +7,8 @@ import Scroll from './components/Scroll';
 import Login from './components/Login';
 import Home from './components/Home';
 import MainLayout from './components/MainLayout';
+import Detail from './components/Detail';
+import Cart from './components/Cart';
 
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/' element={<MainLayout />}>
             <Route index element={<Home />} />
+            <Route path='/detail' element={<Detail />} />
+            <Route path='/cart' element={<Cart />} />
         </Route>
       </Routes>
     </>

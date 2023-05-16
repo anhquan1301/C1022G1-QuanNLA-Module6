@@ -6,7 +6,8 @@ export default function Login() {
         <div className="login-body">
             <div className="padding-login">
             <div className="wrapper bg-white mt-0">
-                    <div className="text-center"> <img
+                    <div className="text-center"> 
+                    <img
                         width='150px'
                         src="dieucosmetics-logo.png"
                         alt="" /></div>

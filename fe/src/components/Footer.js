@@ -11,33 +11,38 @@ export default function Footer() {
                 <h4
                   className="text-uppercase mb-4"
                   style={{
-                    color: "#cbbe73",
+                    color:  "#F8D5D7",
                     fontWeight: "bold",
                     fontFamily: "Al Nile"
                   }}
                 >
                   Liên Hệ
                 </h4>
-                <p className="text-white">
-                  103 – 105 Đường Võ Nguyên Giáp, Phường Khuê Mỹ, Quận Ngũ hành Sơn,
-                  Tp. Đà Nẵng, Việt Nam 7.0 km từ Sân bay Quốc tế Đà Nẵng
+                <div>
+                <p className="text-footer">
+                <i className="bi bi-geo-alt-fill me-2 " />
+                  05 Đường Bàu Hạc, Phường Vĩnh Trung, Quận Hải Châu,
+                  Tp. Đà Nẵng, Việt Nam 1.0 km từ Sân bay Quốc tế Đà Nẵng
                 </p>
-                <p className="text-white">
-                  Tel.: 84-236-3847 333/888 * Fax: 84-236-3847 666 Email:
-                  reservation@furamavietnam.com www.furamavietnam.com
+                </div>
+                <div>
+                <p className="text-footer">
+                <i className="bi bi-telephone-fill me-2 " />
+                  +(84)905008617
                 </p>
+                </div>
                 <div className="mt-4 ">
                   <a>
-                    <i className="bi bi-facebook fs-4 btn text-white" />
+                    <i className="bi bi-facebook fs-4 btn text-footer" />
                   </a>
                   <a>
-                    <i className="bi bi-youtube fs-4 btn text-white" />
+                    <i className="bi bi-youtube fs-4 btn text-footer" />
                   </a>
                   <a>
-                    <i className="bi bi-twitter fs-4 btn text-white" />
+                    <i className="bi bi-twitter fs-4 btn text-footer" />
                   </a>
                   <a>
-                    <i className="bi bi-instagram fs-4 btn text-white" />
+                    <i className="bi bi-instagram fs-4 btn text-footer" />
                   </a>
                 </div>
               </div>
@@ -45,7 +50,7 @@ export default function Footer() {
                 <h4
                   className="text-uppercase mb-4 pb-1"
                   style={{
-                    color: "#cbbe73",
+                    color: "#F8D5D7",
                     fontWeight: "bold",
                     fontFamily: "Al Nile"
                   }}
@@ -56,7 +61,7 @@ export default function Footer() {
                   <input
                     type="text"
                     id="formControlLg"
-                    className="form-control"
+                    className="form-control input-field-footer"
                     placeholder="Địa chỉ Email..."
                   />
                 </div>
@@ -91,14 +96,14 @@ export default function Footer() {
                 <h4
                   className="text-uppercase mb-4 "
                   style={{
-                    color: "#cbbe73",
+                    color:  "#F8D5D7",
                     fontWeight: "bold",
                     fontFamily: "Al Nile"
                   }}
                 >
                   Giờ Mở Cửa
                 </h4>
-                <table className="table text-center text-white">
+                <table className="table text-center text-footer">
                   <tbody className="fw-normal">
                     <tr>
                       <td>T2 - T5:</td>
@@ -114,7 +119,7 @@ export default function Footer() {
               <div>
                 <img
                   style={{ marginTop: "-120px", marginLeft: 835 }}
-                  src="https://furamavietnam.com/wp-content/uploads/2019/02/Ariyana-Tourism-Complex-02-2.png"
+                  src="Screenshot 2023-05-16 101725.png"
                   alt="Ariyana Tourism Complex"
                   width="500px;"
                 />
@@ -125,9 +130,9 @@ export default function Footer() {
             className="text-center p-3"
             style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
           >
-            © 2023
-            <a className="text-black" href="https://codegym.vn/">
-              codegym.vn
+            
+            <a className="text-footer" href="https://codegym.vn/">
+            © 2023 codegym.vn
             </a>
           </div>
         </div>

@@ -13,7 +13,7 @@ export default function Cart() {
                                 <h2>Giỏ Hàng Của Bạn</h2>
                             </div>
                             <div className="p-0">
-                                <table class="table">
+                                <table class="table table-striped">
                                     <thead>
                                         <tr className="text-center text-secondary align-middle">
                                             <th>Ảnh</th>
@@ -43,7 +43,8 @@ export default function Cart() {
                                                 style={{
                                                     width: '10%'
                                                 }}
-                                            >1.320.000 ₫</td>
+                                            >1.320.000 ₫ 
+                                            </td>
                                             <td
                                                 style={{
                                                     width: '15%'
@@ -56,6 +57,54 @@ export default function Cart() {
                                                     <button onClick={() => setQuantity(quantity + 1)}
                                                         className=" btn-quantity text-dieucosmetics">+</button>
                                                 </div>
+                                            </td>
+                                            <td
+                                                style={{
+                                                    width: '10%'
+                                                }}
+                                            >{(quantity * 1320000).toLocaleString(
+                                                "vi-VN",
+                                                { style: "currency", currency: "VND" }
+                                            )}</td>
+                                            <td
+                                                style={{
+                                                    width: '10%'
+                                                }}
+                                            ><i type='button' class="bi bi-trash text-dieucosmetics fs-3"></i></td>
+                                        </tr>
+                                        <tr className="text-center align-middle fs-6 text-secondary">
+                                            <td
+                                                style={{
+                                                    width: '10%'
+                                                }}
+                                            >
+                                                <img
+                                                    src="https://product.hstatic.net/200000259653/product/kem-duong-body-1_fa01395e01434f56bd9285fad2940826_2bcddff12e7c4874ba9971770b3bb331_master.jpg"
+                                                    width='100%'
+                                                />
+                                            </td>
+                                            <td>
+                                                BODY SPA Rejuvenating Body Lotion
+                                            </td>
+                                            <td
+                                                style={{
+                                                    width: '10%'
+                                                }}
+                                            >1.320.000 ₫ 
+                                            </td>
+                                            <td
+                                                style={{
+                                                    width: '15%'
+                                                }}
+                                            >
+                                                <div>
+                                                    <button onClick={() => setQuantity(quantity - 1)}
+                                                        className={quantity === 1 ? "btn-number text-dieucosmetics" : "btn-quantity text-dieucosmetics"}>-</button>
+                                                    <button className=" btn-number text-dieucosmetics">{quantity}</button>
+                                                    <button onClick={() => setQuantity(quantity + 1)}
+                                                        className=" btn-quantity text-dieucosmetics">+</button>
+                                                </div>
+                                                
                                             </td>
                                             <td
                                                 style={{

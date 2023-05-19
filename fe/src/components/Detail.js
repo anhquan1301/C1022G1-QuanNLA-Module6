@@ -87,8 +87,22 @@ export default function Detail() {
                                 </div>
                                 <hr />
                                 <div className="ms-3">
-                                    <span className="fw-bold text-secondary text-decoration-line-through">{activeButton === 1 ? '1,920,000 ₫' : '3.180.000 ₫'}</span>
-                                    <span className="fs-5 ms-3 text-danger fw-bold"> {activeButton === 1 ? '1.320.000 ₫' : '2.370.000 ₫'}</span>
+                                    <span className="fw-bold text-secondary text-decoration-line-through">{activeButton === 1 ? 
+                                    (quantity * 1920000).toLocaleString(
+                                        "vi-VN",
+                                        { style: "currency", currency: "VND" }
+                                    ) : (quantity * 3180000).toLocaleString(
+                                        "vi-VN",
+                                        { style: "currency", currency: "VND" }
+                                    )}</span>
+                                    <span className="fs-5 ms-3 text-danger fw-bold"> {activeButton === 1 ? 
+                                    (quantity * 1320000).toLocaleString(
+                                        "vi-VN",
+                                        { style: "currency", currency: "VND" }
+                                    ) : (quantity * 2370000).toLocaleString(
+                                        "vi-VN",
+                                        { style: "currency", currency: "VND" }
+                                    )}</span>
                                 </div>
                                 <hr />
                                 <div>

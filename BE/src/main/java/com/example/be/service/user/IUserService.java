@@ -16,5 +16,7 @@ public interface IUserService {
     User findByEmailUser(String email);
 
     void updateOtp(User user);
+    void save(User user);
+    Integer getTotalCodeAmount();
 
 }

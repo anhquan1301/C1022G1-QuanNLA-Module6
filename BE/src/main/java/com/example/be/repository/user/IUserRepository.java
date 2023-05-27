@@ -9,12 +9,11 @@ import org.springframework.data.repository.query.Param;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
-
 public interface IUserRepository extends JpaRepository<User, Integer> {
+
     Optional<User> findByUserName(String username);
     Boolean existsByUserName(String username);
     Boolean existsByEmail(String email);
-
     @Modifying
     @Transactional
     @Query(value = "UPDATE user SET password = :newPassword WHERE id = :id",nativeQuery = true)
@@ -24,4 +23,6 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     @Transactional
     @Query(value = "UPDATE user set expiry_time = :expiryTime , otp_secret = :otpSecret where email = :email",nativeQuery = true)
     void updateOtp(@Param("expiryTime") LocalDateTime expiryTime, @Param("otpSecret")String otpSecret, @Param("email")String email);
+    @Query(value = "select count(id) from user", nativeQuery = true)
+    Integer getTotalCodeAmount();
 }

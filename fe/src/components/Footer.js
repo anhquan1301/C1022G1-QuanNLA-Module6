@@ -117,12 +117,12 @@ export default function Footer() {
                 </table>
               </div>
               <div>
-                <img
+                {/* <img
                   style={{ marginTop: "-120px", marginLeft: 835 }}
                   src="Screenshot 2023-05-16 101725.png"
                   alt="Ariyana Tourism Complex"
                   width="500px;"
-                />
+                /> */}
               </div>
             </div>
           </div>

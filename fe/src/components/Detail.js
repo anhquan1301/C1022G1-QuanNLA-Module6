@@ -12,7 +12,7 @@ export default function Detail() {
         <>
             <div className=" bg-home">
                 <div className="p-5">
-                    <div className="container bg-white shadow">
+                    <div className="container bg-white shadow-cosmetics">
                         <div className="row mx-0" style={{ marginTop: 117 }}>
                             <div className="col-2">
                                 <div className="carousel-indicators-1 mt-5 pt-3">
@@ -21,7 +21,7 @@ export default function Detail() {
                                             src="https://product.hstatic.net/200000259653/product/kem-duong-body-1_fa01395e01434f56bd9285fad2940826_2bcddff12e7c4874ba9971770b3bb331_master.jpg"
                                             data-bs-target="#demo"
                                             data-bs-slide-to={0}
-                                            className=" float-end"
+                                            className="float-end"
                                         />
                                         {/* <img src="https://myphamngoainhap.vn/upload/2021/image-skincare-body-1.jpg" data-bs-target="#demo" data-bs-slide-to={2} /> */}
                                     </div>

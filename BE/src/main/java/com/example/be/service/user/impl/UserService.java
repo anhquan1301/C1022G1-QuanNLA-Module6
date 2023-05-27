@@ -53,4 +53,14 @@ public class UserService implements IUserService {
     public void updateOtp(User user) {
         iUserRepository.updateOtp(user.getExpiryTime(), user.getOtpSecret(), user.getEmail());
     }
+
+    @Override
+    public void save(User user) {
+        iUserRepository.save(user);
+    }
+
+    @Override
+    public Integer getTotalCodeAmount() {
+        return iUserRepository.getTotalCodeAmount();
+    }
 }

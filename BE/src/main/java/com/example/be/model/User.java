@@ -30,8 +30,7 @@ public class User {
     private Integer id;
     private String code;
     private String name;
-    @Column(columnDefinition = "BIT")
-    private String gender;
+    private boolean gender;
     @Column(name = "date_of_birth")
     private String dateOfBirth;
     @Column(columnDefinition = "TEXT")
@@ -51,6 +50,35 @@ public class User {
     @OneToMany(mappedBy = "user")
     Set<OderProduct> oderProducts = new HashSet<>();
     public User() {
+    }
+
+    public User(Set<Role> roles, Integer id, String code, String name, boolean gender, String dateOfBirth, String address, String email, String phoneNumber, String userName, String password, String avatar, LocalDateTime expiryTime, String otpSecret, Set<OderProduct> oderProducts) {
+        this.roles = roles;
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.userName = userName;
+        this.password = password;
+        this.avatar = avatar;
+        this.expiryTime = expiryTime;
+        this.otpSecret = otpSecret;
+        this.oderProducts = oderProducts;
+    }
+
+    public User(String name, String address, String dateOfBirth, String email, boolean gender, String phoneNumber, String userName, String password) {
+        this.name = name;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.userName = userName;
+        this.password = password;
     }
 
     public Set<OderProduct> getOderProducts() {
@@ -93,11 +121,11 @@ public class User {
         this.name = name;
     }
 
-    public String getGender() {
+    public boolean getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(boolean gender) {
         this.gender = gender;
     }
 

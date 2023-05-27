@@ -13,7 +13,7 @@ export default function Cart() {
                                 <h2>Giỏ Hàng Của Bạn</h2>
                             </div>
                             <div className="p-0">
-                                <table class="table table-striped">
+                                <table className="table table-striped">
                                     <thead>
                                         <tr className="text-center text-secondary align-middle">
                                             <th>Ảnh</th>
@@ -70,7 +70,7 @@ export default function Cart() {
                                                 style={{
                                                     width: '10%'
                                                 }}
-                                            ><i type='button' class="bi bi-trash text-dieucosmetics fs-3"></i></td>
+                                            ><i type='button' className="bi bi-trash text-dieucosmetics fs-3"></i></td>
                                         </tr>
                                         <tr className="text-center align-middle fs-6 text-secondary">
                                             <td
@@ -118,7 +118,7 @@ export default function Cart() {
                                                 style={{
                                                     width: '10%'
                                                 }}
-                                            ><i type='button' class="bi bi-trash text-dieucosmetics fs-3"></i></td>
+                                            ><i type='button' className="bi bi-trash text-dieucosmetics fs-3"></i></td>
                                         </tr>
                                     </tbody>
                                 </table>

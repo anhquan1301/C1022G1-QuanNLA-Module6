@@ -3,14 +3,18 @@ package com.example.be.controller.auth;
 import com.example.be.dto.mailDTO.MailDTO;
 import com.example.be.dto.mailDTO.OtpDTO;
 import com.example.be.dto.request.ChangePasswordRequest;
+import com.example.be.dto.request.RegisterForm;
 import com.example.be.dto.request.ResetPasswordRequest;
 import com.example.be.dto.request.SignInForm;
 import com.example.be.dto.response.JwtResponse;
 import com.example.be.dto.response.ResponseMessage;
+import com.example.be.model.Role;
+import com.example.be.model.RoleName;
 import com.example.be.model.User;
 import com.example.be.security.JwtTokenProvider;
 import com.example.be.security.UserPrinciple;
 import com.example.be.service.mail.IEmailService;
+import com.example.be.service.role.IRoleService;
 import com.example.be.service.user.IUserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -22,6 +26,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -29,9 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin("*")
@@ -45,7 +48,53 @@ public class AuthRestController {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private IEmailService iEmailService;
-
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    IRoleService iRoleService;
+    @PostMapping("/register")
+    public ResponseEntity<?>register(@RequestBody RegisterForm registerForm){
+        if (Boolean.TRUE.equals(iUserService.existsByUsername(registerForm.getUsername()))) {
+            return new ResponseEntity<>(new ResponseMessage("Tài khoản đã tồn tại"), HttpStatus.BAD_REQUEST);
+        }
+        if (Boolean.TRUE.equals(iUserService.existsByEmail(registerForm.getEmail()))) {
+            return new ResponseEntity<>(new ResponseMessage("Email đã tồn tại"), HttpStatus.BAD_REQUEST);
+        }
+//        if(registerForm.getAvatar() == null || registerForm.getAvatar().trim().isEmpty()){
+//            registerForm.setAvatar("https://i.pinimg.com/736x/c6/e5/65/c6e56503cfdd87da299f72dc416023d4.jpg");
+//        }
+        User user = new User(
+                registerForm.getName(),
+                registerForm.getAddress(),
+                registerForm.getDateOfBirth(),
+                registerForm.getEmail(),
+                registerForm.getGender(),
+                registerForm.getPhoneNumber(),
+                registerForm.getUsername(),
+                passwordEncoder.encode(registerForm.getPassword()));
+        if (!registerForm.getPassword().equals(registerForm.getConfirmPassword())) {
+            return new ResponseEntity<>(new ResponseMessage("Mật khẩu xác nhận không trùng khớp"), HttpStatus.BAD_REQUEST);
+        }
+        Set<String> strRoles = registerForm.getRoles();
+        Set<Role> roles = new HashSet<>();
+        strRoles.forEach(role ->{
+            switch (role){
+                case "admin":
+                    Role adminRole = iRoleService.findByName(RoleName.ROLE_ADMIN).orElseThrow( ()-> new RuntimeException("Không tìm thấy quyền"));
+                    roles.add(adminRole);
+                    break;
+                default:
+                    Role userRole = iRoleService.findByName(RoleName.ROLE_USER).orElseThrow( ()-> new RuntimeException("Không tìm thấy quyền"));
+                    roles.add(userRole);
+            }
+        });
+        user.setRoles(roles);
+        int id = iUserService.getTotalCodeAmount() + 1000;
+        user.setCode("KH" + id);
+        user.setAvatar("https://antimatter.vn/wp-content/uploads/2022/11/anh-avatar-trang-fb-mac-dinh.jpg");
+        iUserService.save(user);
+        return new ResponseEntity<>(new ResponseMessage("Đăng ký thành công"),HttpStatus.CREATED);
+    }
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated @RequestBody SignInForm signInForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -58,7 +107,7 @@ public class AuthRestController {
             }
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         } else if (Boolean.FALSE.equals(iUserService.existsByUsername(signInForm.getUsername()))) {
-            return new ResponseEntity<>(new ResponseMessage("Tên người dùng không tồn tại"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseMessage("Tài khoản không tồn tại"), HttpStatus.BAD_REQUEST);
         } else {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(signInForm.getUsername(), signInForm.getPassword())
@@ -69,7 +118,6 @@ public class AuthRestController {
             return ResponseEntity.ok(new JwtResponse(token, userPrinciple.getUsername(), userPrinciple.getAvatar(), userPrinciple.getAuthorities(),userPrinciple.getName()));
         }
     }
-
 
     @PutMapping("/change-password")
     public ResponseEntity<?> changePassword(HttpServletRequest request, @Validated @RequestBody ChangePasswordRequest changePasswordRequest, BindingResult bindingResult) {
@@ -96,7 +144,7 @@ public class AuthRestController {
         } else {
             return new ResponseEntity<>(new ResponseMessage("Mã JWT không chính xác"), HttpStatus.BAD_REQUEST);
         }
-        User user = iUserService.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Tên người dùng không tồn tại"));
+        User user = iUserService.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Tài khoản không tồn tại"));
         if (Boolean.FALSE.equals(iUserService.checkIfValidOldPassword(user, changePasswordRequest.getOldPassword()))) {
             return new ResponseEntity<>(new ResponseMessage("Mật khẩu hiện tại không đúng"), HttpStatus.BAD_REQUEST);
         }

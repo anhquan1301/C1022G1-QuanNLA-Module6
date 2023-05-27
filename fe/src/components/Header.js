@@ -5,6 +5,7 @@ export default function Header() {
   const navigate = useNavigate()
   const handleLogout = () => {
     localStorage.removeItem('token')
+    localStorage.removeItem('avatar')
     navigate('/login')
   }
   return (
@@ -68,7 +69,7 @@ export default function Header() {
             </ul>
 
             <div className="fs-5 search-container">
-              <i class="bi bi-search">
+              <i className="bi bi-search">
                 <span className='ms-2 position-absolute' style={{
                   bottom: '3px'
                 }}>|</span>
@@ -119,11 +120,11 @@ export default function Header() {
                           className="dropdown-menu p-0"
                           aria-labelledby="navbarDropdownMenuAvatar"
                         >
-                          {/* <li>
-                                  <NavLink to='/employee' className="dropdown-item">
+                          <li>
+                                  <NavLink to='/customer/detail' className="dropdown-item button-buy">
                                       Thông tin cá nhân
                                   </NavLink>
-                              </li> */}
+                              </li>
                           <li>
                             <button onClick={handleLogout} className="dropdown-item button-buy" href="#">
                               Đăng xuất

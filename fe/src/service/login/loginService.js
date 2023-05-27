@@ -1,9 +1,21 @@
 import request from "../../request"
 
 const login = (value)=>{
-    return request.post('/login', { ...value })
+    try {
+        return request.post('/login', { ...value })
+    } catch (error) {
+        return error
+    }
+    
 }
-
+const register = (value)=>{
+    try {
+        return request.post('/register', { ...value })
+    } catch (error) {
+        return error
+    }
+    
+}
 const changePassword = (value)=>{
     const token = localStorage.getItem('token')
     return request.put('/change-password',{ ...value }, {
@@ -30,6 +42,7 @@ const loginService = {
     changePassword,
     forgotPassword,
     checkOtp,
-    resetPassword
+    resetPassword,
+    register
 }
 export default loginService

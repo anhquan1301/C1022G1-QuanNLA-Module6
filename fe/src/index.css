@@ -215,7 +215,9 @@ code {
 .padding-login{
   padding-top: 150px;
 }
-
+.padding-register{
+  padding-top: 100px;
+}
 .login-body {
     background-color: #eee;
     height: 100vh;
@@ -225,10 +227,10 @@ code {
 
 .wrapper {
     max-width: 500px;
-    border-radius: 10px;
+    border-radius: 0px;
     margin: auto;
     padding: 30px 40px;
-    box-shadow: 20px 20px 80px rgb(130, 67, 93)
+    box-shadow: 0px 0px 10px 5px rgb(202, 112, 154)
 }
 
 .h2 {
@@ -238,21 +240,50 @@ code {
     color: #400485;
     font-style: italic
 }
-
+.wrapper-1{
+  max-width: 700px;
+    border-radius: 0px;
+    margin: auto;
+    padding: 30px 40px;
+    box-shadow: 0px 0px 10px 5px rgb(202, 112, 154)
+}
 .h4 {
     font-family: 'Poppins', sans-serif
 }
 
 .input-field {
-    border-radius: 5px;
-    padding: 5px;
+  margin-top: 12px;
+    padding-left: 10px;
     display: flex;
     align-items: center;
     cursor: pointer;
     border: 1px solid rgb(202, 112, 154);
+    border-radius: 0;
     color: rgb(202, 112, 154)
 }
-
+.input-field-1 {
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  /* cursor: pointer; */
+  border: 1px solid rgb(202, 112, 154);
+  border-radius: 0;
+  padding-left: 10px;
+  /* color: rgb(202, 112, 154) */
+}
+.text-register{
+  color: rgb(202, 112, 154);
+  /* padding-left: 10px; */
+}
+.form-check-input:checked {
+  background-color: rgb(202, 112, 154);
+  border-color: rgb(202, 112, 154);
+}
+.form-check-input[type=radio] {
+  border-color: rgb(202, 112, 154);;
+  border-radius: 50%;
+}
 .input-field:hover {
     color: rgb(202, 112, 154);
     border: 1px solid rgb(202, 112, 154)
@@ -265,9 +296,20 @@ code {
     height: 30px;
     width: 100%;
     padding: 0px 2px;
-    font-family: 'Poppins', sans-serif
+    font-family: Georgia, 'Times New Roman', Times, serif, 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
 }
+.input-login-1 {
+ 
+  border: none;
+  outline: none;
+  box-shadow: none;
+  display: flex;
+  align-content: center;
+  height: 30px;
 
+  width: 100%;
+  font-family: Georgia, 'Times New Roman', Times, serif, 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
 .fa-eye-slash.btn {
     border: none;
     outline: none;
@@ -425,13 +467,18 @@ code {
     opacity: .5;
     transition: opacity .6s ease;
 }
+
 .carousel-indicators-1 [data-bs-target]:hover{
   opacity: 1;
   box-shadow: 0px 0px 10px #c7bfbf;
   border-color: rgb(202, 112, 154);
 }
+.carousel-indicators-1 [data-bs-target].active{
+  opacity: 1;
+  box-shadow: 0px 0px 10px  #c7bfbf;
+  border-color: rgb(202, 112, 154);
 
-
+}
 ::marker {
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;
@@ -529,4 +576,56 @@ code {
   border-right: 0.3em solid transparent;
   border-bottom: 0;
   border-left: 0.3em solid transparent;
+}
+.hr-dieucosmetics{
+  border: 1px solid;
+  border-color: rgb(202, 112, 154);
+}
+.carousel-indicators [data-bs-target] {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 1px solid;
+  border-radius: 10px;
+  border-color: rgb(202, 112, 154);
+  margin-right: 3px;
+  margin-left: 3px;
+  margin-top: 30px;
+  background-color: rgb(202, 112, 154);
+  background-clip: border-box;
+  transition: opacity .6s ease;
+}
+.img-producer{
+  opacity: 0.5;
+}
+.img-producer:hover{
+  opacity: 1;
+}
+.bi-eye{
+  color: rgb(202, 112, 154);
+}
+.bi-eye-slash{
+  color: rgb(202, 112, 154);
+}
+.shadow-cosmetics{
+  box-shadow: 0px 0px 10px 5px #d4969a
+}
+.shadow-cosmetics-1{
+  box-shadow: 0px 0px 5px 4px #d4969a
+}
+.border-avatar{
+  border: 4px solid;
+  border-color: #d4969a;
+  
+}
+.th-dieucosmetics{
+    height:50px
+}
+.dropdown-item.active, .dropdown-item:active {
+  color:white;
+  text-decoration: none;
+  background-color: #d4969a;
+}
+.font-table{
+  font-family: Arial;
 }

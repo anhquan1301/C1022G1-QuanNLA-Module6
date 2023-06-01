@@ -90,7 +90,7 @@ public class AuthRestController {
         });
         user.setRoles(roles);
         int id = iUserService.getTotalCodeAmount() + 1000;
-        user.setCode("KH" + id);
+        user.setCode("KH-" + id);
         user.setAvatar("https://antimatter.vn/wp-content/uploads/2022/11/anh-avatar-trang-fb-mac-dinh.jpg");
         iUserService.save(user);
         return new ResponseEntity<>(new ResponseMessage("Đăng ký thành công"),HttpStatus.CREATED);

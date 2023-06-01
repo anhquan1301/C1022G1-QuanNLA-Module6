@@ -1,13 +1,44 @@
+import { useEffect, useState } from 'react'
+import customerService from "../service/login/customer/customerService"
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AvatarContext } from './AvatarContext';
 export default function Header() {
   const token = localStorage.getItem('token')
-  const avatar = localStorage.getItem('avatar')
+  const [customerDetail, setCustomerDetail] = useState()
+  const [avatarDetail,setAvatarDetail] = useState()
   const navigate = useNavigate()
+  const { avatar,setAvatar } = useContext(AvatarContext);
+  const [searchInput, setSearchInput] = useState('');
   const handleLogout = () => {
     localStorage.removeItem('token')
-    localStorage.removeItem('avatar')
     navigate('/login')
+    setAvatar('')
   }
+  const handleSearch = (event) => {
+    const keyword = event.target.value;
+    setSearchInput(keyword);
+  };
+  useEffect(() => {
+    const detail = async () => {
+        try {
+            const res = await customerService.detail()
+            setCustomerDetail(res.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    detail()
+}, [token])
+useEffect(()=>{
+  setAvatarDetail(customerDetail?.avatar)
+},[customerDetail?.avatar])
+const handleSearchProduct = (event)=>{
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    navigate(`/product?search=${searchInput}`)
+  }
+}
   return (
     <>
       <header className=''>
@@ -22,7 +53,7 @@ export default function Header() {
               style={{ marginRight: "-220px" }}>
               <img
                 width='150px'
-                src="dieucosmetics-logo.png"
+                src="/dieucosmetics-logo.png"
                 alt="" />
             </a>
             <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
@@ -43,12 +74,12 @@ export default function Header() {
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
+                <NavLink
+                  to={'/product'}
                   className="nav-link  px-4  text-secondary text-hover"
                 >
                   SẢN PHẨM
-                </a>
+                </NavLink>
               </li>
               <li>
                 <a
@@ -74,27 +105,16 @@ export default function Header() {
                   bottom: '3px'
                 }}>|</span>
               </i>
-              <input type='text' className='form-control search-product ' placeholder='Tìm kiếm sản phẩm' />
+              <input type='text' className='form-control search-product' value={searchInput} onKeyDown={handleSearchProduct} onChange={handleSearch} placeholder='Tìm kiếm sản phẩm' />
+              {/* <NavLink to={`/product/${searchInput}`}>Tìm kiếm</NavLink> */}
             </div>
             <div className="me-5 fs-4 ">
               <div className='float-start'>
                 {
-                  token === null ? <NavLink to={'/login'} type="button" className=" ms-5 bi bi-person ">
+                  token === null ? 
+                  <NavLink to={'/login'} type="button" className=" ms-5 bi bi-person ">
                   </NavLink> :
-                    // <div className='fs-6' style={{
-                    //   width:'40px',
-                    //   height:'40px'
-                    // }} >
-                    // <img
-                    //               src={avatar}
-                    //               className="rounded-circle border border-2 border-color"
-                    //               alt="avatar"
-                    //               width={'100%'}
-                    //               height={'100%'}
-                    //           />
-                    // </div>
                     <div className=" ms-5">
-                      {/* Avatar */}
                       <div className="dropdown">
                         <a
                           className="dropdown-toggle d-flex align-items-center hidden-arrow"
@@ -108,7 +128,7 @@ export default function Header() {
                             height: '40px'
                           }} >
                             <img
-                              src={avatar}
+                              src={ avatar === '' ? avatarDetail : avatar}
                               className="rounded-circle border border-2 border-color"
                               alt="avatar"
                               width={'100%'}
@@ -137,8 +157,8 @@ export default function Header() {
 
               </div>
               <div className='float-end cart-container'>
-                <i type="button" className=" ms-3 me-5 pe-5 bi bi-cart3 ">
-                </i>
+                <NavLink to={'/cart'} className=" ms-3 me-5 pe-5 bi bi-cart3 ">
+                </NavLink>
                 <span className='me-5 pe-5 cart-number'>0</span>
               </div>
             </div>

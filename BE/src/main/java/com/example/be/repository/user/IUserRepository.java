@@ -25,4 +25,15 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     void updateOtp(@Param("expiryTime") LocalDateTime expiryTime, @Param("otpSecret")String otpSecret, @Param("email")String email);
     @Query(value = "select count(id) from user", nativeQuery = true)
     Integer getTotalCodeAmount();
+    @Modifying
+    @Transactional
+    @Query(value = "update user set name = :name, gender = :gender, date_of_birth = :dateOfBirth,address = :address,email = :email,phone_number = :phoneNumber, avatar = :avatar where id = :id",nativeQuery = true)
+    void UpdateCustomer(@Param("name")String name,
+                        @Param("gender")boolean gender,
+                        @Param("dateOfBirth")String date,
+                        @Param("address")String address,
+                        @Param("email")String email,
+                        @Param("phoneNumber")String phoneNumber,
+                        @Param("avatar")String avatar,
+                        @Param("id")Integer id);
 }

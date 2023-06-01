@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 export default function Footer() {
   return (
     <>
-      <footer className="container-fluid p-0 mt-4">
+      <footer className="container-fluid p-0 ">
         <div className="ext-center text-lg-start bg-footer">
           <div className="container p-4">
             <div className="row mt-4 mx-0">

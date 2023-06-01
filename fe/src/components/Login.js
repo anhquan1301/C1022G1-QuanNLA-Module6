@@ -57,8 +57,8 @@ export default function Login() {
         <>
             <div className="login-body" style={
                 showFormEmail || showOtpModal || showFormResetPass ?
-                    { opacity:0.5,backgroundColor: '#000000', } : {}
-            }>
+                    { opacity:0.7} : {}
+                    }>
                 <div className="padding-login">
                     <Formik
                         initialValues={{
@@ -72,7 +72,6 @@ export default function Login() {
                                     navigate('/')
                                     console.log(res);
                                     localStorage.setItem('token', res.data.token)
-                                    localStorage.setItem('avatar', res.data.avatar)
                                 } catch (error) {
                                     const err = error.response.data;
                                     if (err.username === "Không được bỏ trống") {
@@ -185,10 +184,10 @@ export default function Login() {
                     {({ isSubmitting }) => (
                         <Form>
                             <div
-                                className="modal d-block rounded-circle"
+                                className="modal d-block"
                                 id="exampleModal"
                                 tabIndex={-1}>
-                                <div className="modal-dialog" >
+                                <div className="modal-dialog " >
                                     <div className="modal-content" style={{ marginTop: 270 }}>
                                         <div className="modal-header">
                                             <div className="text-center">
@@ -289,7 +288,7 @@ export default function Login() {
                                         </div>
                                         <button
                                             type="button"
-                                            className="btn-close"
+                                            className="btn-close button-buy"
                                             onClick={handleHideOtp}
                                             aria-label="Close"
                                         />
@@ -319,7 +318,7 @@ export default function Login() {
                                                     {
                                                         countdown === 0 ?
                                                             <div className="mt-2">
-                                                                <a className="float-end text-black text-decoration-none  bg-forgot-password"
+                                                                <a href="" className="float-end text-black text-decoration-none  bg-forgot-password"
                                                                     onClick={handleAgainSendCode}>Gửi lại mã</a>
                                                             </div>
                                                             :
@@ -336,14 +335,14 @@ export default function Login() {
 
 
                                     <div className="modal-footer">
-                                        <button
+                                        {/* <button
                                             type="button"
                                             className="btn btn-secondary"
                                             onClick={handleHideOtp}
                                         >
                                             Hủy
-                                        </button>
-                                        <button type="submit" className="btn btn-primary">
+                                        </button> */}
+                                        <button type="submit" className=" button-buy">
                                             Xác nhận
                                         </button>
                                     </div>
@@ -413,7 +412,7 @@ export default function Login() {
                                         </div>
                                         <button
                                             type="button"
-                                            className="btn-close"
+                                            className="btn-close button-buy"
                                             onClick={handleHideResetPass}
                                             aria-label="Close"
                                         />
@@ -431,9 +430,9 @@ export default function Login() {
                                             {
                                                 showNewPassword
                                                     ?
-                                                    <i type="button" onClick={() => { setShowNewPassword(!showNewPassword) }} className={`bi bi-eye-slash-fill me-2 position-absolute top-50 translate-middle-y end-0`}></i>
+                                                    <i type="button" onClick={() => { setShowNewPassword(!showNewPassword) }} className={`bi bi-eye-slash me-2 position-absolute top-50 translate-middle-y end-0`}></i>
                                                     :
-                                                    <i type="button" onClick={() => { setShowNewPassword(!showNewPassword) }} className={`bi bi-eye-fill me-2 position-absolute top-50 translate-middle-y end-0`}></i>
+                                                    <i type="button" onClick={() => { setShowNewPassword(!showNewPassword) }} className={`bi bi-eye me-2 position-absolute top-50 translate-middle-y end-0`}></i>
                                             }
                                         </div>
                                         <div >
@@ -448,23 +447,16 @@ export default function Login() {
                                             {
                                                 showConfirmPassword
                                                     ?
-                                                    <i type="button" onClick={() => { setShowConfirmPassword(!showConfirmPassword) }} className={`bi bi-eye-slash-fill me-2 position-absolute top-50 translate-middle-y end-0`}></i>
+                                                    <i type="button" onClick={() => { setShowConfirmPassword(!showConfirmPassword) }} className={`bi bi-eye-slash me-2 position-absolute top-50 translate-middle-y end-0`}></i>
                                                     :
-                                                    <i type="button" onClick={() => { setShowConfirmPassword(!showConfirmPassword) }} className={`bi bi-eye-fill me-2 position-absolute top-50 translate-middle-y end-0`}></i>
+                                                    <i type="button" onClick={() => { setShowConfirmPassword(!showConfirmPassword) }} className={`bi bi-eye me-2 position-absolute top-50 translate-middle-y end-0`}></i>
                                             }
                                         </div>
                                         <div>
                                             <span className="text-danger" id="confirmPasswordErr"></span>
                                         </div>
                                         <div className="modal-footer">
-                                            <button
-                                                type="button"
-                                                className="btn btn-secondary"
-                                                onClick={handleHideResetPass}
-                                            >
-                                                Hủy
-                                            </button>
-                                            <button type="submit" className="btn btn-primary">
+                                            <button type="submit" className="button-buy">
                                                 Xác nhận
                                             </button>
                                         </div>

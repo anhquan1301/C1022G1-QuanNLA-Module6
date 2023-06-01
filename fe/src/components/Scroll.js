@@ -19,6 +19,9 @@ export default function Scroll() {
     }
     useEffect(() => {
     }, [pathName])
+
+    
+
     return (
         <>
             {goToTop && (
@@ -29,7 +32,7 @@ export default function Scroll() {
                     fontSize: 30,
                     width: 50,
                     borderRadius: 30,
-                    borderColor:'rgb(202, 112, 154)',
+                    borderColor: 'rgb(202, 112, 154)',
                     background: '#F8D5D7',
                     // borderColor:'rgb(202, 112, 154)',
                     color: 'white',

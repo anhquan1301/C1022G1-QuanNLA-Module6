@@ -1,14 +1,19 @@
 package com.example.be.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
+
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(columnDefinition = "id")
     private Product product;
 

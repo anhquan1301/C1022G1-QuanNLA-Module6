@@ -2,8 +2,11 @@ import { Field, Form, Formik } from "formik"
 import { useEffect, useState } from "react"
 import customerService from "../service/login/customer/customerService"
 import loginService from './../service/login/loginService';
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { format } from "date-fns";
+import { useContext } from "react";
+import { AvatarContext } from "./AvatarContext";
 export default function CustomerDetail() {
     const [showPassword, setShowPassword] = useState(false)
     const [showNewPassword, setShowNewPassword] = useState(false)
@@ -12,32 +15,36 @@ export default function CustomerDetail() {
     const [customerDetail, setCustomerDetail] = useState()
     const token = localStorage.getItem('token')
     const navigate = useNavigate()
+    const { setAvatar } = useContext(AvatarContext)
     useEffect(() => {
         const detail = async () => {
             try {
                 const res = await customerService.detail()
-                console.log(res);
                 setCustomerDetail(res.data)
+                
             } catch (error) {
                 console.log(error);
             }
         }
         detail()
     }, [token])
-    console.log(customerDetail);
     if (!customerDetail) {
         return null
     }
+    setAvatar(customerDetail?.avatar)
     return (
         <>
             <div style={{
-                marginTop: 117
+                marginTop: 100
             }}>
                 <div className="row mx-0 mt-5 p-5">
-                    <div className="container p-5 shadow-cosmetics-1 ">
+                    <div>
+                        <NavLink to={'/'} className="bi bi-house text-secondary fs-4 text-decoration-none"><span className="ms-2 fw-normal fs-5">Trang chủ</span></NavLink>
+                    </div>
+                    <div className="container p-5 shadow-cosmetics-1 mt-3 bg-white">
                         <div className="row">
                             <div className="col-3 mt-3">
-                                <div>
+                                <div className="avatar">
                                     <img src={customerDetail?.avatar}
                                         className="border-avatar rounded-circle" width='100%' height='100%' alt="avatar" />
                                 </div>
@@ -45,13 +52,13 @@ export default function CustomerDetail() {
                             <div className="col-9">
                                 <div className="row ms-3 px-3">
                                     <h2 className="text-center text-dieucosmetics">THÔNG TIN CÁ NHÂN</h2>
-                                    <div className="col-6 px-0">
-                                        <table className="fs-5 font-table text-secondary">
+                                    <div className="col-6 px-5">
+                                        <table className=" font-table text-secondary">
                                             <thead>
                                                 <tr>
                                                     <th className="th-dieucosmetics">Mã khách hàng :</th>
                                                     <td style={{
-                                                        width: '50%'
+                                                        width: '55%'
                                                     }}>{customerDetail?.code}</td>
                                                 </tr>
                                             </thead>
@@ -66,7 +73,7 @@ export default function CustomerDetail() {
                                                 </tr>
                                                 <tr>
                                                     <th className="th-dieucosmetics">Ngày sinh :</th>
-                                                    <td>{customerDetail?.dateOfBirth}</td>
+                                                    <td>{format(new Date(customerDetail.dateOfBirth), "dd/MM/yyyy")}</td>
                                                 </tr>
                                                 <tr>
                                                     <th className="th-dieucosmetics">Địa chỉ :</th>
@@ -135,17 +142,25 @@ export default function CustomerDetail() {
                                             }}
                                         >
                                             <Form>
-                                                <table className="fs-5 font-table text-secondary">
+                                                <table className="font-table text-secondary">
                                                     <thead>
                                                         <tr>
                                                             <th className="th-dieucosmetics" style={{ width: '220px' }}>Email :</th>
-                                                            <td className="w-50">{customerDetail?.email}</td>
+                                                            <td style={{
+                                                        width: '60%'
+                                                    }}>{customerDetail?.email}</td>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
                                                             <th className="th-dieucosmetics">Số điện thoại :</th>
                                                             <td>{customerDetail?.phoneNumber}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th className="th-dieucosmetics ">
+                                                                <NavLink to={`update`} type="button" className="text-dieucosmetics text-decoration-none">{'Chỉnh sửa thông tin'}</NavLink>
+                                                            </th>
+                                                            <td></td>
                                                         </tr>
                                                         <tr>
                                                             <th className="th-dieucosmetics ">
@@ -216,6 +231,7 @@ export default function CustomerDetail() {
                                                                 </tr>
                                                             </>
                                                         }
+                                                       
                                                     </tbody>
                                                 </table>
                                             </Form>

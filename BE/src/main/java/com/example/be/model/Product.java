@@ -1,10 +1,13 @@
 package com.example.be.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 public class Product {
@@ -14,29 +17,28 @@ public class Product {
     private String code;
     private String name;
     private String color;
-    private String capacity;
-    private String status;
-    @Column(columnDefinition = "BIGINT")
-    private String price;
     @Column(columnDefinition = "TEXT")
     private String description;
     @Column(columnDefinition = "DATE")
     private String addNewDate;
-    @Column(columnDefinition = "INT")
-    private String quantity;
     @ManyToOne
     @JoinColumn(columnDefinition = "id")
     private ProductType productType;
     @ManyToOne
     @JoinColumn(columnDefinition = "id")
     private Producer producer;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "product")
+    @OrderBy("id ASC")
+    private Set<Image> imageSet = new TreeSet<>();
     @JsonBackReference
     @OneToMany(mappedBy = "product")
-    private Set<Image> imageSet = new HashSet<>();
-    @JsonBackReference
+    @OrderBy("id ASC")
+    private Set<OderDetail> oderDetails = new TreeSet<>();
+    @JsonManagedReference
     @OneToMany(mappedBy = "product")
-    private Set<OderDetail> oderDetails = new HashSet<>();
-
+    @OrderBy("capacity.id ASC")
+    private Set<CapacityProduct> capacityProductSet = new TreeSet<>();
     public Product() {
     }
 
@@ -68,6 +70,14 @@ public class Product {
         return name;
     }
 
+    public Set<CapacityProduct> getCapacityProductSet() {
+        return capacityProductSet;
+    }
+
+    public void setCapacityProductSet(Set<CapacityProduct> capacityProductSet) {
+        this.capacityProductSet = capacityProductSet;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -78,30 +88,6 @@ public class Product {
 
     public void setColor(String color) {
         this.color = color;
-    }
-
-    public String getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(String capacity) {
-        this.capacity = capacity;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
     }
 
     public String getDescription() {
@@ -120,13 +106,6 @@ public class Product {
         this.addNewDate = addNewDate;
     }
 
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
 
     public ProductType getProductType() {
         return productType;

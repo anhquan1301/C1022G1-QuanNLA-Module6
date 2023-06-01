@@ -28,9 +28,10 @@ export default function Register() {
                         onSubmit={(value) => {
                             const register = async () => {
                                 try {
-                                    const res = await loginService.register(value)
+                                     await loginService.register(value)
                                     navigate('/login')
                                 } catch (error) {
+                                    console.log(error);
                                     // const err = error.response.data;
                                     // if (err.username === "Không được bỏ trống") {
                                     //     document.getElementById("usernameError").innerText = "Không được bỏ trống"

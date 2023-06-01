@@ -1,0 +1,75 @@
+package com.example.be.model;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.*;
+
+@Entity
+public class CapacityProduct {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(columnDefinition = "id")
+    private Product product;
+    @ManyToOne
+    @JoinColumn(columnDefinition = "id")
+    private Capacity capacity;
+    @Column(columnDefinition = "BIGINT")
+    private String price;
+    @Column(columnDefinition = "BIGINT")
+    private String priceSale;
+    @Column(columnDefinition = "INT")
+    private String quantity;
+    public CapacityProduct() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getPriceSale() {
+        return priceSale;
+    }
+
+    public void setPriceSale(String priceSale) {
+        this.priceSale = priceSale;
+    }
+
+    public Capacity getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Capacity capacity) {
+        this.capacity = capacity;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+}

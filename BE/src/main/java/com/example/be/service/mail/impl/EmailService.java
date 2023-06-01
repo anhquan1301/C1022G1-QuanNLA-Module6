@@ -24,7 +24,6 @@ public class EmailService implements IEmailService {
     public void sendResetPasswordEmail(String email, String otp) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper message = null;
-
         try {
             message = new MimeMessageHelper(mimeMessage, true);
             message.setTo(email);

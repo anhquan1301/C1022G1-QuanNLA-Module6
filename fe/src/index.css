@@ -200,11 +200,11 @@ code {
 .carouselExampleControls{
   padding:5%;
 }
-.card{
+.card-1{
   border-radius: 0;
   border-color:#ffffff
 }
-.card:hover{
+.card-1:hover{
   transform: scale(1.1);
   /* border-color:  rgb(202, 112, 154); */
   
@@ -252,7 +252,7 @@ code {
 }
 
 .input-field {
-  margin-top: 12px;
+  margin-top: 6px;
     padding-left: 10px;
     display: flex;
     align-items: center;
@@ -296,7 +296,7 @@ code {
     height: 30px;
     width: 100%;
     padding: 0px 2px;
-    font-family: Georgia, 'Times New Roman', Times, serif, 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+   
 }
 .input-login-1 {
  
@@ -306,7 +306,6 @@ code {
   display: flex;
   align-content: center;
   height: 30px;
-
   width: 100%;
   font-family: Georgia, 'Times New Roman', Times, serif, 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
 }
@@ -470,12 +469,12 @@ code {
 
 .carousel-indicators-1 [data-bs-target]:hover{
   opacity: 1;
-  box-shadow: 0px 0px 10px #c7bfbf;
+  box-shadow: 0px 0px 3px 1px #d4969a;
   border-color: rgb(202, 112, 154);
 }
 .carousel-indicators-1 [data-bs-target].active{
   opacity: 1;
-  box-shadow: 0px 0px 10px  #c7bfbf;
+  box-shadow: 0px 0px 3px 1px #d4969a;
   border-color: rgb(202, 112, 154);
 
 }
@@ -618,8 +617,14 @@ code {
   border-color: #d4969a;
   
 }
+.avatar{
+  width: 313.8px;
+  height: 313.8px;
+  background-size: cover;
+  object-fit: cover;
+}
 .th-dieucosmetics{
-    height:50px
+    height:45px
 }
 .dropdown-item.active, .dropdown-item:active {
   color:white;
@@ -628,4 +633,129 @@ code {
 }
 .font-table{
   font-family: Arial;
+}
+.border-camera{
+  color: rgb(229, 217, 217);
+  position: absolute; 
+  bottom: 6px; 
+  right: 50px;
+  border: 1px solid;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  vertical-align: middle;
+  text-align: center;
+  background: #918b8b;
+}
+.card-list{
+  border-radius: 0;
+  border-color:#ffffff
+}
+.card-list:hover{
+  box-shadow: 0px 0px 1px 1px #d4969a;
+  transform: scale(1.02);
+}
+.image-container {
+  position: relative;
+  text-align: center;
+}
+
+.image-container img {
+  display: block;
+  margin: 0 auto;
+}
+
+.image-text {
+  font-size: 40px;
+  color: rgb(131, 127, 127);
+  font-family: cursive;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.page-link {
+  margin: 5px;
+  position: relative;
+  display: block;
+  padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+  font-size: var(--bs-pagination-font-size);
+  color: #d4969a;
+  text-decoration: none;
+  border: none;
+  border-radius: 50%;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.active>.page-link, .page-link.active {
+  z-index: 3;
+  color: #ffffff;
+  background-color: #d4969a;
+  border-color: #7f4b4f;
+  
+}
+.page-link:focus {
+  box-shadow: none;
+}
+.page-item:first-child .page-link {
+  border: none;
+  border-color:white; 
+  background-color: white; 
+}
+.page-item:last-child .page-link {
+  border: none;
+  border-color:white;
+  background-color: white; 
+}
+.disabled>.page-link, .page-link.disabled {
+  color: rgb(44 49 54 / 75%);
+  pointer-events: none;
+  background-color: #ffffff;
+
+}
+
+.dropdown-item:active{
+  background-color: #d4969a;
+}
+
+.accordion-button:not(.collapsed) {
+  color: #d4969a;
+  
+}
+
+.nav-link:hover{
+  color: #d4969a;
+ 
+}
+.nav-link:focus{
+  color: #d4969a;
+}
+
+.accordion-button:not(.collapsed)::after {
+  
+  transform: rotate(-180deg);
+}
+.form-check-input-1{
+
+    
+  --bs-form-check-bg: var(--bs-body-bg);
+    width: 1em;
+    height: 1em;
+    margin-top: 0.25em;
+    vertical-align: top;
+    background-color: var(--bs-form-check-bg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    appearance: none;
+    -webkit-print-color-adjust: exact;
+    border-radius: 20% !important;
+}
+.form-check-input-1:checked {
+  background-color: #d4969a;
+  border-color: #d4969a;
+}
+.form-check-input-1[type=radio] {
+  border-color: #d4969a;
 }

@@ -19,4 +19,5 @@ public interface IUserService {
     void save(User user);
     Integer getTotalCodeAmount();
 
+    void updateUser(User user);
 }

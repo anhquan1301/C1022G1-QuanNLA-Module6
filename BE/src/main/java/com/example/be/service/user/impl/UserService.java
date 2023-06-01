@@ -63,4 +63,16 @@ public class UserService implements IUserService {
     public Integer getTotalCodeAmount() {
         return iUserRepository.getTotalCodeAmount();
     }
+
+    @Override
+    public void updateUser(User user) {
+        iUserRepository.UpdateCustomer(user.getName(),
+                user.getGender(),
+                user.getDateOfBirth(),
+                user.getAddress(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getAvatar(),
+                user.getId());
+    }
 }

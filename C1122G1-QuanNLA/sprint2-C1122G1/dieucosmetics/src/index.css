@@ -1,0 +1,386 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.text-hover:hover {
+  color: rgb(202, 112, 154) !important;
+
+}
+
+.header-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.register-hover:hover {
+  background: white;
+  color: black;
+}
+
+.text-slide {
+  position: relative;
+  bottom: 200px;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+}
+
+/* * {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+} */
+
+
+
+
+@media screen and (max-width:1000px) {
+  .first {
+    text-align: center;
+  }
+
+  .first h4::after {
+    left: 40%;
+  }
+}
+
+@media screen and (max-width:1000px) {
+  .third {
+    text-align: center;
+  }
+
+  .third h4::after {
+    left: 40% !important;
+  }
+}
+
+.margin {
+  margin-left: 20px;
+}
+
+.line {
+  height: 2px;
+  background-color: rgb(206, 206, 206);
+  width: 100%;
+}
+
+.container h1 {
+  text-align: center;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.text-footer {
+  font-size: larger;
+  text-decoration: none;
+  color: rgb(223, 235, 235);
+}
+
+.ti-search1{
+  font-weight: bold;
+  position: relative;
+  right: 345px;
+  top: 9px;
+}
+.ti-search2{
+  font-weight: bold;
+  position: relative;
+  right: 325px;
+  top: 9px;
+}
+.border-color{
+  border-color: rgb(202, 112, 154)  !important;
+}
+.search-product{
+  border-color: rgb(202, 112, 154)  !important;
+  padding-left: 50px;
+  border-radius: 0;
+  width: 120%;
+}
+.bi-search{
+  color: rgb(202, 112, 154) ;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top: 4px;
+  padding-left: 10px;
+}
+.search-container{
+  position: relative;
+}
+.bi-person{
+  color: rgb(202, 112, 154) ;
+}
+.bi-cart3{
+  color: rgb(202, 112, 154) ;
+}
+.text-hover{
+  font-size: 17px;
+  position: relative;
+}
+.text-hover::after{
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  background-color: rgb(202, 112, 154);
+  bottom: 0;
+  left: 0;
+  transition: all 0.3s ease-in-out;
+}
+.bg-home{
+  /* background-image: linear-gradient(to right, rgb(164, 107, 138), rgb(223, 200, 204)); */
+  background-color: #F8D5D7;
+}
+.text-hover:hover::after{
+  transform: scaleX(1);
+}
+.bg-footer{
+  /* background-image: linear-gradient(to right, rgb(107, 85, 107), rgb(223, 200, 204)); */
+  background-image: url('https://theme.hstatic.net/200000256383/1000657411/14/bg_cosmetics.jpg?v=169');
+}
+.cart-container {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-number {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  color:  rgb(202, 112, 154);
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 50%;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.service-policy-item {
+  display: flex;
+  -webkit-box-align: center;
+
+  align-items: center;
+}
+.policy-terms {
+  padding-left: 20px;
+  font-size: 14px;
+    line-height: 1.8;
+    font-weight: 400;
+    font-family: "Roboto", sans-serif;
+    color: #555;
+}
+.section-space {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.icons{
+  padding-bottom: 18px;
+}
+.carouselExampleControls{
+  padding:5%;
+}
+.card{
+  border-radius: 0;
+  border-color:#ffffff
+}
+.card:hover{
+  transform: scale(1.1);
+  /* border-color:  rgb(202, 112, 154); */
+  
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins&display=swap');
+
+.padding-login{
+  padding-top: 150px;
+}
+
+.login-body {
+    background-color: #eee;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to top, #fff 10%, #F8D5D7 90%) no-repeat
+}
+
+.wrapper {
+    max-width: 500px;
+    border-radius: 10px;
+    margin: auto;
+    padding: 30px 40px;
+    box-shadow: 20px 20px 80px rgb(130, 67, 93)
+}
+
+.h2 {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #400485;
+    font-style: italic
+}
+
+.h4 {
+    font-family: 'Poppins', sans-serif
+}
+
+.input-field {
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid rgb(202, 112, 154);
+    color: rgb(202, 112, 154)
+}
+
+.input-field:hover {
+    color: rgb(202, 112, 154);
+    border: 1px solid rgb(202, 112, 154)
+}
+
+.input-login {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    height: 30px;
+    width: 100%;
+    padding: 0px 2px;
+    font-family: 'Poppins', sans-serif
+}
+
+.fa-eye-slash.btn {
+    border: none;
+    outline: none;
+    box-shadow: none
+}
+
+.a-login {
+    text-decoration: none;
+    color: rgb(202, 112, 154);
+    font-weight: 700
+}
+
+.a-login:hover {
+    text-decoration: none;
+    color: #7b4ca0
+}
+
+.option {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer
+}
+
+.option label.text-muted {
+    display: block;
+    cursor: pointer
+}
+
+.option input {
+    display: none
+}
+
+.checkmark {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer
+}
+
+.option input:checked~.checkmark:after {
+    display: block
+}
+
+.option .checkmark:after {
+    content: "";
+    width: 13px;
+    height: 13px;
+    display: block;
+    background: rgb(202, 112, 154);
+    position: absolute;
+    top: 48%;
+    left: 53%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 300ms ease-in-out 0s
+}
+
+.option input[type="radio"]:checked~.checkmark {
+    background: #fff;
+    transition: 300ms ease-in-out 0s;
+    border: 1px solid rgb(202, 112, 154)
+}
+
+.option input[type="radio"]:checked~.checkmark:after {
+    transform: translate(-50%, -50%) scale(1)
+}
+
+.btn.btn-block {
+    border-radius: 0px;
+    background-color: rgb(202, 112, 154);
+    color: #fff
+}
+
+.btn.btn-block:hover {
+    background-color: #55268be0
+}
+
+@media(max-width: 575px) {
+    .wrapper {
+        margin: 10px
+    }
+}
+
+@media(max-width:424px) {
+    .wrapper {
+        padding: 30px 10px;
+        margin: 5px
+    }
+
+    .option {
+        position: relative;
+        padding-left: 22px
+    }
+
+    .option label.text-muted {
+        font-size: 0.95rem
+    }
+
+    .checkmark {
+        position: absolute;
+        top: 2px
+    }
+
+    .option .checkmark:after {
+        top: 50%
+    }
+
+    #forgot {
+        font-size: 0.95rem
+    }
+}

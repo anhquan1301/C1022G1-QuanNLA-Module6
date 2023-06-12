@@ -127,6 +127,10 @@ export default function Cart() {
                         showConfirmButton: false,
                         timer: 1500
                     })
+                    return {
+                        ...item,
+                        quantity: +quantity,
+                    };
                 }
                 if (isNaN(+quantity) || +quantity < 1) {
                     return {

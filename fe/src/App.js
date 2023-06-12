@@ -10,25 +10,30 @@ import CustomerDetail from './components/CustomerDetail';
 import CustomerUpdate from './components/CustomerUpdate';
 import { AvatarProvider } from '../src/components/AvatarContext';
 import ProductList from './components/ProductList';
+import { QuantityProvider } from './components/QuantityContext';
+import PaymentInfo from './components/PaymentInfo';
+
 
 function App() {
   return (
     <>
-    <AvatarProvider>
-      
-      <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />}/>
-        <Route path='/' element={<MainLayout />}>
-            <Route index element={<Home />} />
-            <Route path='product/detail/:id' element={<Detail />} />
-            <Route path='/cart' element={<Cart />} />
-            <Route path='/product' element={<ProductList />} />
-            <Route path='/customer/detail' element={<CustomerDetail />} />
-            <Route path='/customer/detail/update' element={<CustomerUpdate/>}/>
-        </Route>
-      </Routes>
-      </AvatarProvider>
+      <QuantityProvider>
+        <AvatarProvider>
+          <Routes>
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/' element={<MainLayout />}>
+              <Route index element={<Home />} />
+              <Route path='/product/detail/:id' element={<Detail />} />
+              <Route path='/cart' element={<Cart />} />
+              <Route path='/product' element={<ProductList />} />
+              <Route path='/customer/detail' element={<CustomerDetail />} />
+              <Route path='/customer/detail/update' element={<CustomerUpdate />} />
+            </Route>
+            <Route path='/payment-info' element={<PaymentInfo/>} />
+          </Routes>
+        </AvatarProvider>
+      </QuantityProvider>
     </>
   );
 }

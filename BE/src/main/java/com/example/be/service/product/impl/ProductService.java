@@ -8,14 +8,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+
 @Service
 public class ProductService implements IProductService {
     @Autowired
     private IProductRepository iProductRepository;
 
     @Override
-    public Page<Product> searchProduct(String name, String productTypeId, String producerId, Pageable pageable) {
-        return iProductRepository.searchProduct(name,productTypeId,producerId,pageable);
+    public Page<Product> searchProduct(String name, String productTypeId, String producerId, long minPrice, long maxPrice, Pageable pageable) {
+        return iProductRepository.searchProduct(name,productTypeId,producerId,minPrice,maxPrice,pageable);
     }
 
     @Override

@@ -3,16 +3,19 @@ import customerService from "../service/login/customer/customerService"
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AvatarContext } from './AvatarContext';
+import { QuantityContext } from './QuantityContext';
 export default function Header() {
   const token = localStorage.getItem('token')
   const [customerDetail, setCustomerDetail] = useState()
   const [avatarDetail,setAvatarDetail] = useState()
   const navigate = useNavigate()
   const { avatar,setAvatar } = useContext(AvatarContext);
+  const { iconQuantity,setIconQuantity } = useContext(QuantityContext);
   const [searchInput, setSearchInput] = useState('');
   const handleLogout = () => {
     localStorage.removeItem('token')
     navigate('/login')
+    setIconQuantity(0)
     setAvatar('')
   }
   const handleSearch = (event) => {
@@ -29,7 +32,11 @@ export default function Header() {
         }
     }
     detail()
+   
 }, [token])
+useEffect(()=>{
+setIconQuantity(customerDetail?.cartSet.length)
+},[customerDetail?.cartSet.length])
 useEffect(()=>{
   setAvatarDetail(customerDetail?.avatar)
 },[customerDetail?.avatar])
@@ -39,6 +46,8 @@ const handleSearchProduct = (event)=>{
     navigate(`/product?search=${searchInput}`)
   }
 }
+
+
   return (
     <>
       <header className=''>
@@ -159,7 +168,7 @@ const handleSearchProduct = (event)=>{
               <div className='float-end cart-container'>
                 <NavLink to={'/cart'} className=" ms-3 me-5 pe-5 bi bi-cart3 ">
                 </NavLink>
-                <span className='me-5 pe-5 cart-number'>0</span>
+                <span className='me-5 pe-5 cart-number'>{iconQuantity}</span>
               </div>
             </div>
           </div>

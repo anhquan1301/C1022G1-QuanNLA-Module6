@@ -1,10 +1,8 @@
-package com.example.be.controller.cusotmer;
+package com.example.be.controller.customer;
 
 import com.example.be.dto.customer.CustomerDetailDTO;
 import com.example.be.dto.customer.CustomerUpdateDTO;
 import com.example.be.dto.response.ResponseMessage;
-import com.example.be.dto.role.RoleDTO;
-import com.example.be.model.Role;
 import com.example.be.model.User;
 import com.example.be.security.JwtAuthenticationFilter;
 import com.example.be.security.JwtTokenProvider;
@@ -16,9 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/customer")

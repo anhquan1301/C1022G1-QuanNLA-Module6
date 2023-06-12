@@ -1,6 +1,11 @@
 package com.example.be.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 public class OderProduct {
@@ -8,16 +13,46 @@ public class OderProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String code;
-    @Column(columnDefinition = "DATE")
+    @Column(columnDefinition = "DATETIME")
     private String oderDate;
     @Column(columnDefinition = "BIGINT")
     private String totalPay;
-
+    private String phoneNumber;
+    private String shippingAddress;
+    @OneToMany(mappedBy = "oderProduct")
+    @JsonManagedReference
+    private Set<OderDetail> oderDetailSet = new TreeSet<>();
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(columnDefinition = "id")
     private User user;
     public OderProduct() {
     }
+
+    public Set<OderDetail> getOderDetailSet() {
+        return oderDetailSet;
+    }
+
+    public void setOderDetailSet(Set<OderDetail> oderDetailSet) {
+        this.oderDetailSet = oderDetailSet;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
 
     public Integer getId() {
         return id;

@@ -2,11 +2,14 @@ package com.example.be.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table( uniqueConstraints = {
@@ -48,7 +51,12 @@ public class User {
     private String otpSecret;
     @JsonBackReference
     @OneToMany(mappedBy = "user")
-    Set<OderProduct> oderProducts = new HashSet<>();
+    @OrderBy("id desc")
+    private Set<OderProduct> oderProducts = new TreeSet<>();
+    @JsonBackReference
+    @OneToMany(mappedBy = "user")
+    @OrderBy("capacityProduct.id ASC")
+    private Set<Cart> cartSet = new TreeSet<>();
     public User() {
     }
 
@@ -79,6 +87,18 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.userName = userName;
         this.password = password;
+    }
+
+    public boolean isGender() {
+        return gender;
+    }
+
+    public Set<Cart> getCartSet() {
+        return cartSet;
+    }
+
+    public void setCartSet(Set<Cart> cartSet) {
+        this.cartSet = cartSet;
     }
 
     public Set<OderProduct> getOderProducts() {

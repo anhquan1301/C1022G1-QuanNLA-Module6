@@ -39,6 +39,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @OrderBy("capacity.id ASC")
     private Set<CapacityProduct> capacityProductSet = new TreeSet<>();
+
     public Product() {
     }
 

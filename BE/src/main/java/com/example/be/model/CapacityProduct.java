@@ -1,8 +1,11 @@
 package com.example.be.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 public class CapacityProduct {
@@ -22,6 +25,10 @@ public class CapacityProduct {
     private String priceSale;
     @Column(columnDefinition = "INT")
     private String quantity;
+    @OneToMany(mappedBy = "capacityProduct")
+    @JsonManagedReference
+    @OrderBy("capacityProduct.id ASC")
+    private Set<Cart> cartSet = new TreeSet<>();
     public CapacityProduct() {
     }
 
@@ -71,5 +78,13 @@ public class CapacityProduct {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public Set<Cart> getCartSet() {
+        return cartSet;
+    }
+
+    public void setCartSet(Set<Cart> cartSet) {
+        this.cartSet = cartSet;
     }
 }

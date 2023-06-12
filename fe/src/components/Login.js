@@ -70,7 +70,6 @@ export default function Login() {
                                 try {
                                     const res = await loginService.login(value)
                                     navigate('/')
-                                    console.log(res);
                                     localStorage.setItem('token', res.data.token)
                                 } catch (error) {
                                     const err = error.response.data;

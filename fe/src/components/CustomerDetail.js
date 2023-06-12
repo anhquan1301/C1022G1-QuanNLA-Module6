@@ -7,31 +7,74 @@ import Swal from "sweetalert2";
 import { format } from "date-fns";
 import { useContext } from "react";
 import { AvatarContext } from "./AvatarContext";
+import ReactPaginate from "react-paginate";
 export default function CustomerDetail() {
     const [showPassword, setShowPassword] = useState(false)
     const [showNewPassword, setShowNewPassword] = useState(false)
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
     const [showFormChangePassword, setShowFormChangePassword] = useState(false)
+    const [showHistory, setShowHistory] = useState(false)
     const [customerDetail, setCustomerDetail] = useState()
     const token = localStorage.getItem('token')
+    const [detailCartList, setDetailCartList] = useState([])
     const navigate = useNavigate()
     const { setAvatar } = useContext(AvatarContext)
-    useEffect(() => {
-        const detail = async () => {
-            try {
-                const res = await customerService.detail()
-                setCustomerDetail(res.data)
-                
-            } catch (error) {
-                console.log(error);
-            }
+    const [pageCount, setPageCount] = useState(1)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [itemsPerPage] = useState(3)
+    const [historyList, setHistoryList] = useState([])
+    const [allList, setAllList] = useState([])
+    const [showModal, setShowModal] = useState(true)
+    const detail = async () => {
+        try {
+            const res = await customerService.detail()
+            setCustomerDetail(res.data)
+            setAllList(res.data.oderProducts)
+        } catch (error) {
+            console.log(error);
         }
+    }
+    useEffect(() => {
         detail()
     }, [token])
+    useEffect(() => {
+        const indexOfLastItem = currentPage * itemsPerPage;
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+        setPageCount(Math.ceil(allList.length / itemsPerPage))
+        setHistoryList(allList.slice(indexOfFirstItem, indexOfLastItem))
+    }, [customerDetail])
+    useEffect(() => {
+        const indexOfLastItem = currentPage * itemsPerPage;
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+        setHistoryList(allList.slice(indexOfFirstItem, indexOfLastItem))
+    }, [currentPage])
     if (!customerDetail) {
         return null
     }
     setAvatar(customerDetail?.avatar)
+    const handleModalDetail = (detailCartList) => {
+        setDetailCartList(detailCartList)
+    }
+    console.log(customerDetail);
+    console.log(historyList);
+    const handlePageClick = (page) => {
+        setCurrentPage(page + 1)
+    }
+    const handleProductDetail = (id) => {
+        navigate(`/product/detail/${id}`)
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+            modalBackdrop.classList.remove('modal-backdrop');
+            modalBackdrop.classList.remove('fade');
+            modalBackdrop.classList.remove('show');
+        }
+        const modalBody = document.querySelector('.modal-open');
+        if (modalBody) {
+            modalBody.classList.remove('modal-open');
+            modalBody.style.removeProperty('overflow');
+            modalBody.style.removeProperty('padding-right');            
+        }
+    }
     return (
         <>
             <div style={{
@@ -147,8 +190,8 @@ export default function CustomerDetail() {
                                                         <tr>
                                                             <th className="th-dieucosmetics" style={{ width: '220px' }}>Email :</th>
                                                             <td style={{
-                                                        width: '60%'
-                                                    }}>{customerDetail?.email}</td>
+                                                                width: '60%'
+                                                            }}>{customerDetail?.email}</td>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -159,6 +202,17 @@ export default function CustomerDetail() {
                                                         <tr>
                                                             <th className="th-dieucosmetics ">
                                                                 <NavLink to={`update`} type="button" className="text-dieucosmetics text-decoration-none">{'Chỉnh sửa thông tin'}</NavLink>
+                                                            </th>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th className="th-dieucosmetics ">
+                                                                {
+                                                                    showHistory ?
+                                                                        <span type="button" onClick={() => setShowHistory(!showHistory)} className="text-dieucosmetics text-decoration-none">{'Ẩn lịch sử mua hàng'}</span>
+                                                                        :
+                                                                        <span type="button" onClick={() => setShowHistory(!showHistory)} className="text-dieucosmetics text-decoration-none">{'Lịch sử mua hàng'}</span>
+                                                                }
                                                             </th>
                                                             <td></td>
                                                         </tr>
@@ -231,7 +285,7 @@ export default function CustomerDetail() {
                                                                 </tr>
                                                             </>
                                                         }
-                                                       
+
                                                     </tbody>
                                                 </table>
                                             </Form>
@@ -242,7 +296,119 @@ export default function CustomerDetail() {
                         </div>
                     </div>
                 </div>
+                {
+                    showHistory &&
+                        customerDetail?.oderProducts.length === 0 ?
+                        <div className="row mx-0 px-5 pb-5">
+                            <h2 className="text-center text-danger">Bạn chưa có lịch sử mua hàng</h2>
+                        </div>
+                        :
+                        showHistory &&
+                        <div className="row mx-0 px-5 pb-5">
+                            <div>
+                                <h3 className="text-center text-dieucosmetics">LỊCH SỬ MUA HÀNG</h3>
+                            </div>
+                            <div className="mt-3">
+                                <table className="w-100">
+                                    <thead>
+                                        <tr className="text-center">
+                                            <th>STT</th>
+                                            <th>Mã đơn hàng</th>
+                                            <th>Ngày mua hàng</th>
+                                            <th>Tổng đơn hàng</th>
+                                            <th>Chi tiết đơn hàng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            historyList.map((element, index) => (
+                                                <tr className="text-center">
+                                                    <td scope="row" style={{ height: '60px' }}>{index + 1}</td>
+                                                    <td>{element.code}</td>
+                                                    <td>{format(new Date(element.oderDate), "dd/MM/yyyy")}</td>
+                                                    <td>{(+element.totalPay).toLocaleString(
+                                                        "vi-VN",
+                                                        { style: "currency", currency: "VND" }
+                                                    )}</td>
+                                                    <td>
+                                                        <i type="button" onClick={() => handleModalDetail(element.oderDetailSet)} className="bi bi-info text-dieucosmetics fs-2" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        }
+                                    </tbody>
+                                </table>
+                                <div className="mt-2 d-flex justify-content-center">
+                                    <ReactPaginate
+                                        previousLabel="Trước"
+                                        nextLabel="Sau"
+                                        pageCount={pageCount}
+                                        onPageChange={(event) => handlePageClick(event.selected)}
+                                        containerClassName="pagination"
+                                        previousClassName="page-item"
+                                        previousLinkClassName="page-link"
+                                        nextClassName="page-item"
+                                        nextLinkClassName="page-link"
+                                        pageClassName="page-item"
+                                        pageLinkClassName="page-link"
+                                        activeClassName="active"
+                                        activeLinkClassName="page-link"
+                                    // disabledLinkClassName="d-none"
+                                    // forcePage={currentPage}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                }
             </div>
+            {
+                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+                    <div class="modal-dialog modal-dialog-centered modal-lg" >
+                        <div class="modal-content" >
+                            <div class="modal-header bg-home ">
+                                <h1 class="modal-title fs-5 ms-2 text-white " id="exampleModalLabel">CHI TIẾT ĐƠN HÀNG</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" >
+                                <div>
+                                    <table class="w-100 text-secondary">
+                                        <thead>
+                                            <tr className="text-center">
+                                                <th scope="row">STT</th>
+                                                <th>Hình ảnh</th>
+                                                <th>Mã đơn hàng</th>
+                                                <th>Đơn giá</th>
+                                                <th>Số lượng</th>
+                                                <th>Tổng</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                detailCartList?.map((element, index) => (
+                                                    <tr onClick={() => handleProductDetail(element.product.id)} key={index} className="text-center click-detail-product">
+                                                        <td scope="row" style={{ height: '100px' }}>{index + 1}</td>
+                                                        <td><img width={'50px'} src={element.product.imageSet[0].name} /></td>
+                                                        <td>{element.product.code}</td>
+                                                        <td>{(+element.price).toLocaleString(
+                                                            "vi-VN",
+                                                            { style: "currency", currency: "VND" }
+                                                        )}</td>
+                                                        <td>{element.quantity}</td>
+                                                        <td>{(+element.subtotal).toLocaleString(
+                                                            "vi-VN",
+                                                            { style: "currency", currency: "VND" }
+                                                        )}</td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </>
     )
 }

@@ -18,7 +18,7 @@ code {
 }
 
 .text-hover:hover {
-  color: rgb(202, 112, 154) !important;
+  color: #d4969a !important;
 
 }
 
@@ -107,16 +107,16 @@ code {
   top: 9px;
 }
 .border-color{
-  border-color: rgb(202, 112, 154)  !important;
+  border-color: #d4969a  !important;
 }
 .search-product{
-  border-color: rgb(202, 112, 154)  !important;
+  border-color: #d4969a  !important;
   padding-left: 50px;
   border-radius: 0;
   width: 120%;
 }
 .bi-search{
-  color: rgb(202, 112, 154) ;
+  color: #d4969a ;
   position: absolute;
   top: 0;
   left: 0;
@@ -127,10 +127,10 @@ code {
   position: relative;
 }
 .bi-person{
-  color: rgb(202, 112, 154) ;
+  color: #d4969a ;
 }
 .bi-cart3{
-  color: rgb(202, 112, 154) ;
+  color: #d4969a ;
 }
 .text-hover{
   font-size: 17px;
@@ -142,7 +142,7 @@ code {
   height: 2px;
   width: 100%;
   transform: scaleX(0);
-  background-color: rgb(202, 112, 154);
+  background-color: #d4969a;
   bottom: 0;
   left: 0;
   transition: all 0.3s ease-in-out;
@@ -167,7 +167,7 @@ code {
   position: absolute;
   top: -8px;
   right: -8px;
-  color:  rgb(202, 112, 154);
+  color:  red;
   font-size: 14px;
   font-weight: bold;
   border-radius: 50%;
@@ -206,7 +206,7 @@ code {
 }
 .card-1:hover{
   transform: scale(1.1);
-  /* border-color:  rgb(202, 112, 154); */
+  /* border-color:  #d4969a; */
   
 }
 
@@ -230,7 +230,7 @@ code {
     border-radius: 0px;
     margin: auto;
     padding: 30px 40px;
-    box-shadow: 0px 0px 10px 5px rgb(202, 112, 154)
+    box-shadow: 0px 0px 10px 5px #d4969a
 }
 
 .h2 {
@@ -245,7 +245,7 @@ code {
     border-radius: 0px;
     margin: auto;
     padding: 30px 40px;
-    box-shadow: 0px 0px 10px 5px rgb(202, 112, 154)
+    box-shadow: 0px 0px 10px 5px #d4969a
 }
 .h4 {
     font-family: 'Poppins', sans-serif
@@ -257,9 +257,9 @@ code {
     display: flex;
     align-items: center;
     cursor: pointer;
-    border: 1px solid rgb(202, 112, 154);
+    border: 1px solid #d4969a;
     border-radius: 0;
-    color: rgb(202, 112, 154)
+    color: #d4969a
 }
 .input-field-1 {
   border-radius: 5px;
@@ -267,26 +267,26 @@ code {
   display: flex;
   align-items: center;
   /* cursor: pointer; */
-  border: 1px solid rgb(202, 112, 154);
+  border: 1px solid #d4969a;
   border-radius: 0;
   padding-left: 10px;
-  /* color: rgb(202, 112, 154) */
+  /* color: #d4969a */
 }
 .text-register{
-  color: rgb(202, 112, 154);
+  color: #d4969a;
   /* padding-left: 10px; */
 }
 .form-check-input:checked {
-  background-color: rgb(202, 112, 154);
-  border-color: rgb(202, 112, 154);
+  background-color: #d4969a;
+  border-color: #d4969a;
 }
 .form-check-input[type=radio] {
-  border-color: rgb(202, 112, 154);;
+  border-color: #d4969a;;
   border-radius: 50%;
 }
 .input-field:hover {
-    color: rgb(202, 112, 154);
-    border: 1px solid rgb(202, 112, 154)
+    color: #d4969a;
+    border: 1px solid #d4969a
 }
 
 .input-login {
@@ -317,7 +317,7 @@ code {
 
 .a-login {
     text-decoration: none;
-    color: rgb(202, 112, 154);
+    color: #d4969a;
     font-weight: 700
 }
 
@@ -362,7 +362,7 @@ code {
     width: 13px;
     height: 13px;
     display: block;
-    background: rgb(202, 112, 154);
+    background: #d4969a;
     position: absolute;
     top: 48%;
     left: 53%;
@@ -374,7 +374,7 @@ code {
 .option input[type="radio"]:checked~.checkmark {
     background: #fff;
     transition: 300ms ease-in-out 0s;
-    border: 1px solid rgb(202, 112, 154)
+    border: 1px solid #d4969a
 }
 
 .option input[type="radio"]:checked~.checkmark:after {
@@ -383,7 +383,7 @@ code {
 
 .btn.btn-block {
     border-radius: 0px;
-    background-color: rgb(202, 112, 154);
+    background-color: #d4969a;
     color: #fff
 }
 
@@ -470,12 +470,12 @@ code {
 .carousel-indicators-1 [data-bs-target]:hover{
   opacity: 1;
   box-shadow: 0px 0px 3px 1px #d4969a;
-  border-color: rgb(202, 112, 154);
+  border-color: #d4969a;
 }
 .carousel-indicators-1 [data-bs-target].active{
   opacity: 1;
   box-shadow: 0px 0px 3px 1px #d4969a;
-  border-color: rgb(202, 112, 154);
+  border-color: #d4969a;
 
 }
 ::marker {
@@ -489,7 +489,7 @@ code {
   font-size: large;
 }
 .text-dieucosmetics{
-  color: rgb(202, 112, 154);
+  color: #d4969a;
   font-weight: bold;
 }
 .capacity-button{
@@ -507,7 +507,7 @@ code {
   transform: scale(1.1);
 }
 .capacity-button.active{
-  border-color: rgb(202, 112, 154);
+  border-color: #d4969a;
   background-color: #F8D5D7;
   color: white;
   
@@ -517,7 +517,7 @@ code {
   border-width:1;
   color: darkgrey;
   background-color: white;
-  border-color: rgb(202, 112, 154);
+  border-color: #d4969a;
   font-weight: 500;
   padding: 5px;
 }
@@ -530,12 +530,23 @@ code {
   background-color: #F8D5D7;
   color: white;
 }
+.button-done-buy{
+  cursor: default;
+  border: 1px solid;
+  border-width:1;
+  color: rgb(255, 255, 255);
+  background-color: rgb(122, 117, 117);
+  border-color: #5d5b5b;
+  font-weight: 500;
+  padding: 5px;
+}
+
 .btn-quantity{
   border: 1px solid;
   border-width:1;
   color: darkgrey;
   background-color: white;
-  border-color: rgb(202, 112, 154);
+  border-color: #d4969a;
   font-weight: 500;
   /* padding: 10px; */
   /* margin: 5px; */
@@ -543,11 +554,25 @@ code {
   height: 40px;
 }
 .btn-number{
+  margin-top: 3px;
   border: 1px solid;
   border-width:1;
   color: darkgrey;
   background-color: white;
-  border-color: rgb(202, 112, 154);
+  border-color: #d4969a;
+  font-weight: 500;
+  /* padding: 10px; */
+  /* margin: 5px; */
+  width: 40px;
+  height: 40px;
+}
+.btn-number-cart{
+  margin-top: 1px;
+  border: 1px solid;
+  border-width:1;
+  color: darkgrey;
+  background-color: white;
+  border-color: #d4969a;
   font-weight: 500;
   /* padding: 10px; */
   /* margin: 5px; */
@@ -564,7 +589,7 @@ code {
 }
 .form-cart{
   box-shadow: 0px 0px 10px #c7bfbf;
-  border-color: rgb(202, 112, 154);
+  border-color: #d4969a;
 }
 .dropdown-toggle::after {
   display: inline-block;
@@ -578,7 +603,7 @@ code {
 }
 .hr-dieucosmetics{
   border: 1px solid;
-  border-color: rgb(202, 112, 154);
+  border-color: #d4969a;
 }
 .carousel-indicators [data-bs-target] {
   width: 12px;
@@ -586,11 +611,11 @@ code {
   padding: 0;
   border: 1px solid;
   border-radius: 10px;
-  border-color: rgb(202, 112, 154);
+  border-color: #d4969a;
   margin-right: 3px;
   margin-left: 3px;
   margin-top: 30px;
-  background-color: rgb(202, 112, 154);
+  background-color: #d4969a;
   background-clip: border-box;
   transition: opacity .6s ease;
 }
@@ -601,10 +626,10 @@ code {
   opacity: 1;
 }
 .bi-eye{
-  color: rgb(202, 112, 154);
+  color: #d4969a;
 }
 .bi-eye-slash{
-  color: rgb(202, 112, 154);
+  color: #d4969a;
 }
 .shadow-cosmetics{
   box-shadow: 0px 0px 10px 5px #d4969a
@@ -758,4 +783,22 @@ code {
 }
 .form-check-input-1[type=radio] {
   border-color: #d4969a;
+}
+.price-slider-wrapper .MuiSlider-root {
+  color: #d4969a 
+}
+
+.price-slider-wrapper .MuiSlider-thumb {
+  color: #ffffff; 
+  border: 5px solid #d4969a; 
+}
+
+.price-slider-wrapper .MuiSlider-valueLabel {
+  background-color: #ffffff; 
+  color: #d4969a;
+}
+.click-detail-product:hover{
+  background-color:#F8D5D7;
+  color:#ffffff;
+  cursor: pointer;
 }

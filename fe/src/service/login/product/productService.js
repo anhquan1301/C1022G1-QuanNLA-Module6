@@ -7,9 +7,10 @@ const detail = (id)=>{
         console.log(error);
     }
 }
-const findByName = ({ name,productTypeId,producerId},page)=>{
+const findByName = ({name,productTypeId,producerId,minPrice,maxPrice},page,sortType)=>{
+    console.log({ name,productTypeId,producerId,minPrice,maxPrice});
     try {
-        return request.get(`/product?name=${name?name:''}&productTypeId=${productTypeId?productTypeId:''}&producerId=${producerId?producerId:''}&page=${page ? page : 0}`)
+        return request.get(`/product?name=${name?name:''}&productTypeId=${productTypeId?productTypeId:''}&producerId=${producerId?producerId:''}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page ? page : 0}&sortType=${sortType}`)
     } catch (error) {
         console.log(error);
     }

@@ -1,9 +1,12 @@
 package com.example.be.dto.customer;
 
 import com.example.be.dto.role.RoleDTO;
+import com.example.be.model.Cart;
+import com.example.be.model.OderProduct;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class CustomerDetailDTO {
     private Integer id;
@@ -16,7 +19,8 @@ public class CustomerDetailDTO {
     private String phoneNumber;
     private String userName;
     private String avatar;
-
+    private Set<OderProduct> oderProducts = new TreeSet<>();
+    private Set<Cart> cartSet = new TreeSet<>();
     public CustomerDetailDTO() {
     }
 
@@ -100,4 +104,19 @@ public class CustomerDetailDTO {
         this.avatar = avatar;
     }
 
+    public Set<OderProduct> getOderProducts() {
+        return oderProducts;
+    }
+
+    public void setOderProducts(Set<OderProduct> oderProducts) {
+        this.oderProducts = oderProducts;
+    }
+
+    public Set<Cart> getCartSet() {
+        return cartSet;
+    }
+
+    public void setCartSet(Set<Cart> cartSet) {
+        this.cartSet = cartSet;
+    }
 }

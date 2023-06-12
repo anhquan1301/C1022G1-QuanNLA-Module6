@@ -223,7 +223,7 @@ export default function CustomerUpdate() {
                                                             : 
                                                             <div className="d-flex justify-content-center mt-4">
                                                                 <NavLink to='/customer/detail' className="button-buy text-decoration-none text-center mx-2">Quay lại</NavLink>
-                                                                <button type="submit" className="button-buy text-center mx-1">Xác nhận</button>
+                                                                <button type="submit" className="button-buy text-center ms-3">Xác nhận</button>
                                                             </div> 
                                                             }
                                                            

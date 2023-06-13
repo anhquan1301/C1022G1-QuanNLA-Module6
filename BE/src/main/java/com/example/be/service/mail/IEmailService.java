@@ -6,4 +6,6 @@ public interface IEmailService {
     boolean validateOtp(String otpCode, String email);
     String generateOtp(User user);
 
+
+
 }

@@ -1,11 +1,14 @@
 
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import productService from "../service/login/product/productService"
 import { NavLink, useLocation, useParams } from "react-router-dom"
 import ReactPaginate from "react-paginate"
 import Header from "./Header"
 import { Slider } from "@mui/material"
 import { debounce } from "lodash"; // Import debounce từ thư viện lodash (cần cài đặt lodash trước)
+import cartService from "../service/login/cart/cartService"
+import Swal from "sweetalert2"
+import { QuantityContext } from "./QuantityContext"
 
 
 export default function ProductList() {
@@ -25,10 +28,11 @@ export default function ProductList() {
         maxPrice: 3000000
     })
     const sortList = ['Tên: A-Z', 'Tên: Z-A', 'Giá: Giảm dần', 'Giá: Tăng dần']
-    const [nameSort,setNameSort] = useState('')
+    const { iconQuantity,setIconQuantity } = useContext(QuantityContext)
+    const [nameSort, setNameSort] = useState('')
     const findByName = async () => {
         try {
-            const res = await productService.findByName({ ...valueSearch, name: search },currentPage,nameSort)
+            const res = await productService.findByName({ ...valueSearch, name: search }, currentPage, nameSort)
             console.log(res.data.content);
             setProductList(res.data.content)
             setCurrentPage(res.data.number)
@@ -71,7 +75,7 @@ export default function ProductList() {
     }
     const handlePageClick = async (page) => {
         setCurrentPage(page.selected);
-        const res = await productService.findByName(valueSearch, page.selected,nameSort)
+        const res = await productService.findByName(valueSearch, page.selected, nameSort)
         setProductList(res.data.content)
     };
 
@@ -103,28 +107,41 @@ export default function ProductList() {
             maxPrice: event.target.value[1]
         })
     }, 100);
-    const handleSortProduct = async(event) => {
-        const res = await productService.findByName(valueSearch, currentPage,event.target.value)
+    const handleSortProduct = async (event) => {
+        const res = await productService.findByName(valueSearch, currentPage, event.target.value)
         setNameSort(event.target.value)
         setProductList(res.data.content)
-        let sortedProducts = [...productList];
-        switch (event.target.value) {
-            case 'Giá: Tăng dần':
-                sortedProducts.sort((a, b) => a.capacityProductSet[0].priceSale - b.capacityProductSet[0].priceSale);
-                break
-            case 'Giá: Giảm dần':
-                sortedProducts.sort((a, b) => b.capacityProductSet[0].priceSale - a.capacityProductSet[0].priceSale);
-                break
-            case 'Tên: A-Z':
-                sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
-                break
-            case 'Tên: Z-A':
-                sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
-                break
-            default:
-                break
+    }
+    const handleCreateCart = async(price,idCapacityProduct)=>{
+        try {
+            const value = {
+                quantity: '1',
+                price: price,
+                idCapacityProduct: idCapacityProduct,
+            }
+           const res = await cartService.createCart(value)
+           console.log(res);
+           if(res.data.message==='Thêm sản phẩm vào giỏ hàng thành công'){
+            setIconQuantity(iconQuantity + 1)
+           }
+            Swal.fire({
+                icon: 'success',
+                title: 'Sản phẩm đã được thêm vào giỏ hàng',
+                showConfirmButton: false,
+                timer: 1500
+            })
+           
+        } catch (error) {
+            console.log(error);
+            if(error.response.data){
+                Swal.fire({
+                    icon: 'error',
+                    title: error.response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
         }
-        setProductList(sortedProducts);
     }
     return (
         <>
@@ -261,7 +278,7 @@ export default function ProductList() {
                                         <div className="float-end ">
                                             <label className="fs-5 text-secondary me-2">Sắp xếp </label>
                                             <select className="" onChange={handleSortProduct}>
-                                                <option>---Chọn---</option>
+                                                <option value={""}>---Chọn---</option>
                                                 {
                                                     sortList.map((element, index) => (
                                                         <option key={index} value={element}>
@@ -277,6 +294,9 @@ export default function ProductList() {
                                         {
                                             productList.map((element, index) => (
                                                 <div type='button' className="card-list col-4 mt-2" key={index}>
+                                                    <div className="cart-icon">
+                                                        <i type="button" onClick={()=>{handleCreateCart(element.capacityProductSet[0].priceSale,element.capacityProductSet[0].id)}} className="bi bi-cart-plus" aria-hidden="true"></i>
+                                                    </div>
                                                     <NavLink to={`detail/${element.id}`} className={'text-decoration-none text-secondary'}>
                                                         <img src={element.imageSet[0].name}
                                                             className="card-img-top" alt="..." width={'100%'} />

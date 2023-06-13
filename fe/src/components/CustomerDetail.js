@@ -55,8 +55,7 @@ export default function CustomerDetail() {
     const handleModalDetail = (detailCartList) => {
         setDetailCartList(detailCartList)
     }
-    console.log(customerDetail);
-    console.log(historyList);
+    console.log(detailCartList);
     const handlePageClick = (page) => {
         setCurrentPage(page + 1)
     }
@@ -377,6 +376,7 @@ export default function CustomerDetail() {
                                                 <th scope="row">STT</th>
                                                 <th>Hình ảnh</th>
                                                 <th>Mã đơn hàng</th>
+                                                <th>Dung tích</th>
                                                 <th>Đơn giá</th>
                                                 <th>Số lượng</th>
                                                 <th>Tổng</th>
@@ -389,6 +389,7 @@ export default function CustomerDetail() {
                                                         <td scope="row" style={{ height: '100px' }}>{index + 1}</td>
                                                         <td><img width={'50px'} src={element.product.imageSet[0].name} /></td>
                                                         <td>{element.product.code}</td>
+                                                        <td>{element.product.capacityProductSet[0].capacity.name}</td>
                                                         <td>{(+element.price).toLocaleString(
                                                             "vi-VN",
                                                             { style: "currency", currency: "VND" }

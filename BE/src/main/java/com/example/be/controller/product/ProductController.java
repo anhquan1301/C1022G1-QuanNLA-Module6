@@ -36,15 +36,15 @@ public class ProductController {
                 sort =  Sort.by("name").descending();
                 break;
             case "Giá: Tăng dần":
-                sort =  Sort.by("price_sale").ascending();
+                sort =  Sort.by("cp.price_sale").ascending();
                 break;
             case "Giá: Giảm dần":
-                sort =  Sort.by("price_sale").descending();
+                sort =  Sort.by("cp.price_sale").descending();
                 break;
             default:
                 sort =  Sort.by("id").descending();
         }
-        Pageable sortedPageaBle = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+            Pageable sortedPageaBle = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
         return new ResponseEntity<>(iProductService.searchProduct(name,productTypeId,producerId,minPrice,maxPrice,sortedPageaBle),HttpStatus.OK);
     }
     @GetMapping("detail")

@@ -72,11 +72,15 @@ public class CartController {
             CapacityProduct capacityProduct = iCapacityProductService.findById(cartDTO.getIdCapacityProduct());
             Cart existingCart = iCartService.findCartByUserAndProduct(user, capacityProduct);
             if (existingCart != null) {
+                if(Integer.parseInt(cartDTO.getQuantity()) + Integer.parseInt(existingCart.getQuantity()) > Integer.parseInt(capacityProduct.getQuantity())){
+                    return new ResponseEntity<>(new ResponseMessage("Số lượng trong kho đã hết"), HttpStatus.BAD_REQUEST);
+                }
                 int currentQuantity = Integer.parseInt(existingCart.getQuantity());
                 int newQuantity = currentQuantity + Integer.parseInt(cartDTO.getQuantity());
                 existingCart.setQuantity(String.valueOf(newQuantity));
                 existingCart.setCreateDate(String.valueOf(currentDate));
                 iCartService.createCart(existingCart);
+                return new ResponseEntity<>(new ResponseMessage("Cập nhật sản phẩm vào giỏ hàng thành công"), HttpStatus.CREATED);
             } else {
                 Cart newCart = new Cart();
                 newCart.setUser(user);
@@ -85,8 +89,8 @@ public class CartController {
                 newCart.setQuantity(cartDTO.getQuantity());
                 newCart.setCreateDate(String.valueOf(currentDate));
                 iCartService.createCart(newCart);
+                return new ResponseEntity<>(new ResponseMessage("Thêm sản phẩm vào giỏ hàng thành công"), HttpStatus.CREATED);
             }
-            return new ResponseEntity<>(new ResponseMessage("Thêm sản phẩm vào giỏ hàng thành công"), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(new ResponseMessage("JWT không tồn tại"), HttpStatus.BAD_REQUEST);
     }

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @Entity
 public class Product {
@@ -38,7 +35,7 @@ public class Product {
     @JsonManagedReference
     @OneToMany(mappedBy = "product")
     @OrderBy("capacity.id ASC")
-    private Set<CapacityProduct> capacityProductSet = new TreeSet<>();
+    private List<CapacityProduct> capacityProductSet = new ArrayList<>();
 
     public Product() {
     }
@@ -71,11 +68,11 @@ public class Product {
         return name;
     }
 
-    public Set<CapacityProduct> getCapacityProductSet() {
+    public List<CapacityProduct> getCapacityProductSet() {
         return capacityProductSet;
     }
 
-    public void setCapacityProductSet(Set<CapacityProduct> capacityProductSet) {
+    public void setCapacityProductSet(List<CapacityProduct> capacityProductSet) {
         this.capacityProductSet = capacityProductSet;
     }
 

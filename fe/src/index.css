@@ -802,3 +802,33 @@ code {
   color:#ffffff;
   cursor: pointer;
 }
+/* .card-list {
+  position: relative;
+}
+
+.image-container {
+  position: relative;
+} */
+
+.cart-icon {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  /* background-color: #ffffff; */
+  padding: 5px;
+  border-radius: 50%;
+  transform: translate(50%, -50%);
+}
+
+.cart-icon i {
+  color: #d4969a;
+  font-size: 30px;
+}
+.cart-icon i:hover{
+  color: #90272e;
+  font-size: 35px;
+}
+
+
+
+

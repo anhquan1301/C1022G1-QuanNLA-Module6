@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -70,10 +71,13 @@ public class CartController {
             LocalDateTime currentDate = LocalDateTime.now();
             User user = iUserService.findByUsername(username).get();
             CapacityProduct capacityProduct = iCapacityProductService.findById(cartDTO.getIdCapacityProduct());
+            if(Integer.parseInt(cartDTO.getQuantity()) > Integer.parseInt(capacityProduct.getQuantity())){
+                return new ResponseEntity<>(new ResponseMessage("Sản phẩm đã hết hàng"), HttpStatus.BAD_REQUEST);
+            }
             Cart existingCart = iCartService.findCartByUserAndProduct(user, capacityProduct);
             if (existingCart != null) {
                 if(Integer.parseInt(cartDTO.getQuantity()) + Integer.parseInt(existingCart.getQuantity()) > Integer.parseInt(capacityProduct.getQuantity())){
-                    return new ResponseEntity<>(new ResponseMessage("Số lượng trong kho đã hết"), HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(new ResponseMessage("Sản phẩm đã hết hàng"), HttpStatus.BAD_REQUEST);
                 }
                 int currentQuantity = Integer.parseInt(existingCart.getQuantity());
                 int newQuantity = currentQuantity + Integer.parseInt(cartDTO.getQuantity());
@@ -81,7 +85,7 @@ public class CartController {
                 existingCart.setCreateDate(String.valueOf(currentDate));
                 iCartService.createCart(existingCart);
                 return new ResponseEntity<>(new ResponseMessage("Cập nhật sản phẩm vào giỏ hàng thành công"), HttpStatus.CREATED);
-            } else {
+            }else {
                 Cart newCart = new Cart();
                 newCart.setUser(user);
                 newCart.setPrice(cartDTO.getPrice());
@@ -96,13 +100,22 @@ public class CartController {
     }
 
     @PutMapping("")
-    public ResponseEntity<?> cartUpdate(@RequestBody CartUpdateQuantity cartUpdateQuantity){
-        Cart cart = iCartService.findByIdCart(cartUpdateQuantity.getId());
-        if(cart==null){
-            return new ResponseEntity<>(new ResponseMessage("Cập nhật giỏ hàng thất bại"),HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> cartUpdate(@RequestBody List<CartUpdateQuantity> cartUpdateQuantityList){
+        for (CartUpdateQuantity cartUpdateQuantity: cartUpdateQuantityList ) {
+            Cart cart = iCartService.findByIdCart(cartUpdateQuantity.getId());
+            if(cart==null){
+                return new ResponseEntity<>(new ResponseMessage("Cập nhật giỏ hàng thất bại"),HttpStatus.BAD_REQUEST);
+            }
+            CapacityProduct capacityProduct = iCapacityProductService.findById(cart.getCapacityProduct().getId());
+            if(capacityProduct==null){
+                return new ResponseEntity<>(new ResponseMessage("Cập nhật giỏ hàng thất bại"),HttpStatus.BAD_REQUEST);
+            }
+            if(Integer.parseInt(cartUpdateQuantity.getQuantity()) > Integer.parseInt(capacityProduct.getQuantity())){
+                return new ResponseEntity<>(new ResponseMessage("Sản phẩm đã hết hàng"), HttpStatus.BAD_REQUEST);
+            }
+            cart.setQuantity(cartUpdateQuantity.getQuantity());
+            iCartService.updateCart(cart);
         }
-        cart.setQuantity(cartUpdateQuantity.getQuantity());
-        iCartService.updateCart(cart);
         return new ResponseEntity<>(new ResponseMessage("Cập nhật giỏ hàng thành công"),HttpStatus.OK);
     }
 

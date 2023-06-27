@@ -2,11 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import customerService from "../service/login/customer/customerService"
 import cartService from "../service/login/cart/cartService";
 import Swal from "sweetalert2";
-import { Form, Formik } from "formik";
 import { NavLink } from "react-router-dom";
 import { QuantityContext } from "./QuantityContext";
-import PaymentInfo from "./PaymentInfo";
-
+import * as Yup from 'yup';
 export default function Cart() {
     const [customerDetail, setCustomerDetail] = useState()
     const token = localStorage.getItem('token')
@@ -15,9 +13,13 @@ export default function Cart() {
         id: 0,
         quantity: ''
     })
+    const [mounted, setMounted] = useState(false);
     const [showVNpay, setShowVNPay] = useState(false)
     const [quantityCheckbox, setQuantityCheckbox] = useState([])
     const { setIconQuantity } = useContext(QuantityContext)
+    const existingCart = JSON.parse(localStorage.getItem('valueCart')) || [];
+    const [phoneNumberCustomer,setPhoneNumberCustomer] = useState(null)
+    const [addressCustomer,setAddressCustomer] = useState(null)
     const detail = async () => {
         try {
             const res = await customerService.detail()
@@ -36,13 +38,15 @@ export default function Cart() {
         }
     }
     const updateCart = () => {
+        console.log(cartList);
         try {
             cartList.map(async (item) => {
                 if (item?.quantity > item?.capacityProductQuantity) {
-                    const value = {
+                    const value = [] 
+                    value.push({
                         id: item.cartId,
                         quantity: item.capacityProductQuantity
-                    }
+                    })
                     await cartService.updateCart(value)
                     getCartList()
                 }
@@ -54,6 +58,8 @@ export default function Cart() {
     const updateCartQuantity = async (value) => {
         try {
             await cartService.updateCart(value)
+            localStorage.removeItem('valueCart')
+            getCartList()
         } catch (error) {
             console.log(error);
         }
@@ -62,7 +68,13 @@ export default function Cart() {
         try {
             await cartService.deleteCart(id)
             setQuantityCheckbox(quantityCheckbox.filter(ids => ids != id));
-            getCartList()
+            const updatedCartStorage = existingCart.filter((element) => {
+                return +element.id !== +id;
+            });
+            localStorage.setItem('valueCart', JSON.stringify(updatedCartStorage))
+            const valueCartStorage = localStorage.getItem('valueCart')
+            console.log(valueCartStorage);
+            updateCartQuantity(JSON.parse(valueCartStorage))
         } catch (error) {
             console.log(error);
         }
@@ -77,8 +89,11 @@ export default function Cart() {
         detail()
     }, [token])
     useEffect(() => {
-        updateCartQuantity(valueCart)
-    }, [valueCart]);
+        return () => {
+            const valueCartStorage = localStorage.getItem('valueCart')
+            document.removeEventListener('beforeunload', updateCartQuantity(JSON.parse(valueCartStorage)));
+        };
+    }, []);
     const handleIncrease = (cartId) => {
         const updatedCartList = cartList.map((item) => {
             if (item?.cartId === cartId) {
@@ -94,6 +109,7 @@ export default function Cart() {
             return item;
         });
         setCartList(updatedCartList);
+        setMounted(true)
     }
     const handleReduce = (cartId) => {
         const updatedCartList = cartList.map((item) => {
@@ -116,6 +132,7 @@ export default function Cart() {
             return item;
         });
         setCartList(updatedCartList);
+        setMounted(true)
     }
     const handleChangeQuantity = (cartId, quantity) => {
         const updatedCartList = cartList.map((item) => {
@@ -127,9 +144,18 @@ export default function Cart() {
                         showConfirmButton: false,
                         timer: 1500
                     })
+                    // localStorage.setItem('valueCart',JSON.stringify({
+                    //     id: cartId,
+                    //     quantity: item.capacityProductQuantity
+                    // }))
+
+                    setValueCart({
+                        id: cartId,
+                        quantity: +item.capacityProductQuantity,
+                    })
                     return {
                         ...item,
-                        quantity: +quantity,
+                        quantity: +item.capacityProductQuantity,
                     };
                 }
                 if (isNaN(+quantity) || +quantity < 1) {
@@ -140,7 +166,7 @@ export default function Cart() {
                 }
                 setValueCart({
                     id: cartId,
-                    quantity: quantity
+                    quantity: +quantity
                 })
                 return {
                     ...item,
@@ -150,6 +176,7 @@ export default function Cart() {
             return item;
         });
         setCartList(updatedCartList);
+        setMounted(true)
     }
     const handleFormPay = (event, cartId) => {
         if (event.target.checked) {
@@ -157,7 +184,6 @@ export default function Cart() {
         } else {
             setQuantityCheckbox(quantityCheckbox.filter(id => id !== cartId));
         }
-
     }
     const handlePayMent = async (totalPay, cartIds, phoneNumber, customerName, address) => {
         const value = {
@@ -177,8 +203,70 @@ export default function Cart() {
     const handleVNPaymentMethod = () => {
         setShowVNPay(!showVNpay)
     }
-    setIconQuantity(cartList.length)
-
+    useEffect(() => {
+        setIconQuantity(cartList.length)
+    }, [cartList.length])
+   
+    
+    const updatedCart = existingCart.map((item) => {
+        if (item.id === valueCart.id) {
+          return {
+            ...item,
+            quantity: +valueCart.quantity,
+          };
+        }
+        return item;
+      });
+      const foundItem = existingCart.find((item) => +item.id === +valueCart.id);
+    if (!foundItem && +valueCart.id !== 0) {
+        updatedCart.push({
+            id: valueCart.id,
+            quantity: +valueCart.quantity
+        });
+    }
+    useEffect(()=>{
+        if(mounted){
+            localStorage.setItem('valueCart', JSON.stringify(updatedCart))
+            setMounted(false)
+        }
+    },[updatedCart])
+    useEffect(() => {
+        document.title = "Giỏ Hàng";
+    }, [])
+    const schema = Yup.object().shape({
+        phoneNumber: Yup.string().required('Số điện thoại không được để trống')
+          .matches(/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/, 'Nhập đúng định dạng SDT VD: 0903.XXX.XXX (X là chữ số)'),
+        // address: Yup.string().required('Địa chỉ không được để trống')
+      });
+      const schema1 = Yup.object().shape({
+        address: Yup.string().required('Địa chỉ không được để trống')
+      });
+    const handlePhoneNumberCustomer = (event)=>{
+        const phoneNumber = event.target.value;
+        setPhoneNumberCustomer(phoneNumber);
+        schema
+          .validate({ phoneNumber })
+          .then(() => {
+            document.getElementById('phoneNumberError').innerHTML = '';
+          })
+          .catch((error) => {
+            console.log(error.message);
+            document.getElementById('phoneNumberError').innerHTML = error.message;
+          });
+    }
+    const handleAddressCustomer = (event)=>{
+        const address = event.target.value;
+        setAddressCustomer(address)
+        schema1
+        .validate({ address })
+        .then(() => {
+            document.getElementById('addressError').innerHTML = '';
+        })
+        .catch((error) => {
+            console.log(error);
+          document.getElementById('addressError').innerHTML = error.message;
+        });
+    }
     return (
         <>
             <div className="">
@@ -336,21 +424,27 @@ export default function Cart() {
                                                     }}>Họ và tên :</th>
                                                     <td style={{
                                                         height: '50px',
-                                                    }}>{customerDetail?.name}</td>
+                                                    }}><input className="form-control-1 w-50" type="text" disabled value={customerDetail?.name}/></td>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <th>Số điện thoại :</th>
-                                                    <td style={{
+                                                    <td  style={{
                                                         height: '50px',
-                                                    }}>{customerDetail?.phoneNumber}</td>
+                                                    }}><input onChange={handlePhoneNumberCustomer} className="form-control-1 w-50" type="text" value={phoneNumberCustomer!==null ? phoneNumberCustomer : customerDetail?.phoneNumber}/>
+                                                    <span className="text-danger" id="phoneNumberError"></span>
+                                                    </td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Địa chỉ giao hàng :</th>
+                                                    <th className="align-top">Địa chỉ nhận hàng :</th>
                                                     <td style={{
                                                         height: '50px',
-                                                    }}>{customerDetail?.address}</td>
+                                                    }}> <textarea onChange={handleAddressCustomer} style={{
+                                                        height: '150px',
+                                                    }} className="form-control-1" value={ addressCustomer !==null ? addressCustomer : customerDetail?.address}></textarea> 
+                                                    <span className="text-danger" id="addressError"></span>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -392,9 +486,8 @@ export default function Cart() {
                                                 width: '150px',
                                                 height: '40px',
                                             }} className="text-end text-secondary fw-bold" >
-                                                <img type='button' onClick={handleVNPaymentMethod} className={ showVNpay ? "border border-3 border-color" : "border border-3"} width={'40%'} src="https://play-lh.googleusercontent.com/o-_z132f10zwrco4NXk4sFqmGylqXBjfcwR8-wK0lO1Wk4gzRXi4IZJdhwVlEAtpyQ" /></td>
+                                                <img type='button' onClick={handleVNPaymentMethod} className={showVNpay ? "border border-3 border-color" : "border border-3"} width={'40%'} src="https://play-lh.googleusercontent.com/o-_z132f10zwrco4NXk4sFqmGylqXBjfcwR8-wK0lO1Wk4gzRXi4IZJdhwVlEAtpyQ" /></td>
                                         </tr>
-                                        <hr />
                                         <tr>
                                             <th className="fs-5">Tổng : </th>
                                             <td className="text-end text-secondary text-danger fw-bold fs-5" >{(cartList
@@ -417,7 +510,7 @@ export default function Cart() {
                                                         <button onClick={showVNpay ? () => handlePayMent(cartList
                                                             .filter(elements => quantityCheckbox.includes(elements.cartId))
                                                             .map((element) => (+element.price * +element.quantity))
-                                                            .reduce((accumulator, currentValue) => accumulator + currentValue, 0) + 39000, quantityCheckbox, customerDetail?.phoneNumber, customerDetail?.name, customerDetail?.address) : () => {
+                                                            .reduce((accumulator, currentValue) => accumulator + currentValue, 0) + 39000, quantityCheckbox, phoneNumberCustomer!==null ? phoneNumberCustomer : customerDetail?.phoneNumber, customerDetail?.name, addressCustomer !==null ? addressCustomer : customerDetail?.address) : () => {
                                                                 Swal.fire({
                                                                     title: 'Bạn chưa chọn phương thức thanh toán',
                                                                     icon: 'error',

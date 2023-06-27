@@ -11,7 +11,7 @@ export default function Footer() {
                 <h4
                   className="text-uppercase mb-4"
                   style={{
-                    color:  "#F8D5D7",
+                    color: "#F8D5D7",
                     fontWeight: "bold",
                     fontFamily: "Al Nile"
                   }}
@@ -19,17 +19,17 @@ export default function Footer() {
                   Liên Hệ
                 </h4>
                 <div>
-                <p className="text-footer">
-                <i className="bi bi-geo-alt-fill me-2 " />
-                  05 Đường Bàu Hạc, Phường Vĩnh Trung, Quận Hải Châu,
-                  Tp. Đà Nẵng, Việt Nam 1.0 km từ Sân bay Quốc tế Đà Nẵng
-                </p>
+                  <p className="text-footer">
+                    <i className="bi bi-geo-alt-fill me-2 " />
+                    05 Đường Bàu Hạc, Phường Vĩnh Trung, Quận Hải Châu,
+                    Tp. Đà Nẵng, Việt Nam 1.0 km từ Sân bay Quốc tế Đà Nẵng
+                  </p>
                 </div>
                 <div>
-                <p className="text-footer">
-                <i className="bi bi-telephone-fill me-2 " />
-                  +(84)905008617
-                </p>
+                  <p className="text-footer">
+                    <i className="bi bi-telephone-fill me-2 " />
+                    +(84)905008617
+                  </p>
                 </div>
                 <div className="mt-4 ">
                   <a>
@@ -96,7 +96,7 @@ export default function Footer() {
                 <h4
                   className="text-uppercase mb-4 "
                   style={{
-                    color:  "#F8D5D7",
+                    color: "#F8D5D7",
                     fontWeight: "bold",
                     fontFamily: "Al Nile"
                   }}
@@ -104,11 +104,13 @@ export default function Footer() {
                   Giờ Mở Cửa
                 </h4>
                 <table className="table text-center text-footer">
-                  <tbody className="fw-normal">
+                  <thead>
                     <tr>
                       <td>T2 - T5:</td>
                       <td>6:00 - 22:00</td>
                     </tr>
+                  </thead>
+                  <tbody className="fw-normal">
                     <tr>
                       <td>T6 - CN:</td>
                       <td>6:00 - 24:00</td>
@@ -117,12 +119,12 @@ export default function Footer() {
                 </table>
               </div>
               <div>
-                {/* <img
-                  style={{ marginTop: "-120px", marginLeft: 835 }}
-                  src="Screenshot 2023-05-16 101725.png"
+                <img
+                  style={{ marginTop: "-110px", marginLeft: 835 }}
+                  src="https://theme.hstatic.net/200000256383/1000657411/14/i_payment.png?v=169"
                   alt="Ariyana Tourism Complex"
-                  width="500px;"
-                /> */}
+                  width="200px;"
+                />
               </div>
             </div>
           </div>
@@ -130,9 +132,9 @@ export default function Footer() {
             className="text-center p-3"
             style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
           >
-            
+
             <a className="text-footer" href="https://codegym.vn/">
-            © 2023 codegym.vn
+              © 2023 codegym.vn
             </a>
           </div>
         </div>

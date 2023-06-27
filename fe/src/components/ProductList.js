@@ -1,7 +1,7 @@
 
 import { useContext, useEffect, useState } from "react"
 import productService from "../service/login/product/productService"
-import { NavLink, useLocation, useParams } from "react-router-dom"
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom"
 import ReactPaginate from "react-paginate"
 import Header from "./Header"
 import { Slider } from "@mui/material"
@@ -28,11 +28,12 @@ export default function ProductList() {
         maxPrice: 3000000
     })
     const sortList = ['Tên: A-Z', 'Tên: Z-A', 'Giá: Giảm dần', 'Giá: Tăng dần']
-    const { iconQuantity,setIconQuantity } = useContext(QuantityContext)
+    const { iconQuantity, setIconQuantity } = useContext(QuantityContext)
     const [nameSort, setNameSort] = useState('')
+    const navigate = useNavigate()
     const findByName = async () => {
         try {
-            const res = await productService.findByName({ ...valueSearch, name: search }, currentPage, nameSort)
+            const res = await productService.findByName({ ...valueSearch, name: search }, nameSort)
             console.log(res.data.content);
             setProductList(res.data.content)
             setCurrentPage(res.data.number)
@@ -57,6 +58,9 @@ export default function ProductList() {
             console.log(error);
         }
     }
+    useEffect(() => {
+        document.title = "Danh Sách Sản Phẩm";
+    }, [])
     useEffect(() => {
         findByName()
     }, [valueSearch, search])
@@ -103,7 +107,7 @@ export default function ProductList() {
     const handlePriceChange = debounce((event) => {
         setValueSearch({
             ...valueSearch,
-            minPrice: event.target.value[0],
+            minPrice: event.target.value[0],    
             maxPrice: event.target.value[1]
         })
     }, 100);
@@ -112,28 +116,35 @@ export default function ProductList() {
         setNameSort(event.target.value)
         setProductList(res.data.content)
     }
-    const handleCreateCart = async(price,idCapacityProduct)=>{
+    const handleCreateCart = async (price, idCapacityProduct) => {
         try {
             const value = {
                 quantity: '1',
                 price: price,
                 idCapacityProduct: idCapacityProduct,
             }
-           const res = await cartService.createCart(value)
-           console.log(res);
-           if(res.data.message==='Thêm sản phẩm vào giỏ hàng thành công'){
-            setIconQuantity(iconQuantity + 1)
-           }
+            const res = await cartService.createCart(value)
+            console.log(res);
+            if (res.data.message === 'Thêm sản phẩm vào giỏ hàng thành công') {
+                setIconQuantity(iconQuantity + 1)
+            }
             Swal.fire({
                 icon: 'success',
                 title: 'Sản phẩm đã được thêm vào giỏ hàng',
                 showConfirmButton: false,
                 timer: 1500
             })
-           
         } catch (error) {
             console.log(error);
-            if(error.response.data){
+            if (error.response.status === 403) {
+                navigate('/login')
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Vui lòng đăng nhập để mua hàng',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            } else if (error.response.data) {
                 Swal.fire({
                     icon: 'error',
                     title: error.response.data.message,
@@ -142,6 +153,7 @@ export default function ProductList() {
                 })
             }
         }
+
     }
     return (
         <>
@@ -152,8 +164,8 @@ export default function ProductList() {
                 </div>
             </div>
             <div className="container mb-5" >
-                <div className="row mx-0">
-                    <div className="col-3 text-secondary p-5">
+                <div className="row mx-0 px-5 py-3">
+                    <div className="col-3 text-secondary py-5">
                         <div>
                             <h4>Danh mục</h4>
                         </div>
@@ -265,7 +277,6 @@ export default function ProductList() {
                         </div>
                     </div>
                     <div className="col-9 text-secondary p-5">
-
                         {
                             productList.length === 0 ?
                                 <div className="mt-5">
@@ -277,11 +288,11 @@ export default function ProductList() {
                                         <h4 >Tất cả sản phẩm</h4>
                                         <div className="float-end ">
                                             <label className="fs-5 text-secondary me-2">Sắp xếp </label>
-                                            <select className="" onChange={handleSortProduct}>
-                                                <option value={""}>---Chọn---</option>
+                                            <select className="select-dieucosmetics border border-2" onChange={handleSortProduct}>
+                                                <option className="select-sort" value={""}>---Chọn---</option>
                                                 {
                                                     sortList.map((element, index) => (
-                                                        <option key={index} value={element}>
+                                                        <option className="select-sort" key={index} value={element}>
                                                             {element}
                                                         </option>
                                                     ))
@@ -295,21 +306,22 @@ export default function ProductList() {
                                             productList.map((element, index) => (
                                                 <div type='button' className="card-list col-4 mt-2" key={index}>
                                                     <div className="cart-icon">
-                                                        <i type="button" onClick={()=>{handleCreateCart(element.capacityProductSet[0].priceSale,element.capacityProductSet[0].id)}} className="bi bi-cart-plus" aria-hidden="true"></i>
+                                                        <i type="button" onClick={() => { handleCreateCart(element.capacityProductSet[0].priceSale, element.capacityProductSet[0].id) }} className="bi bi-cart-plus" aria-hidden="true"></i>
                                                     </div>
                                                     <NavLink to={`detail/${element.id}`} className={'text-decoration-none text-secondary'}>
                                                         <img src={element.imageSet[0].name}
                                                             className="card-img-top" alt="..." width={'100%'} />
                                                         <div className="card-body">
                                                             {
-                                                                element.name.length > 30 ? <h6>{element.name.slice(0, 30)}...</h6> : <h6>{element.name}</h6>
+                                                                element.name.length > 25 ? <h6>{element.name.slice(0, 25)}...</h6> : <h6>{element.name}</h6>
                                                             }
-                                                            <div>
+                                                            <p>
                                                                 <span className='text-decoration-line-through'>{
-                                                                    (+element.capacityProductSet[0].price).toLocaleString(
-                                                                        "vi-VN",
-                                                                        { style: "currency", currency: "VND" }
-                                                                    )
+                                                                    +element.capacityProductSet[0].price === 0 ? "" :
+                                                                        (+element.capacityProductSet[0].price).toLocaleString(
+                                                                            "vi-VN",
+                                                                            { style: "currency", currency: "VND" }
+                                                                        )
                                                                 }</span>
                                                                 <span className='text-danger fs-5 float-end fw-bold'>{
                                                                     (+element.capacityProductSet[0].priceSale).toLocaleString(
@@ -317,7 +329,7 @@ export default function ProductList() {
                                                                         { style: "currency", currency: "VND" }
                                                                     )
                                                                 }</span>
-                                                            </div>
+                                                            </p>
                                                         </div>
                                                     </NavLink>
                                                 </div>

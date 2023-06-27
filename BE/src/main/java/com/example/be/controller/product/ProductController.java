@@ -24,7 +24,7 @@ public class ProductController {
                                            @RequestParam(required = false,defaultValue = "") String producerId,
                                            Long minPrice,
                                            Long maxPrice,
-                                           @PageableDefault(size = 6) Pageable pageable,
+                                           @PageableDefault(size = 9) Pageable pageable,
                                            @RequestParam(required = false,defaultValue = "") String sortType
                                            ){
         Sort sort = null;
@@ -50,5 +50,9 @@ public class ProductController {
     @GetMapping("detail")
     public ResponseEntity<?> detailProduct(@RequestParam(required = false)Integer id){
         return new ResponseEntity<>(iProductService.findByProduct(id),HttpStatus.OK);
+    }
+    @GetMapping("sale-list")
+    public ResponseEntity<?> productSaleList(){
+        return new ResponseEntity<>(iProductService.productSaleList(),HttpStatus.OK);
     }
 }

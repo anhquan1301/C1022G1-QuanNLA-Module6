@@ -43,7 +43,13 @@ export default function Detail() {
     useEffect(() => {
         detail()
     }, [param.id])
-    
+    useEffect(() => {
+        document.title = "Thông Tin Sản Phẩm";
+    }, [])
+    useEffect(()=>{
+        setIconQuantity(customerDetail?.cartSet.length)
+        },[customerDetail?.cartSet.length])
+
     const handleCreatCart = async () => {
         try {
             const value = {
@@ -106,18 +112,17 @@ export default function Detail() {
         } else {
             setQuantity(+e.target.value)
         }
-
     }
     const handleCartLogin = () => {
         Swal.fire({
             icon: 'error',
             title: 'Vui lòng đăng nhập để mua hàng',
             showConfirmButton: false,
-            timer:1500
+            timer: 1500
         })
         navigate('/login')
     }
-    setIconQuantity(customerDetail?.cartSet.length)
+  
     return (
         <>
             <div className=" bg-home">
@@ -143,7 +148,7 @@ export default function Detail() {
                                                         src={img.name}
                                                         data-bs-target="#carouselExampleIndicators"
                                                         data-bs-slide-to={index++}
-                                                        className="float-end"
+                                                        className="float-end bg-white"
                                                         aria-current="true"
                                                         aria-label={`Slide ${img.id}`}
                                                     />
@@ -182,7 +187,7 @@ export default function Detail() {
                                                 {+productDetail?.capacityProductSet[activeButton]?.quantity < 1
                                                     || +productDetail?.capacityProductSet[activeButton]?.cartSet
                                                         .filter(element => element.user.id === customerDetail?.id)
-                                                        .map(element => element.quantity) > +productDetail?.capacityProductSet[activeButton]?.quantity
+                                                        .map(element => element.quantity) >= +productDetail?.capacityProductSet[activeButton]?.quantity
                                                     ?
                                                     <span className="text-danger fw-bold">Hết hàng</span> : <span>Còn hàng</span>}
                                             </span>
@@ -199,7 +204,7 @@ export default function Detail() {
                                     <div className="d-inline">
                                         {productDetail?.capacityProductSet.map((element, index) => (
                                             <span className="fw-bold text-secondary text-decoration-line-through" key={index}>
-                                                {capacityId === element.capacity.id &&
+                                                {+element.price === 0 ? '' : capacityId === element.capacity.id &&
                                                     (quantity * element.price).toLocaleString(
                                                         "vi-VN",
                                                         { style: "currency", currency: "VND" }
@@ -237,14 +242,14 @@ export default function Detail() {
                                     +productDetail?.capacityProductSet[activeButton].quantity < 1
                                         || +productDetail?.capacityProductSet[activeButton]?.cartSet
                                             .filter(element => element.user.id === customerDetail?.id)
-                                            .map(element => element.quantity) > +productDetail?.capacityProductSet[activeButton]?.quantity
+                                            .map(element => element.quantity) >= +productDetail?.capacityProductSet[activeButton]?.quantity
                                         ?
                                         <div className="mt-4 fs-5">
                                             <span className="fw-bold text-danger">Xin lỗi sản phẩm đã hết hàng</span>
                                         </div> :
                                         <>
                                             <div className="mt-4">
-                                                <button onClick={quantity !== 1 ? () => setQuantity(quantity - 1) : () => { }}
+                                                <button onClick={quantity > 1 ? () => setQuantity(quantity - 1) : () => { }}
                                                     className={quantity === 1 ? "btn-number text-dieucosmetics" : "btn-quantity text-dieucosmetics"}>-</button>
                                                 <input onChange={handleChangeQuantity} className=" btn-number text-dieucosmetics text-center" value={quantity} />
                                                 <button onClick={quantity + +productDetail?.capacityProductSet[activeButton]?.cartSet

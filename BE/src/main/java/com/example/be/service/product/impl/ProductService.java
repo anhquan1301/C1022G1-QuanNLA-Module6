@@ -1,6 +1,7 @@
 package com.example.be.service.product.impl;
 
 import com.example.be.model.Product;
+import com.example.be.projections.IProductSaleList;
 import com.example.be.repository.product.IProductRepository;
 import com.example.be.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Service
 public class ProductService implements IProductService {
@@ -23,5 +25,10 @@ public class ProductService implements IProductService {
     @Override
     public Product findByProduct(int id) {
         return iProductRepository.findById(id);
+    }
+
+    @Override
+    public List<IProductSaleList> productSaleList() {
+        return iProductRepository.productSaleList();
     }
 }

@@ -32,7 +32,7 @@ const updateCart = (value)=>{
     console.log(value);
     const token = localStorage.getItem('token')
     try {
-        return request.put(`/cart`,{ ...value },{
+        return request.put(`/cart`,value,{
             headers:
             {
                 'Authorization': 'Bearer ' + token

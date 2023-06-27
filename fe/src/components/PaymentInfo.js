@@ -15,6 +15,7 @@ export default function PaymentInfo() {
     vnp_PayDate: "",
     vnp_TransactionNo: "",
   });
+  const [showFormPayment, setShowFormPayment] = useState(true)
   const customerName = localStorage.getItem('customerName')
   const url = window.location.href
   const handleFormatDateTime = (dateTimeString) => {
@@ -30,6 +31,9 @@ export default function PaymentInfo() {
     const formattedTime = format(parsedDate, "HH:mm:ss");
     return formattedDate + " " + formattedTime;
   };
+  useEffect(() => {
+    document.title = "Thanh Toán";
+}, [])
   useEffect(() => {
     const parsed = queryString.parse(url);
     const str = "http://localhost:3000/payment-info?vnp_Amount";
@@ -66,6 +70,7 @@ export default function PaymentInfo() {
     } catch (error) {
       console.log(error);
       if (error.response.data.message) {
+        setShowFormPayment(false)
         Swal.fire({
           icon: 'error',
           title: error.response.data.message,
@@ -92,7 +97,7 @@ export default function PaymentInfo() {
   return (
     <>
       {
-        paymentInfo.vnp_Amount ?
+        paymentInfo.vnp_Amount && showFormPayment ?
           <div className="d-flex justify-content-center flex-column align-items-center 100-vh mt-5" >
             <img
               src={"icon-thanh-cong.png"}

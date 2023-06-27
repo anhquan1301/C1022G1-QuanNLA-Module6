@@ -13,9 +13,9 @@ export default function Header() {
   const { iconQuantity,setIconQuantity } = useContext(QuantityContext);
   const [searchInput, setSearchInput] = useState('');
   const handleLogout = () => {
-    localStorage.removeItem('token')
+    localStorage.clear()
     navigate('/login')
-    setIconQuantity(0)
+    setIconQuantity(0)            
     setAvatar('')
   }
   const handleSearch = (event) => {
@@ -39,14 +39,15 @@ setIconQuantity(customerDetail?.cartSet.length)
 },[customerDetail?.cartSet.length])
 useEffect(()=>{
   setAvatarDetail(customerDetail?.avatar)
-},[customerDetail?.avatar])
+},[customerDetail])
+
 const handleSearchProduct = (event)=>{
   if (event.key === 'Enter') {
     event.preventDefault();
     navigate(`/product?search=${searchInput}`)
   }
 }
-
+console.log(customerDetail);
 
   return (
     <>
@@ -54,17 +55,17 @@ const handleSearchProduct = (event)=>{
         <nav className="header-fixed border-bottom border-color">
           <div
             style={{ backgroundColor: "#fff" }}
-            className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 border-bottom"
+            className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 header-shadow"
           >
-            <a
-              href="#"
+            <NavLink
+               to='/'
               className="d-flex align-items-center ms-5 col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"
               style={{ marginRight: "-220px" }}>
               <img
                 width='150px'
                 src="/dieucosmetics-logo.png"
                 alt="" />
-            </a>
+            </NavLink>
             <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
               <li>
                 <NavLink
@@ -168,7 +169,7 @@ const handleSearchProduct = (event)=>{
               <div className='float-end cart-container'>
                 <NavLink to={'/cart'} className=" ms-3 me-5 pe-5 bi bi-cart3 ">
                 </NavLink>
-                <span className='me-5 pe-5 cart-number'>{iconQuantity}</span>
+                <span className='me-5 pe-5 cart-number'>{iconQuantity === 0 ? '' : iconQuantity}</span>
               </div>
             </div>
           </div>

@@ -1,5 +1,4 @@
 package com.example.be.controller.auth;
-
 import com.example.be.dto.mailDTO.MailDTO;
 import com.example.be.dto.mailDTO.OtpDTO;
 import com.example.be.dto.request.ChangePasswordRequest;
@@ -31,8 +30,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -53,7 +50,21 @@ public class AuthRestController {
     @Autowired
     IRoleService iRoleService;
     @PostMapping("/register")
-    public ResponseEntity<?>register(@RequestBody RegisterForm registerForm){
+    public ResponseEntity<?>register(@Validated @RequestBody RegisterForm registerForm,BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            Map<String, String> map = new LinkedHashMap<>();
+            List<FieldError> err = bindingResult.getFieldErrors();
+            for (FieldError error : err) {
+                if (!map.containsKey(error.getField())) {
+                    map.put(error.getField(), error.getDefaultMessage());
+                }
+            }
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        }
+        int age = registerForm.getAge();
+        if (age < 15) {
+            return new ResponseEntity<>(new ResponseMessage("Người dùng đăng ký tài khoản phải từ 15 tuổi trở lên"),HttpStatus.BAD_REQUEST);
+        }
         if (Boolean.TRUE.equals(iUserService.existsByUsername(registerForm.getUsername()))) {
             return new ResponseEntity<>(new ResponseMessage("Tài khoản đã tồn tại"), HttpStatus.BAD_REQUEST);
         }
@@ -91,7 +102,7 @@ public class AuthRestController {
         user.setRoles(roles);
         int id = iUserService.getTotalCodeAmount() + 1000;
         user.setCode("KH-" + id);
-        user.setAvatar("https://antimatter.vn/wp-content/uploads/2022/11/anh-avatar-trang-fb-mac-dinh.jpg");
+        user.setAvatar("https://firebasestorage.googleapis.com/v0/b/quannla.appspot.com/o/files%2Fanh-avatar-trang-fb-mac-dinh.jpg?alt=media&token=fae9b400-ca65-4568-9808-b5e18f1f3d65");
         iUserService.save(user);
         return new ResponseEntity<>(new ResponseMessage("Đăng ký thành công"),HttpStatus.CREATED);
     }

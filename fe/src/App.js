@@ -13,7 +13,6 @@ import ProductList from './components/ProductList';
 import { QuantityProvider } from './components/QuantityContext';
 import PaymentInfo from './components/PaymentInfo';
 
-
 function App() {
   return (
     <>

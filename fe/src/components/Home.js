@@ -1,5 +1,28 @@
-
+import { useEffect, useState } from "react"
+import productService from "../service/login/product/productService"
+import { useNavigate } from "react-router-dom"
 export default function Home() {
+    const [productSaleList, setProductSaleList] = useState([])
+    const getProductSaleList = async () => {
+        try {
+            const res = await productService.productSaleList()
+            console.log(res);
+            setProductSaleList(res.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        getProductSaleList()
+    }, [])
+    useEffect(() => {
+        document.title = "Trang Chủ";
+    }, [])
+    const navigate = useNavigate()
+    const handleDetailProduct = (id)=>{
+        navigate('/product/detail/' + id)
+    }
+    console.log(productSaleList);
     return (
         <>
             <div style={{ marginTop: 117 }}>
@@ -105,83 +128,71 @@ export default function Home() {
                     <div id="carouselExampleControls" className="carousel carousel-dark slide " data-bs-ride="carousel">
                         <div className="carousel-inner ">
                             <div className="carousel-item active">
-                                <div className="row d-flex justify-content-center">
-                                    <div className="col-lg-2 mx-4 px-0">
-                                        <div className="card-1" >
-                                            <img src="https://product.hstatic.net/1000373343/product/it-cosmetics-cc-lip-serum-love-2000x2000_33365e7c9e84483b8f64247d249c271e_grande.jpg" className="card-img-top" alt="..." />
-                                            <div className="card-body">
-                                                <h6>Serum Trẻ Hoá Da Chống Lão Hóa Image MD...</h6>
-                                                <p className='text-danger'>1.320.000 đ</p>
+                                <div className="row d-flex justify-content-center mt-3">
+                                    {
+                                        productSaleList.slice(0,4).map((element, index) => (
+                                            <div className="col-lg-2 mx-4 px-0" key={index}>
+                                                <div type='button' onClick={()=>handleDetailProduct(element.id)} className="card-1" >
+                                                    <img src={element.imageName} className="card-img-top" alt="..." />
+                                                    <div className="card-body">
+                                                        <div>{
+                                                            element.name.length > 20 ? <h6>{element.name.slice(0, 20)}...</h6> : <h6>{element.name}</h6>
+                                                        }</div>
+                                                        <p>
+                                                                <span className='text-decoration-line-through'>{
+                                                                    +element.capacityProductPrice === 0 ? "": 
+                                                                    (+element.capacityProductPrice).toLocaleString(
+                                                                        "vi-VN",
+                                                                        { style: "currency", currency: "VND" }
+                                                                    )
+                                                                }</span>
+                                                                <span className='text-danger fs-6 float-end fw-bold'>{
+                                                                    (+element.capacityProductPriceSale).toLocaleString(
+                                                                        "vi-VN",
+                                                                        { style: "currency", currency: "VND" }
+                                                                    )
+                                                                }</span>
+                                                            </p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-2 mx-4 px-0">
-                                        <div className="card-1" >
-                                            <img src="https://product.hstatic.net/1000373343/product/it-cosmetics-moisturizer-secret-sauce-pack-shot_ca9d11b5417844f9ac8c2ade1b29e43a_grande.jpg" className="card-img-top" alt="..." />
-                                            <div className="card-body">
-                                                <h6>Serum Trẻ Hoá Da Chống Lão Hóa Image MD...</h6>
-                                                <p className='text-danger'>1.320.000 đ</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-2 mx-4 px-0">
-                                        <div className="card-1" >
-                                            <img src="https://product.hstatic.net/1000373343/product/it-cosmetics-confidence-neck-cream-pack-shot_3c365be95a1547ceb19c5d1d4d5232c5_grande.jpg" className="card-img-top" alt="..." />
-                                            <div className="card-body">
-                                                <h6>Serum Trẻ Hoá Da Chống Lão Hóa Image MD...</h6>
-                                                <p className='text-danger'>1.320.000 đ</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-2 mx-4 px-0">
-                                        <div className="card-1" >
-                                            <img src="https://product.hstatic.net/1000373343/product/it-cosmetics-je-ne-sais-quoi-lip-treatment-pack-shot-je-ne-sais-quoi_c01c5f4255bd497ea1cf2a1221bf8128_master.jpg" className="card-img-top" alt="..." />
-                                            <div className="card-body">
-                                                <h6>Serum Trẻ Hoá Da Chống Lão Hóa Image MD...</h6>
-                                                <p className='text-danger'>1.320.000 đ</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        ))
+                                    }
+
                                 </div>
                             </div>
                             <div className="carousel-item">
-                                <div className="row d-flex justify-content-center">
-                                    <div className="col-lg-2 mx-4 px-0">
-                                        <div className="card-1" >
-                                            <img src="https://product.hstatic.net/200000259653/product/serum-chong-lao-hoa_2c0b7f40c4984738a8946c2a853d32b9_88ec0f99be5044729866eeb294f4f622_large.jpg" className="card-img-top" alt="..." />
-                                            <div className="card-body">
-                                                <h6>Serum Trẻ Hoá Da Chống Lão Hóa Image MD...</h6>
-                                                <p className='text-danger'>1.320.000 đ</p>
+                                <div className="row d-flex justify-content-center mt-3">
+                                {
+                                        productSaleList.slice(4).map((element, index) => (
+                                            <div className="col-lg-2 mx-4 px-0" key={index}>
+                                                <div type='button' onClick={()=>handleDetailProduct(element.id)} className="card-1" >
+                                                    <img src={element.imageName} className="card-img-top" alt="..." />
+                                                    <div className="card-body">
+                                                        <div>{
+                                                            element.name.length > 20 ? <h6>{element.name.slice(0, 20)}...</h6> : <h6>{element.name}</h6>
+                                                        }</div>
+                                                        <p>
+                                                                <span className='text-decoration-line-through'>{
+                                                                    +element.capacityProductPrice === 0 ? "": 
+                                                                    (+element.capacityProductPrice).toLocaleString(
+                                                                        "vi-VN",
+                                                                        { style: "currency", currency: "VND" }
+                                                                    )
+                                                                }</span>
+                                                                <span className='text-danger fs-6 float-end fw-bold'>{
+                                                                    (+element.capacityProductPriceSale).toLocaleString(
+                                                                        "vi-VN",
+                                                                        { style: "currency", currency: "VND" }
+                                                                    )
+                                                                }</span>
+                                                            </p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-2 mx-4 px-0">
-                                        <div className="card-1" >
-                                            <img src="https://product.hstatic.net/200000259653/product/serum-lam-trang-sang-da-3_f513b111401b4a09b788d0c6ddd9fc19_2d5e307c490f4150bead8f63b213d867_grande.jpg" className="card-img-top" alt="..." />
-                                            <div className="card-body">
-                                                <h6>Serum Trẻ Hoá Da Chống Lão Hóa Image MD...</h6>
-                                                <p className='text-danger'>1.320.000 đ</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-2 mx-4 px-0">
-                                        <div className="card-1" >
-                                            <img src="https://product.hstatic.net/200000259653/product/mat-na-phuc-hoi-da_f65d27202f5e47309d32bbc07f125485_f86d4189753d4911bb8691bed4df6d9b_large.jpg" className="card-img-top" alt="..." />
-                                            <div className="card-body">
-                                                <h6>Serum Trẻ Hoá Da Chống Lão Hóa Image MD...</h6>
-                                                <p className='text-danger'>1.320.000 đ</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-2 mx-4 px-0">
-                                        <div className="card-1" >
-                                            <img src="https://product.hstatic.net/200000259653/product/serum-ngua-lao-hoa-da-kho_9f86e353465c47e0aa9000a5acc17d4e_4603e1d0bae242cda3576d7c64ce9287_master.jpg" className="card-img-top" alt="..." />
-                                            <div className="card-body">
-                                                <h6>Serum Trẻ Hoá Da Chống Lão Hóa Image MD...</h6>
-                                                <p className='text-danger'>1.320.000 đ</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        ))
+                                    }
+
                                 </div>
                             </div>
                         </div>
@@ -269,7 +280,7 @@ export default function Home() {
 
             </div>
             <hr className='mx-5 hr-dieucosmetics mt-5' />
-            
+
             <div className="container mt-5 bg-home py-5 mb-5">
                 <div className="row ">
                     <div className="col-lg-3 col-md-6 col-sm-6">

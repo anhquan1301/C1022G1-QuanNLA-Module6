@@ -29,10 +29,18 @@ const findAllProducer = ()=>{
         console.log(error);
     }
 }
+const productSaleList = ()=>{
+    try {
+        return request.get(`/product/sale-list`)
+    } catch (error) {
+        console.log(error);
+    }
+}
 export const productService = {
     detail,
     findByName,
     findAllProductType,
-    findAllProducer
+    findAllProducer,
+    productSaleList
 }
 export default productService

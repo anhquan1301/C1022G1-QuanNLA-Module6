@@ -4,6 +4,8 @@ import loginService from "../service/login/loginService";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { RotatingLines } from "react-loader-spinner";
+import { AvatarContext } from "./AvatarContext";
+import { useContext } from "react";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false)
@@ -16,6 +18,7 @@ export default function Login() {
     const [showOtpModal, setShowOtpModal] = useState(false)
     const [showNewPassword, setShowNewPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const { setAvatar } = useContext(AvatarContext)
     const handleShowFromEmail = () => {
         setShowFormEmail(true)
     }
@@ -38,7 +41,9 @@ export default function Login() {
             console.log(error);
         }
     }
-
+    useEffect(()=>{
+        setAvatar('')
+    },[])
     useEffect(() => {
         const intervalId = setInterval(() => {
             setCountdown(countdown => countdown - 1);

@@ -1,13 +1,29 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import loginService from "../service/login/loginService";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import * as Yup from 'yup'
 
 export default function Register() {
     const [showPassword, setShowPassword] = useState(false)
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
+    const [showErr,setShowErr] = useState(false)
+    const [showErrUsername,setShowErrUsername] = useState(false)
     const navigate = useNavigate()
+    const getMinDate = () => {
+        const today = new Date();
+        return new Date(
+          today.getFullYear() - 15,
+          today.getMonth(),
+          today.getDate()
+        );
+      };
+    
+      useEffect(() => {
+        document.title = "Đăng ký tài khoản";
+      }, []);
+    
     return (
         <>
             <div className="login-body">
@@ -16,7 +32,7 @@ export default function Register() {
                         initialValues={{
                             name: '',
                             dateOfBirth: '',
-                            gender: 'false',
+                            gender: '',
                             phoneNumber: '',
                             address: '',
                             email: '',
@@ -25,36 +41,50 @@ export default function Register() {
                             confirmPassword: '',
                             roles: ["user"]
                         }}
+                        validationSchema={Yup.object({
+                            name: Yup.string().required('Không được bỏ trống')
+                            .matches(/^([a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/,'Tên phải đúng định dạng. VD: Nguyễn Văn A')
+                            .min(5,'Ký tự phải nhiều hơn 5')
+                            .max(30,'Ký tự phải ít hơn 30'),
+                            dateOfBirth: Yup.date().required('Không được bỏ trống').max(getMinDate(),'Người dùng đăng ký tài khoản phải từ 15 tuổi trở lên'),
+                            gender: Yup.string().required('Không được bỏ trống'),
+                            phoneNumber: Yup.string().required('Không được bỏ trống')
+                            .matches(/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/,'Nhập đúng định dạng SDT VD: 0903.XXX.XXX (X là chữ số)'),
+                            address: Yup.string().required('Không được bỏ trống'),
+                            email: Yup.string().required('Không được bỏ trống').email('Nhập đúng định dạng email'),
+                            username: Yup.string().required('Không được bỏ trống')
+                            .min(5,'Ký tự phải nhiều hơn 5')
+                            .max(30,'Ký tự phải ít hơn 30'),
+                            password: Yup.string().required('Không được bỏ trống')
+                            .min(5,'Ký tự phải nhiều hơn 5')
+                            .max(30,'Ký tự phải ít hơn 30'),
+                            confirmPassword: Yup.string().required('Không được bỏ trống')
+                            .min(5,'Ký tự phải nhiều hơn 5')
+                            .max(30,'Ký tự phải ít hơn 30'),
+                        })}
                         onSubmit={(value) => {
                             const register = async () => {
                                 try {
-                                     await loginService.register(value)
+                                    await loginService.register(value)
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Đăng ký tài khoản thành công',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
                                     navigate('/login')
                                 } catch (error) {
                                     console.log(error);
-                                    // const err = error.response.data;
-                                    // if (err.username === "Không được bỏ trống") {
-                                    //     document.getElementById("usernameError").innerText = "Không được bỏ trống"
-                                    // } else if (err.message === "Tên người dùng không tồn tại") {
-                                    //     document.getElementById("usernameError").innerText = "Tên người dùng không tồn tại"
-                                    // } else if (err.username === "Tên đăng nhập ít nhất 5 ký tự và nhiều nhất 20 ký tự") {
-                                    //     document.getElementById("usernameError").innerText = "Tên đăng nhập ít nhất 5 ký tự và nhiều nhất 20 ký tự"
-                                    // } else if (err.username === "Tên đăng nhập không được chứa ký tự đặc biệt") {
-                                    //     document.getElementById("usernameError").innerText = "Tên đăng nhập không được chứa ký tự đặc biệt"
-                                    // } else {
-                                    //     document.getElementById("usernameError").innerText = ""
-                                    // }
-                                    // if (err.password === "Không được bỏ trống") {
-                                    //     document.getElementById("passwordError").innerText = "Không được bỏ trống"
-                                    // } else if (err.password === "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự") {
-                                    //     document.getElementById("passwordError").innerText = "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự"
-                                    // } else if (err === "" || err.status === 403) {
-                                    //     document.getElementById("passwordError").innerText = "Mật khẩu không chính xác"
-                                    // } else if (err.password === "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự") {
-                                    //     document.getElementById("passwordError").innerText = "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự"
-                                    // } else {
-                                    //     document.getElementById("passwordError").innerText = ""
-                                    // }
+                                    if(error.response.data.message==='Email đã tồn tại'){
+                                        setShowErr(true)
+                                    }else{
+                                        setShowErr(false)
+                                    }
+                                    if(error.response.data.message==='Tài khoản đã tồn tại'){
+                                        setShowErrUsername(true)
+                                    }else{
+                                        setShowErrUsername(false)
+                                    }
                                 }
                             }
                             register()
@@ -73,13 +103,19 @@ export default function Register() {
                                         <div className="form-group mt-2">
                                             <label htmlFor="name" className="text-register">Họ và tên :</label>
                                             <div className="input-field-1">
-                                                <Field type="text" className="input-login" name="name" id="name" placeholder="Nhập họ và tên" />
+                                                <Field type="text" className="input-login " name="name" id="name" placeholder="Nhập họ và tên" />
+                                            </div>
+                                            <div>
+                                                <ErrorMessage component='span' className="text-danger" name='name' />
                                             </div>
                                         </div>
                                         <div className="form-group mt-2">
                                             <label htmlFor="dateOfBirth" className="text-register">Ngày sinh :</label>
                                             <div className="input-field-1">
                                                 <Field type="date" className="input-login" name="dateOfBirth" id="dateOfBirth" />
+                                            </div>
+                                            <div>
+                                                <ErrorMessage component='span' className="text-danger" name='dateOfBirth' />
                                             </div>
                                         </div>
                                         <div className="form-group mt-2">
@@ -93,18 +129,29 @@ export default function Register() {
                                                     <Field className="form-check-input" type="radio" name="gender" id="inlineRadio2" value="true" />
                                                     <label className="form-check-label text-register" htmlFor="inlineRadio2">Nữ</label>
                                                 </div>
+                                                <div>
+                                                    <ErrorMessage component='span' className="text-danger" name='gender' />
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="form-group mt-2">
                                             <label htmlFor="email" className="text-register">Email :</label>
                                             <div className="input-field-1">
-                                                <Field type="text" className="input-login" name="email" id="email" placeholder="Nhập Email" />
+                                            <Field type="text" className="input-login" name="email" id="email" placeholder="Nhập Email" />
+                                            </div>
+                                            <div>
+                                                {
+                                                    showErr ? <span className="text-danger">Email đã tồn tại</span> : <ErrorMessage component='span' className="text-danger" name='email' />
+                                                }
                                             </div>
                                         </div>
                                         <div className="form-group mt-2">
                                             <label htmlFor="phoneNumber" className="text-register">Số điện thoại :</label>
                                             <div className="input-field-1">
                                                 <Field type="text" className="input-login" name="phoneNumber" id="phoneNumber" placeholder="Nhập số điện thoại" />
+                                            </div>
+                                            <div>
+                                                <ErrorMessage component='span' className="text-danger" name='phoneNumber' />
                                             </div>
                                         </div>
                                     </div>
@@ -113,6 +160,12 @@ export default function Register() {
                                             <label htmlFor="username" className="text-register">Tài khoản :</label>
                                             <div className="input-field-1">
                                                 <Field type="text" className="input-login" name="username" id="username" placeholder="Nhập tài khoản" />
+                                            </div>
+                                            <div>
+                                                {
+                                                    showErrUsername ? <span className="text-danger">Tài khoản đã tồn tại</span> : <ErrorMessage component='span' className="text-danger" name='username' />
+                                                }
+                                                
                                             </div>
                                         </div>
 
@@ -128,7 +181,9 @@ export default function Register() {
                                                 }
 
                                             </div>
-
+                                            <div>
+                                                <ErrorMessage component='span' className="text-danger" name='password' />
+                                            </div>
                                         </div>
                                         <div className="form-group mt-2">
                                             <label className="text-register">Xác nhận mật khẩu :</label>
@@ -142,7 +197,9 @@ export default function Register() {
                                                 }
 
                                             </div>
-
+                                            <div>
+                                                <ErrorMessage component='span' className="text-danger" name='confirmPassword' />
+                                            </div>
                                         </div>
                                         <div className="form-group mt-2">
                                             <label htmlFor="address" className="text-register" >Địa chỉ :</label>
@@ -151,6 +208,9 @@ export default function Register() {
                                                     height: '96px'
                                                 }} className=" input-login" name="address" id="address" placeholder="Nhập địa chỉ" >
                                                 </Field>
+                                            </div>
+                                            <div>
+                                                <ErrorMessage component='span' className="text-danger" name='address' />
                                             </div>
                                         </div>
                                     </div>

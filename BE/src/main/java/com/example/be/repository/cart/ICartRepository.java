@@ -26,7 +26,7 @@ public interface ICartRepository extends JpaRepository<Cart,Integer> {
             "    cp.capacity_id AS capacityProductCapacityId,\n" +
             "    p.name AS productName,\n" +
             "    c2.name AS capacityName,\n" +
-            "    MAX(i.name) AS imageName\n" +
+            "    (SELECT i.name FROM image i WHERE i.product_id = p.id LIMIT 1) AS imageName\n" +
             "FROM\n" +
             "    cart c\n" +
             "        JOIN capacity_product cp ON cp.id = c.capacity_product_id\n" +

@@ -4,7 +4,8 @@ import com.example.be.model.User;
 
 import java.util.Optional;
 
-public interface IUserService {
+public interface
+IUserService {
 
     Optional<User> findByUsername(String name);
     Boolean existsByUsername(String username);

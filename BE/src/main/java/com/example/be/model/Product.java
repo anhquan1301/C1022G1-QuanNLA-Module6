@@ -34,7 +34,7 @@ public class Product {
     private Set<OderDetail> oderDetails = new TreeSet<>();
     @JsonManagedReference
     @OneToMany(mappedBy = "product")
-    @OrderBy("capacity.id ASC")
+    @OrderBy("priceSale ASC")
     private List<CapacityProduct> capacityProductSet = new ArrayList<>();
 
     public Product() {

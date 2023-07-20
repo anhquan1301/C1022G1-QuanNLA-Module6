@@ -44,7 +44,7 @@ export default function CustomerUpdate() {
                 if (error.response.status === 403) {
                     setShow403Img(true)
                 }
-            }
+            }   
         }
         detail()
     }, [token])
@@ -59,6 +59,7 @@ export default function CustomerUpdate() {
             const reader = new FileReader();
             reader.onload = () => {
                 const imageUrl = reader.result;
+                console.log(imageUrl);
                 setAvatarDetail(imageUrl);
             };
             reader.readAsDataURL(file);
@@ -104,7 +105,7 @@ export default function CustomerUpdate() {
     if (!customerDetail && show403Img === false) {
         return null
     }
-
+    console.log(firebaseImg);
     return (
         <>
             {
@@ -199,7 +200,7 @@ export default function CustomerUpdate() {
                                                 </div>
                                                 <div className="col-9">
                                                     <div className="row ms-3 px-3">
-                                                        <h2 className="text-center text-dieucosmetics">CHỈNH SỬA THÔNG TIN CÁ NHÂN</h2>
+                                                        <h2 className="text-center text-secondary bg-home py-2">CHỈNH SỬA THÔNG TIN CÁ NHÂN</h2>
                                                         <div className="col-12 px-0">
                                                             <div className="bg-white mt-0">
                                                                 <div className="row">

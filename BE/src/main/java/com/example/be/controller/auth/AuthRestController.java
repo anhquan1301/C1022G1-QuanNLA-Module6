@@ -7,6 +7,7 @@ import com.example.be.dto.request.ResetPasswordRequest;
 import com.example.be.dto.request.SignInForm;
 import com.example.be.dto.response.JwtResponse;
 import com.example.be.dto.response.ResponseMessage;
+import com.example.be.model.OAuthProvider;
 import com.example.be.model.Role;
 import com.example.be.model.RoleName;
 import com.example.be.model.User;
@@ -102,6 +103,7 @@ public class AuthRestController {
         user.setRoles(roles);
         int id = iUserService.getTotalCodeAmount() + 1000;
         user.setCode("KH-" + id);
+        user.setoAuthProvider(OAuthProvider.local);
         user.setAvatar("https://firebasestorage.googleapis.com/v0/b/quannla.appspot.com/o/files%2Fanh-avatar-trang-fb-mac-dinh.jpg?alt=media&token=fae9b400-ca65-4568-9808-b5e18f1f3d65");
         iUserService.save(user);
         return new ResponseEntity<>(new ResponseMessage("Đăng ký thành công"),HttpStatus.CREATED);

@@ -7,6 +7,7 @@ public class CartPaymentForm {
     private String phoneNumber;
     private String shippingAddress;
     private String totalPay;
+    private String paymentMethod;
     private List<Integer> cartIds = new ArrayList<>();
     public CartPaymentForm() {
     }
@@ -41,5 +42,13 @@ public class CartPaymentForm {
 
     public void setTotalPay(String totalPay) {
         this.totalPay = totalPay;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

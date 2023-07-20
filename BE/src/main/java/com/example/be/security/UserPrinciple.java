@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class UserPrinciple implements UserDetails {
+public class UserPrinciple implements UserDetails, OAuth2User {
     private Integer id;
     private String name;
     private String username;
@@ -20,6 +22,13 @@ public class UserPrinciple implements UserDetails {
     private String avatar;
 
     private Collection<? extends GrantedAuthority> roles;
+
+    private Map<String, Object> attributes;
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -40,17 +49,21 @@ public class UserPrinciple implements UserDetails {
     }
     public static UserPrinciple build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-        return new UserPrinciple(
-                user.getId(),
-                user.getName(),
-                user.getUserName(),
-                user.getEmail(),
-                user.getPassword(),
-                user.getAvatar(),
-                authorities
-        );
+            return new UserPrinciple(
+                    user.getId(),
+                    user.getName(),
+                    user.getUserName(),
+                    user.getEmail(),
+                    user.getPassword(),
+                    user.getAvatar(),
+                    authorities
+            );
     }
-
+    public static UserPrinciple build(User users, Map<String, Object> attributes) {
+        UserPrinciple userPrincipal = UserPrinciple.build(users);
+        userPrincipal.setAttributes(attributes);
+        return userPrincipal;
+    }
     public Integer getId() {
         return id;
     }
@@ -97,6 +110,10 @@ public class UserPrinciple implements UserDetails {
 
     public String getName() {
         return name;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
     }
 
     @Override

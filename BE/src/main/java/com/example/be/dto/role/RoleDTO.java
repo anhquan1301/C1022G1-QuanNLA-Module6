@@ -2,16 +2,14 @@ package com.example.be.dto.role;
 
 import com.example.be.dto.customer.CustomerDetailDTO;
 import com.example.be.model.RoleName;
+import com.example.be.model.User;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class RoleDTO {
     private Integer id;
-
     private RoleName name;
-    Set<CustomerDetailDTO> employeeDetailDTOS = new HashSet<>();
-
     public RoleDTO() {
     }
 
@@ -31,11 +29,4 @@ public class RoleDTO {
         this.name = name;
     }
 
-    public Set<CustomerDetailDTO> getEmployeeDetailDTOS() {
-        return employeeDetailDTOS;
-    }
-
-    public void setEmployeeDetailDTOS(Set<CustomerDetailDTO> employeeDetailDTOS) {
-        this.employeeDetailDTOS = employeeDetailDTOS;
-    }
 }

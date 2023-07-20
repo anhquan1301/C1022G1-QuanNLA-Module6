@@ -80,9 +80,7 @@ export default function CustomerDetail() {
             modalBody.style.removeProperty('padding-right');
         }
     }
-    console.log(detailCartList);
-    console.log(show403Img);
-
+    console.log(customerDetail);
     return (
         <>
             {
@@ -104,7 +102,7 @@ export default function CustomerDetail() {
                                 </div>
                                 <div className="col-9">
                                     <div className="row ms-3 px-3">
-                                        <h2 className="text-center text-dieucosmetics">THÔNG TIN CÁ NHÂN</h2>
+                                        <h2 className="text-center text-secondary bg-home py-2">THÔNG TIN CÁ NHÂN</h2>
                                         <div className="col-6 px-5">
                                             <table className=" font-table text-secondary">
                                                 <thead>
@@ -122,15 +120,15 @@ export default function CustomerDetail() {
                                                     </tr>
                                                     <tr>
                                                         <th className="th-dieucosmetics">Giới tính :</th>
-                                                        <td>{customerDetail?.gender === false ? 'Nam' : 'Nữ'}</td>
+                                                        <td>{ customerDetail?.gender ? (customerDetail?.gender === false ? 'Nam' : 'Nữ') : ("(Chưa cập nhật)") }</td>
                                                     </tr>
                                                     <tr>
                                                         <th className="th-dieucosmetics">Ngày sinh :</th>
-                                                        <td>{format(new Date(customerDetail.dateOfBirth), "dd/MM/yyyy")}</td>
+                                                        <td> {customerDetail?.dateOfBirth === null ? "(Chưa cập nhật)" : format(new Date(customerDetail?.dateOfBirth), "dd/MM/yyyy")}</td>
                                                     </tr>
                                                     <tr>
-                                                        <th className="th-dieucosmetics align-top">Địa chỉ :</th>
-                                                        <td>{customerDetail?.address}</td>
+                                                        <th className={customerDetail?.address ? "th-dieucosmetics align-top" :"th-dieucosmetics"}>Địa chỉ :</th>
+                                                        <td>{customerDetail?.address ? customerDetail?.address:"(Chưa cập nhật)"}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -146,8 +144,7 @@ export default function CustomerDetail() {
                                                     const changePassword = async () => {
                                                         try {
                                                             await loginService.changePassword(value)
-                                                            localStorage.removeItem('token')
-                                                            localStorage.removeItem('avatar')
+                                                            localStorage.clear()
                                                             Swal.fire({
                                                                 icon: 'success',
                                                                 title: 'Thay đổi mật khẩu thành công. Vui lòng đăng nhập lại',
@@ -207,7 +204,7 @@ export default function CustomerDetail() {
                                                         <tbody>
                                                             <tr>
                                                                 <th className="th-dieucosmetics">Số điện thoại :</th>
-                                                                <td>{customerDetail?.phoneNumber}</td>
+                                                                <td>{customerDetail?.phoneNumber ? customerDetail?.phoneNumber : "(Chưa cập nhật)"}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th className="th-dieucosmetics ">

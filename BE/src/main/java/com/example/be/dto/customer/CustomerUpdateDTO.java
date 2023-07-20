@@ -16,7 +16,7 @@ public class CustomerUpdateDTO {
     @Length(min = 5,max = 30,message = "Trường này ít nhất 5 ký tự và nhiều nhất 30 ký tự")
     private String name;
     @NotNull(message = "Không được bỏ trống")
-    private boolean gender;
+    private Boolean gender;
     @NotBlank(message = "Không được bỏ trống")
     private String dateOfBirth;
     @NotBlank(message = "Không được bỏ trống")
@@ -54,11 +54,11 @@ public class CustomerUpdateDTO {
         this.name = name;
     }
 
-    public boolean isGender() {
+    public Boolean getGender() {
         return gender;
     }
 
-    public void setGender(boolean gender) {
+    public void setGender(Boolean gender) {
         this.gender = gender;
     }
 

@@ -3,6 +3,7 @@ package com.example.be.dto.customer;
 import com.example.be.dto.role.RoleDTO;
 import com.example.be.model.Cart;
 import com.example.be.model.OderProduct;
+import com.example.be.model.Role;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +13,7 @@ public class CustomerDetailDTO {
     private Integer id;
     private String code;
     private String name;
-    private boolean gender;
+    private Boolean gender;
     private String dateOfBirth;
     private String address;
     private String email;
@@ -21,8 +22,10 @@ public class CustomerDetailDTO {
     private String avatar;
     private Set<OderProduct> oderProducts = new TreeSet<>();
     private Set<Cart> cartSet = new TreeSet<>();
+    private Set<RoleDTO> roleSet = new TreeSet<>();
     public CustomerDetailDTO() {
     }
+
 
     public Integer getId() {
         return id;
@@ -48,11 +51,11 @@ public class CustomerDetailDTO {
         this.name = name;
     }
 
-    public boolean isGender() {
+    public Boolean getGender() {
         return gender;
     }
 
-    public void setGender(boolean gender) {
+    public void setGender(Boolean gender) {
         this.gender = gender;
     }
 
@@ -118,5 +121,13 @@ public class CustomerDetailDTO {
 
     public void setCartSet(Set<Cart> cartSet) {
         this.cartSet = cartSet;
+    }
+
+    public Set<RoleDTO> getRoleSet() {
+        return roleSet;
+    }
+
+    public void setRoleSet(Set<RoleDTO> roleSet) {
+        this.roleSet = roleSet;
     }
 }

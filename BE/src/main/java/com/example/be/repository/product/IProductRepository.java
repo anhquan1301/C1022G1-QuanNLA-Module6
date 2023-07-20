@@ -21,7 +21,7 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
             "           AND (p.product_type_id = :productTypeId OR :productTypeId = '')\n" +
             "        AND (p.producer_id = :producerId OR :producerId = '')\n" +
             "              AND cp.price_sale >= :minPrice\n" +
-            "            AND cp.price_sale <= :maxPrice", nativeQuery = true)
+            "            AND cp.price_sale <= :maxPrice AND p.is_delete = FALSE\n", nativeQuery = true)
     Page<Product> searchProduct(@Param("name") String name,
                                 @Param("productTypeId") String productTypeId,
                                 @Param("producerId") String producerId,
@@ -39,4 +39,6 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
             "ORDER BY p.id DESC\n" +
             "LIMIT 8",nativeQuery = true)
     List<IProductSaleList> productSaleList();
+    @Query(value = "select count(id) from product", nativeQuery = true)
+    Integer getTotalCodeAmount();
 }

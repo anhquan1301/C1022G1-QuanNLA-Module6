@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import productService from "../service/login/product/productService"
-import { useNavigate } from "react-router-dom"
+import {  useNavigate } from "react-router-dom"
 export default function Home() {
     const [productSaleList, setProductSaleList] = useState([])
+    
     const getProductSaleList = async () => {
         try {
             const res = await productService.productSaleList()
@@ -14,10 +15,9 @@ export default function Home() {
     }
     useEffect(() => {
         getProductSaleList()
-    }, [])
-    useEffect(() => {
         document.title = "Trang Chủ";
     }, [])
+
     const navigate = useNavigate()
     const handleDetailProduct = (id)=>{
         navigate('/product/detail/' + id)

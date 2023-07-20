@@ -32,7 +32,7 @@ public interface ICartRepository extends JpaRepository<Cart,Integer> {
             "        JOIN capacity_product cp ON cp.id = c.capacity_product_id\n" +
             "        JOIN capacity c2 ON c2.id = cp.capacity_id\n" +
             "        JOIN product p ON cp.product_id = p.id\n" +
-            "        JOIN image i ON p.id = i.product_id where c.user_id = :id\n" +
+            "        JOIN image i ON p.id = i.product_id where c.user_id = :id AND p.is_delete = false\n" +
             "GROUP BY c.id, c.create_date,c.price,c.quantity,c.user_id,c.capacity_product_id,cp.quantity,cp.product_id,cp.capacity_id,p.name, c2.name " +
             "Order by c.id desc ",nativeQuery = true)
     Page<ICartProjection> findAllByDeleteFalse(@Param("id")Integer id ,Pageable pageable);

@@ -29,9 +29,41 @@ const findAllProducer = ()=>{
         console.log(error);
     }
 }
+const fildAllCapacity = ()=>{
+    try {
+        return request.get(`/capacity`)
+    } catch (error) {
+        console.log(error);
+    }
+}
 const productSaleList = ()=>{
     try {
         return request.get(`/product/sale-list`)
+    } catch (error) {
+        console.log(error);
+    }
+}
+const productCreate = (value)=>{
+    const token = localStorage.getItem('token')
+    console.log(value);
+    try {
+        return request.post(`/product/create`,{ ...value }, {
+            headers : {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+const deleteProduct = (id)=>{
+    const token = localStorage.getItem('token')
+    try {
+        return request.delete(`/product/delete?id=${id}`, {
+            headers : {
+                'Authorization': `Bearer ${token}`
+            }
+        })
     } catch (error) {
         console.log(error);
     }
@@ -41,6 +73,9 @@ export const productService = {
     findByName,
     findAllProductType,
     findAllProducer,
-    productSaleList
+    productSaleList,
+    fildAllCapacity,
+    productCreate,
+    deleteProduct
 }
 export default productService

@@ -41,9 +41,9 @@ export default function Login() {
             console.log(error);
         }
     }
-    useEffect(()=>{
+    useEffect(() => {
         setAvatar('')
-    },[])
+    }, [])
     useEffect(() => {
         const intervalId = setInterval(() => {
             setCountdown(countdown => countdown - 1);
@@ -62,8 +62,8 @@ export default function Login() {
         <>
             <div className="login-body" style={
                 showFormEmail || showOtpModal || showFormResetPass ?
-                    { opacity:0.7} : {}
-                    }>
+                    { opacity: 0.7 } : {}
+            }>
                 <div className="padding-login">
                     <Formik
                         initialValues={{
@@ -76,6 +76,7 @@ export default function Login() {
                                     const res = await loginService.login(value)
                                     navigate('/')
                                     localStorage.setItem('token', res.data.token)
+                                    localStorage.setItem('role', res.data.roles[0].authority)
                                 } catch (error) {
                                     const err = error.response.data;
                                     if (err.username === "Không được bỏ trống") {
@@ -148,6 +149,12 @@ export default function Login() {
                                 <div className="text-center pt-3 text-muted">Bạn chưa có tài khoản?
                                     <NavLink className="a-login ms-1" to={'/register'}>Đăng ký</NavLink>
                                 </div>
+                                <div className="mt-2">
+                                <NavLink className="btn btn-google social-btn google w-75" to='http://localhost:8080/oauth2/authorization/google'>
+                                    <img src={'google-logo.png'} alt="Google" />Đăng nhập bằng Google</NavLink>
+                                <NavLink className="btn btn-facebook social-btn facebook w-75" to='http://localhost:8080/oauth2/authorization/facebook'>
+                                    <img src={'fb-logo.png'} alt="Facebook" />Đăng nhập bằng Facebook</NavLink>
+                                    </div>
                             </div>
                         </Form>
                     </Formik>

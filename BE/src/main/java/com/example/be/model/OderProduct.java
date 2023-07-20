@@ -19,14 +19,22 @@ public class OderProduct {
     private String totalPay;
     private String phoneNumber;
     private String shippingAddress;
+    private String paymentMethod;
     @OneToMany(mappedBy = "oderProduct")
-    @JsonManagedReference
+    @JsonManagedReference("oderProductOderDetailRef")
     private Set<OderDetail> oderDetailSet = new TreeSet<>();
     @ManyToOne
-    @JsonManagedReference
     @JoinColumn(columnDefinition = "id")
     private User user;
     public OderProduct() {
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public Set<OderDetail> getOderDetailSet() {

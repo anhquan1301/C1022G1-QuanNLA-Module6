@@ -3,5 +3,5 @@ package com.example.be.service.cart;
 import com.example.be.model.OderDetail;
 
 public interface IOderDetailService {
-void createOderDetail(OderDetail oderDetail);
+    OderDetail createOderDetail(OderDetail oderDetail);
 }

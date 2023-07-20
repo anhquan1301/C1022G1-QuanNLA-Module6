@@ -17,4 +17,9 @@ public class ProducerService implements IProducerService {
     public List<Producer> findAllProducer() {
         return iProducerRepository.findAll();
     }
+
+    @Override
+    public Producer findByProducerId(int id) {
+        return iProducerRepository.findById(id);
+    }
 }

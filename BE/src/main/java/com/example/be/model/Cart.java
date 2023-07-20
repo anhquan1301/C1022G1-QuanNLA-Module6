@@ -14,11 +14,10 @@ public class Cart {
     @Column(columnDefinition = "BIGINT")
     private String price;
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "capacityProductCartBackRef")
     @JoinColumn(columnDefinition = "id")
     private CapacityProduct capacityProduct;
     @ManyToOne
-    @JsonManagedReference
     @JoinColumn(columnDefinition = "id")
     private User user;
     @Column(columnDefinition = "DATETIME")

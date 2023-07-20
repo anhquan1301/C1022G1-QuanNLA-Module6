@@ -21,8 +21,8 @@ import java.util.TreeSet;
         })
 })
 public class User {
-    @JsonBackReference
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonBackReference("userSetRoleReference")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "role_user",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
@@ -33,7 +33,7 @@ public class User {
     private Integer id;
     private String code;
     private String name;
-    private boolean gender;
+    private Boolean gender;
     @Column(name = "date_of_birth")
     private String dateOfBirth;
     @Column(columnDefinition = "TEXT")
@@ -43,24 +43,26 @@ public class User {
     private String phoneNumber;
     @Column(name = "user_name", nullable = false)
     private String userName;
-    @Column(nullable = false,columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String password;
     @Lob
     private String avatar;
     private LocalDateTime expiryTime;
     private String otpSecret;
-    @JsonBackReference
+    @Enumerated(EnumType.STRING)
+    private OAuthProvider oAuthProvider;
+    @JsonBackReference("userOderProductRef")
     @OneToMany(mappedBy = "user")
     @OrderBy("id desc")
     private Set<OderProduct> oderProducts = new TreeSet<>();
-    @JsonBackReference
+    @JsonBackReference(value = "userCartReference")
     @OneToMany(mappedBy = "user")
     @OrderBy("capacityProduct.id ASC")
     private Set<Cart> cartSet = new TreeSet<>();
     public User() {
     }
 
-    public User(Set<Role> roles, Integer id, String code, String name, boolean gender, String dateOfBirth, String address, String email, String phoneNumber, String userName, String password, String avatar, LocalDateTime expiryTime, String otpSecret, Set<OderProduct> oderProducts) {
+    public User(Set<Role> roles, Integer id, String code, String name, Boolean gender, String dateOfBirth, String address, String email, String phoneNumber, String userName, String password, String avatar, LocalDateTime expiryTime, String otpSecret, Set<OderProduct> oderProducts) {
         this.roles = roles;
         this.id = id;
         this.code = code;
@@ -78,7 +80,7 @@ public class User {
         this.oderProducts = oderProducts;
     }
 
-    public User(String name, String address, String dateOfBirth, String email, boolean gender, String phoneNumber, String userName, String password) {
+    public User(String name, String address, String dateOfBirth, String email, Boolean gender, String phoneNumber, String userName, String password) {
         this.name = name;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
@@ -89,7 +91,15 @@ public class User {
         this.password = password;
     }
 
-    public boolean isGender() {
+    public OAuthProvider getoAuthProvider() {
+        return oAuthProvider;
+    }
+
+    public void setoAuthProvider(OAuthProvider oAuthProvider) {
+        this.oAuthProvider = oAuthProvider;
+    }
+
+    public Boolean isGender() {
         return gender;
     }
 
@@ -141,11 +151,11 @@ public class User {
         this.name = name;
     }
 
-    public boolean getGender() {
+    public Boolean getGender() {
         return gender;
     }
 
-    public void setGender(boolean gender) {
+    public void setGender(Boolean gender) {
         this.gender = gender;
     }
 

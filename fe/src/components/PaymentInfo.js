@@ -33,7 +33,7 @@ export default function PaymentInfo() {
   };
   useEffect(() => {
     document.title = "Thanh Toán";
-}, [])
+  }, [])
   useEffect(() => {
     const parsed = queryString.parse(url);
     const str = "http://localhost:3000/payment-info?vnp_Amount";
@@ -60,16 +60,23 @@ export default function PaymentInfo() {
       shippingAddress: address,
       totalPay: paymentInfo.vnp_Amount,
       cartIds: cartIds,
+      paymentMethod: 'VNPay'
     }
     try {
       await cartService.payment(valuePayment)
       localStorage.removeItem('cartIds')
       localStorage.removeItem('phoneNumber')
       localStorage.removeItem('address')
-
+      localStorage.removeItem('paymentMethod')
+      localStorage.removeItem('valueCart')
     } catch (error) {
       console.log(error);
       if (error.response.data.message) {
+        localStorage.removeItem('cartIds')
+        localStorage.removeItem('phoneNumber')
+        localStorage.removeItem('address')
+        localStorage.removeItem('paymentMethod')
+        localStorage.removeItem('valueCart')
         setShowFormPayment(false)
         Swal.fire({
           icon: 'error',

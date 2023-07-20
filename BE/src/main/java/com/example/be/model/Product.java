@@ -18,26 +18,36 @@ public class Product {
     private String description;
     @Column(columnDefinition = "DATE")
     private String addNewDate;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(columnDefinition = "id")
     private ProductType productType;
     @ManyToOne
     @JoinColumn(columnDefinition = "id")
     private Producer producer;
-    @JsonManagedReference
+    @JsonManagedReference("productImageBackRef")
     @OneToMany(mappedBy = "product")
     @OrderBy("id ASC")
-    private Set<Image> imageSet = new TreeSet<>();
-    @JsonBackReference
+    private List<Image> imageSet = new ArrayList<>();
+    @JsonBackReference("oderDetailsProductBackRef")
     @OneToMany(mappedBy = "product")
     @OrderBy("id ASC")
     private Set<OderDetail> oderDetails = new TreeSet<>();
-    @JsonManagedReference
+    @JsonManagedReference(value = "productBackRef")
     @OneToMany(mappedBy = "product")
     @OrderBy("priceSale ASC")
     private List<CapacityProduct> capacityProductSet = new ArrayList<>();
 
+    private boolean isDelete;
+
     public Product() {
+    }
+
+    public boolean isDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(boolean delete) {
+        isDelete = delete;
     }
 
     public Set<OderDetail> getOderDetails() {
@@ -121,11 +131,11 @@ public class Product {
         this.producer = producer;
     }
 
-    public Set<Image> getImageSet() {
+    public List<Image> getImageSet() {
         return imageSet;
     }
 
-    public void setImageSet(Set<Image> imageSet) {
+    public void setImageSet(List<Image> imageSet) {
         this.imageSet = imageSet;
     }
 }

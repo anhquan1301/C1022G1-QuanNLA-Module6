@@ -9,15 +9,10 @@ import javax.persistence.*;
 public class CapacityProductDTO {
 
     private Integer id;
-
     private Product product;
-
     private Capacity capacity;
-
     private String price;
-
     private String priceSale;
-
     private String quantity;
 
     public CapacityProductDTO() {

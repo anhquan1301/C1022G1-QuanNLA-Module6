@@ -12,7 +12,7 @@ public class OderDetailService implements IOderDetailService {
     private IOrderDetailRepository iOrderDetailRepository;
 
     @Override
-    public void createOderDetail(OderDetail oderDetail) {
-        iOrderDetailRepository.save(oderDetail);
+    public OderDetail createOderDetail(OderDetail oderDetail) {
+      return iOrderDetailRepository.save(oderDetail);
     }
 }

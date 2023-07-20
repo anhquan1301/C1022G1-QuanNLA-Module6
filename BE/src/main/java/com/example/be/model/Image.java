@@ -10,10 +10,9 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("productImageBackRef")
     @JoinColumn(columnDefinition = "id")
     private Product product;
 

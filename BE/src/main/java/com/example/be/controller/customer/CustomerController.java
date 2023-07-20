@@ -3,6 +3,8 @@ package com.example.be.controller.customer;
 import com.example.be.dto.customer.CustomerDetailDTO;
 import com.example.be.dto.customer.CustomerUpdateDTO;
 import com.example.be.dto.response.ResponseMessage;
+import com.example.be.dto.role.RoleDTO;
+import com.example.be.model.Role;
 import com.example.be.model.User;
 import com.example.be.security.JwtAuthenticationFilter;
 import com.example.be.security.JwtTokenProvider;
@@ -20,10 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/customer")
@@ -46,6 +45,14 @@ public class CustomerController {
             }
             CustomerDetailDTO customerDetailDTO = new CustomerDetailDTO();
             Optional<User> user = iUserService.findByUsername(username);
+            Set<RoleDTO> roleDTOSet = new HashSet<>();
+            RoleDTO roleDTO;
+            for (Role role : user.get().getRoles()) {
+                roleDTO = new RoleDTO();
+                BeanUtils.copyProperties(role,roleDTO);
+                roleDTOSet.add(roleDTO);
+            }
+            customerDetailDTO.setRoleSet(roleDTOSet);
             BeanUtils.copyProperties(user.get(),customerDetailDTO);
             return new ResponseEntity<>(customerDetailDTO,HttpStatus.OK);
         }else {

@@ -10,10 +10,10 @@ import java.util.TreeSet;
 @Entity
 public class CapacityProduct {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "productBackRef")
     @JoinColumn(columnDefinition = "id")
     private Product product;
     @ManyToOne
@@ -25,8 +25,8 @@ public class CapacityProduct {
     private String priceSale;
     @Column(columnDefinition = "INT")
     private String quantity;
-    @OneToMany(mappedBy = "capacityProduct")
-    @JsonManagedReference
+    @OneToMany
+    @JsonManagedReference(value = "capacityProductCartBackRef")
     @OrderBy("capacityProduct.id ASC")
     private Set<Cart> cartSet = new TreeSet<>();
     public CapacityProduct() {

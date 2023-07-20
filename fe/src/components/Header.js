@@ -7,15 +7,15 @@ import { QuantityContext } from './QuantityContext';
 export default function Header() {
   const token = localStorage.getItem('token')
   const [customerDetail, setCustomerDetail] = useState()
-  const [avatarDetail,setAvatarDetail] = useState()
+  const [avatarDetail, setAvatarDetail] = useState('https://firebasestorage.googleapis.com/v0/b/quannla.appspot.com/o/files%2Fanh-avatar-trang-fb-mac-dinh.jpg?alt=media&token=10a4447c-33df-4390-a5fb-0ccc5d97069a')
   const navigate = useNavigate()
-  const { avatar,setAvatar } = useContext(AvatarContext);
-  const { iconQuantity,setIconQuantity } = useContext(QuantityContext);
+  const { avatar, setAvatar } = useContext(AvatarContext);
+  const { iconQuantity, setIconQuantity } = useContext(QuantityContext);
   const [searchInput, setSearchInput] = useState('');
   const handleLogout = () => {
     localStorage.clear()
     navigate('/login')
-    setIconQuantity(0)            
+    setIconQuantity(0)
     setAvatar('')
   }
   const handleSearch = (event) => {
@@ -24,31 +24,34 @@ export default function Header() {
   };
   useEffect(() => {
     const detail = async () => {
-        try {
-            const res = await customerService.detail()
-            setCustomerDetail(res.data)
-        } catch (error) {
-            console.log(error);
-        }
+      try {
+        const res = await customerService.detail()
+        setCustomerDetail(res.data)
+      } catch (error) {
+        console.log(error);
+      }
     }
     detail()
-   
-}, [token])
-useEffect(()=>{
-setIconQuantity(customerDetail?.cartSet.length)
-},[customerDetail?.cartSet.length])
-useEffect(()=>{
-  setAvatarDetail(customerDetail?.avatar)
-},[customerDetail])
 
-const handleSearchProduct = (event)=>{
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    navigate(`/product?search=${searchInput}`)
+  }, [token])
+
+  useEffect(() => {
+    setIconQuantity(customerDetail?.cartSet.length)
+  }, [customerDetail?.cartSet.length])
+  useEffect(() => {
+    setAvatarDetail(customerDetail?.avatar)
+  }, [customerDetail])
+
+  const handleSearchProduct = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      navigate(`/product?search=${searchInput}`)
+    }
   }
-}
-console.log(customerDetail);
-
+  if(avatarDetail===undefined){
+    setAvatarDetail('https://firebasestorage.googleapis.com/v0/b/quannla.appspot.com/o/files%2Fanh-avatar-trang-fb-mac-dinh.jpg?alt=media&token=10a4447c-33df-4390-a5fb-0ccc5d97069a')
+  }
+  console.log(avatarDetail);
   return (
     <>
       <header className=''>
@@ -58,7 +61,7 @@ console.log(customerDetail);
             className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 header-shadow"
           >
             <NavLink
-               to='/'
+              to='/'
               className="d-flex align-items-center ms-5 col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"
               style={{ marginRight: "-220px" }}>
               <img
@@ -116,14 +119,13 @@ console.log(customerDetail);
                 }}>|</span>
               </i>
               <input type='text' className='form-control search-product' value={searchInput} onKeyDown={handleSearchProduct} onChange={handleSearch} placeholder='Tìm kiếm sản phẩm' />
-              {/* <NavLink to={`/product/${searchInput}`}>Tìm kiếm</NavLink> */}
             </div>
             <div className="me-5 fs-4 ">
               <div className='float-start'>
                 {
-                  token === null ? 
-                  <NavLink to={'/login'} type="button" className=" ms-5 bi bi-person ">
-                  </NavLink> :
+                  token === null ?
+                    <NavLink to={'/login'} type="button" className=" ms-5 bi bi-person ">
+                    </NavLink> :
                     <div className=" ms-5">
                       <div className="dropdown">
                         <a
@@ -138,7 +140,7 @@ console.log(customerDetail);
                             height: '40px'
                           }} >
                             <img
-                              src={ avatar === '' ? avatarDetail : avatar}
+                              src={avatar === '' ? avatarDetail : avatar}
                               className="rounded-circle border border-2 border-color"
                               alt="avatar"
                               width={'100%'}
@@ -151,10 +153,10 @@ console.log(customerDetail);
                           aria-labelledby="navbarDropdownMenuAvatar"
                         >
                           <li>
-                                  <NavLink to='/customer/detail' className="dropdown-item button-buy">
-                                      Thông tin cá nhân
-                                  </NavLink>
-                              </li>
+                            <NavLink to='/customer/detail' className="dropdown-item button-buy">
+                              Thông tin cá nhân
+                            </NavLink>
+                          </li>
                           <li>
                             <button onClick={handleLogout} className="dropdown-item button-buy" href="#">
                               Đăng xuất

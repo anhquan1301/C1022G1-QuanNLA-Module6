@@ -19,4 +19,13 @@ public class CapacityProductService implements ICapacityProductService {
     public void updateQuantityProduct(CapacityProduct capacityProduct) {
         iCapacityProductRepository.save(capacityProduct);
     }
+    @Override
+    public void capacityProductCreate(CapacityProduct capacityProduct) {
+        iCapacityProductRepository.save(capacityProduct);
+    }
+
+    @Override
+    public Integer getIdCapacityProduct() {
+        return iCapacityProductRepository.getIdCapacityProduct();
+    }
 }

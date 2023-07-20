@@ -29,6 +29,7 @@ export default function ProductList() {
     })
     const sortList = ['Tên: A-Z', 'Tên: Z-A', 'Giá: Giảm dần', 'Giá: Tăng dần']
     const { iconQuantity, setIconQuantity } = useContext(QuantityContext)
+    const role = localStorage.getItem('role')
     const [nameSort, setNameSort] = useState('')
     const navigate = useNavigate()
     const findByName = async () => {
@@ -107,7 +108,7 @@ export default function ProductList() {
     const handlePriceChange = debounce((event) => {
         setValueSearch({
             ...valueSearch,
-            minPrice: event.target.value[0],    
+            minPrice: event.target.value[0],
             maxPrice: event.target.value[1]
         })
     }, 100);
@@ -155,6 +156,35 @@ export default function ProductList() {
         }
 
     }
+    const handdleDeleteProduct = (id, image) => {
+        Swal.fire({
+            color: '#d4969a',
+            text: 'BẠN CHẮC CHẮN MUỐN XÓA SẢN PHẨM ?',
+            imageUrl: image,
+            imageHeight: '150px',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Không',
+            confirmButtonText: 'Có'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await productService.deleteProduct(id)
+                    findByName()
+                    Swal.fire({
+                        title: 'Xóa sản phẩm thành công',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        })
+    }
     return (
         <>
             <div className="row mx-0" style={{ marginTop: '117px' }}>
@@ -170,17 +200,12 @@ export default function ProductList() {
                             <h4>Danh mục</h4>
                         </div>
                         <hr />
-                        <div>
-                            <button className="nav-link link-dark ms-2 fs-5 fw-bold accordion-button"
-                                aria-current="page"
-                                onClick={() => setValueSearch({
-                                    name: valueSearch.name,
-                                    productTypeId: '',
-                                    producerId: valueSearch.producerId,
-                                    minPrice: valueSearch.minPrice,
-                                    maxPrice: valueSearch.maxPrice
-                                })}>Tất cả sản phẩm</button>
-                        </div>
+                        {
+                            role == 'ROLE_ADMIN' && <div>
+                                <NavLink to={'/product/create'} className="text-decoration-none ms-2 fs-5 fw-bold text-danger"
+                                    aria-current="page">Thêm mới sản phẩm</NavLink>
+                            </div>
+                        }
                         <div className="accordion-header mt-2 ms-2" id="headingOne">
                             <button
                                 className="accordion-button fs-6 fw-bold"
@@ -201,7 +226,7 @@ export default function ProductList() {
                                 productTypeList.map((element, index) => (
                                     <div className="nav-item my-2 ms-4" key={index}>
                                         <button
-                                            className="nav-link link-dark  text-truncate "
+                                            className="nav-link link-dark  text-truncate"
                                             aria-current="page"
                                             onClick={() => handleProductType(element.id)}
                                         >
@@ -210,6 +235,17 @@ export default function ProductList() {
                                     </div>
                                 ))
                             }
+                            <div className="nav-item my-2 ms-4">
+                                <button className="nav-link link-dark text-truncate fw-bold"
+                                    aria-current="page"
+                                    onClick={() => setValueSearch({
+                                        name: valueSearch.name,
+                                        productTypeId: '',
+                                        producerId: valueSearch.producerId,
+                                        minPrice: valueSearch.minPrice,
+                                        maxPrice: valueSearch.maxPrice
+                                    })}>Tất cả sản phẩm</button>
+                            </div>
                         </div>
                         <div className="accordion-header mt-2 ms-2" id="headingOne">
                             <button
@@ -307,6 +343,9 @@ export default function ProductList() {
                                                 <div type='button' className="card-list col-4 mt-2" key={index}>
                                                     <div className="cart-icon">
                                                         <i type="button" onClick={() => { handleCreateCart(element.capacityProductSet[0].priceSale, element.capacityProductSet[0].id) }} className="bi bi-cart-plus" aria-hidden="true"></i>
+                                                    </div>
+                                                    <div className="trash-icon">
+                                                        <i type='button' onClick={() => { handdleDeleteProduct(element.id, element.imageSet[0].name) }} className="bi bi-trash" />
                                                     </div>
                                                     <NavLink to={`detail/${element.id}`} className={'text-decoration-none text-secondary'}>
                                                         <img src={element.imageSet[0].name}

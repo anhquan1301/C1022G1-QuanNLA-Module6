@@ -10,6 +10,7 @@ import com.example.be.security.JwtTokenProvider;
 import com.example.be.service.cart.ICartService;
 import com.example.be.service.cart.IOderDetailService;
 import com.example.be.service.cart.IOderProductService;
+import com.example.be.service.mail.IEmailService;
 import com.example.be.service.product.ICapacityProductService;
 import com.example.be.service.product.IProducerService;
 import com.example.be.service.product.IProductService;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +49,8 @@ public class CartController {
     private IOderDetailService iOderDetailService;
     @Autowired
     private IOderProductService iOderProductService;
+    @Autowired
+    private IEmailService iEmailService;
     @GetMapping("")
     public ResponseEntity<?> findAllCart(HttpServletRequest request,@PageableDefault Pageable pageable){
         String token = jwtAuthenticationFilter.getJwt(request);
@@ -101,6 +105,7 @@ public class CartController {
 
     @PutMapping("")
     public ResponseEntity<?> cartUpdate(@RequestBody List<CartUpdateQuantity> cartUpdateQuantityList){
+        boolean flag = false;
         for (CartUpdateQuantity cartUpdateQuantity: cartUpdateQuantityList ) {
             Cart cart = iCartService.findByIdCart(cartUpdateQuantity.getId());
             if(cart==null){
@@ -111,10 +116,16 @@ public class CartController {
                 return new ResponseEntity<>(new ResponseMessage("Cập nhật giỏ hàng thất bại"),HttpStatus.BAD_REQUEST);
             }
             if(Integer.parseInt(cartUpdateQuantity.getQuantity()) > Integer.parseInt(capacityProduct.getQuantity())){
-                return new ResponseEntity<>(new ResponseMessage("Sản phẩm đã hết hàng"), HttpStatus.BAD_REQUEST);
+                cart.setQuantity(capacityProduct.getQuantity());
+                iCartService.updateCart(cart);
+                flag = true;
+            }else{
+                cart.setQuantity(cartUpdateQuantity.getQuantity());
+                iCartService.updateCart(cart);
             }
-            cart.setQuantity(cartUpdateQuantity.getQuantity());
-            iCartService.updateCart(cart);
+        }
+        if(flag){
+            return new ResponseEntity<>(new ResponseMessage("Số lượng sản phẩm trong kho không đủ"), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(new ResponseMessage("Cập nhật giỏ hàng thành công"),HttpStatus.OK);
     }
@@ -133,6 +144,7 @@ public class CartController {
         if(cartPaymentForm.getCartIds().isEmpty()){
             return new ResponseEntity<>(new ResponseMessage("Không có đơn hàng được chọn"),HttpStatus.BAD_REQUEST);
         }
+        boolean flag = false;
         for(Integer cartId: cartPaymentForm.getCartIds()){
            Cart cart  =  iCartService.findByIdCart(cartId);
             CapacityProduct capacityProduct = cart.getCapacityProduct();
@@ -140,8 +152,13 @@ public class CartController {
                 return new ResponseEntity<>(new ResponseMessage("Giỏ hàng không tồn tại"),HttpStatus.BAD_REQUEST);
             }
             if(Integer.parseInt(capacityProduct.getQuantity())<Integer.parseInt(cart.getQuantity())){
-                return new ResponseEntity<>(new ResponseMessage("Số lượng trong kho còn " + capacityProduct.getQuantity()+ " sản phẩm"),HttpStatus.BAD_REQUEST);
+                cart.setQuantity(capacityProduct.getQuantity());
+                iCartService.updateCart(cart);
+                flag = true;
             }
+        }
+        if(flag){
+            return new ResponseEntity<>(new ResponseMessage("Số lượng sản phẩm trong kho không đủ"),HttpStatus.BAD_REQUEST);
         }
         String token = jwtAuthenticationFilter.getJwt(request);
         if (token != null && jwtTokenProvider.validateToken(token)) {
@@ -158,23 +175,29 @@ public class CartController {
             oderProduct.setUser(user);
             oderProduct.setPhoneNumber(cartPaymentForm.getPhoneNumber());
             oderProduct.setShippingAddress(cartPaymentForm.getShippingAddress());
+            oderProduct.setPaymentMethod(cartPaymentForm.getPaymentMethod());
             oderProduct.setTotalPay(cartPaymentForm.getTotalPay());
             iOderProductService.createOderProduct(oderProduct);
             OderProduct oderProduct1 = iOderProductService.findByIdOderProduct(oderProduct.getId());
             Cart cart;
+            List<OderDetail> oderDetailList = new ArrayList<>();
             for(Integer cartId: cartPaymentForm.getCartIds()){
                 cart  =  iCartService.findByIdCart(cartId);
                 CapacityProduct capacityProduct = cart.getCapacityProduct();
                 OderDetail oderDetail = new OderDetail();
                 oderDetail.setPrice(cart.getPrice());
                 oderDetail.setQuantity(cart.getQuantity());
-                oderDetail.setProduct(cart.getCapacityProduct().getProduct());
+                oderDetail.setProduct(capacityProduct.getProduct());
                 oderDetail.setSubtotal(String.valueOf(Integer.parseInt(oderDetail.getPrice())*Integer.parseInt(oderDetail.getQuantity())));
                 oderDetail.setOderProduct(oderProduct1);
                 capacityProduct.setQuantity(String.valueOf(Integer.parseInt(capacityProduct.getQuantity())-Integer.parseInt(cart.getQuantity())));
-                iOderDetailService.createOderDetail(oderDetail);
+                OderDetail oderDetail1 = iOderDetailService.createOderDetail(oderDetail);
+                oderDetailList.add(oderDetail1);
                 iCapacityProductService.updateQuantityProduct(capacityProduct);
                 deleteCart(cartId);
+            }
+            if(!oderDetailList.isEmpty()){
+                iEmailService.sendPaymentSuccessEmail(user.getEmail(),oderProduct1,oderDetailList);
             }
             return new ResponseEntity<>(new ResponseMessage("Thanh toán đơn hàng thành công"), HttpStatus.CREATED);
         }

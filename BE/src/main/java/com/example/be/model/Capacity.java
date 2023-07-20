@@ -16,7 +16,7 @@ public class Capacity {
     private Integer id;
     private String name;
     @OneToMany(mappedBy = "capacity")
-    @JsonBackReference
+    @JsonBackReference(value = "capacityProductSetBackRef")
     @OrderBy("priceSale ASC")
     private Set<CapacityProduct> capacityProductSet = new TreeSet<>();
     public Capacity() {

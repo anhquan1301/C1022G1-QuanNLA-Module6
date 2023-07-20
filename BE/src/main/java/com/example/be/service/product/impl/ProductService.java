@@ -31,4 +31,20 @@ public class ProductService implements IProductService {
     public List<IProductSaleList> productSaleList() {
         return iProductRepository.productSaleList();
     }
+
+    @Override
+    public Integer getTotalCodeAmount() {
+        return iProductRepository.getTotalCodeAmount();
+    }
+
+    @Override
+    public Product productCreate(Product product) {
+       return iProductRepository.save(product);
+    }
+
+    @Override
+    public void deleteProduct(Product product) {
+        product.setDelete(true);
+        iProductRepository.save(product);
+    }
 }

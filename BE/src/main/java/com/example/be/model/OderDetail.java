@@ -15,7 +15,7 @@ public class OderDetail {
     @JoinColumn(columnDefinition = "id")
     private Product product;
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("oderProductOderDetailRef")
     @JoinColumn(columnDefinition = "id")
     private OderProduct oderProduct;
     @Column(columnDefinition = "BIGINT")

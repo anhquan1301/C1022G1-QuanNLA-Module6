@@ -3,6 +3,8 @@ package com.example.be.config;
 import com.example.be.security.CustomUserDetailsService;
 import com.example.be.security.JwtAuthenticationEntryPoint;
 import com.example.be.security.JwtAuthenticationFilter;
+import com.example.be.service.OAuth2.impl.CustomOAuth2UserService;
+import com.example.be.service.OAuth2.impl.OAuth2LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +27,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomUserDetailsService customUserDetailsService;
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    @Autowired
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    @Autowired
+    private CustomOAuth2UserService oauth2UserService;
     @Bean
     public JwtAuthenticationFilter jwtTokenFilter(){
         return new JwtAuthenticationFilter();
@@ -46,19 +52,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().and().csrf().disable()
-                                .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/register","/login","/reset-password"
-                        ,"/forgot-password","/check-otp","/product/**"
-                        ,"/producer/**","/product-type/**")
+                        ,"/forgot-password","/check-otp","/product","/product/detail","/product/sale-list"
+                        ,"/producer/**","/product-type/**","/capacity/**","/oauth2/**","/login/**")
                 .permitAll()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/cart/**","/payment","/change-password","/customer/**")
                 .hasAnyRole("USER","ADMIN")
+                .antMatchers("/product/create","/product/delete")
+                .hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .oauth2Login()
+                .loginPage("/login")
+                .userInfoEndpoint()
+                .userService(oauth2UserService)
+                .and()
+                .successHandler(oAuth2LoginSuccessHandler)
+                .and()
+                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         httpSecurity.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

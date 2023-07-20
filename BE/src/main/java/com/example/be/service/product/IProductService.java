@@ -18,4 +18,8 @@ public interface IProductService {
             , Pageable pageable);
     Product findByProduct(int id);
     List<IProductSaleList> productSaleList();
+    Integer getTotalCodeAmount();
+    Product productCreate(Product product);
+
+    void deleteProduct(Product product);
 }

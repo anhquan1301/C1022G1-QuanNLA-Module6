@@ -18,7 +18,6 @@ public class VNPayConfig {
     public static String vnp_Command = "pay";
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
-
     public static String Sha256(String message) {
         String digest = null;
         try {

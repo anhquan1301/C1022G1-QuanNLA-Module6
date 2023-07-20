@@ -9,8 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.net.Inet4Address;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,6 +26,12 @@ public class VNPayController {
     private IOderProductService iOderProductService;
     @PostMapping("")
     public ResponseEntity<?> createPayment (@RequestBody RequestVNPayment RequestVNPayment) throws UnsupportedEncodingException {
+        Inet4Address myIp;
+        try {
+             myIp = (Inet4Address) Inet4Address.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
         long amount = Long.parseLong(RequestVNPayment.getTotalPay())*100;
         int id = iOderProductService.getTotalCodeAmount() + 1000;
         String vnp_TxnRef = "DH-" + id;
@@ -33,21 +42,20 @@ public class VNPayController {
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
+        vnp_Params.put("vnp_IpAddr", String.valueOf(myIp));
         vnp_Params.put("vnp_BankCode", "NCB");
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
+        vnp_Params.put("vnp_OrderType", "topup");
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang : " + vnp_TxnRef);
         vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_Returnurl);
-
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
-
         cld.add(Calendar.MINUTE, 15);
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
-
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
         StringBuilder hashData = new StringBuilder();

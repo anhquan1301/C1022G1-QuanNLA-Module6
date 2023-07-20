@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface IProducerRepository extends JpaRepository<Producer,Integer> {
     List<Producer> findAll();
+    Producer findById(int id);
 }

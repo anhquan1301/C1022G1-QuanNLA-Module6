@@ -1,21 +1,24 @@
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { Field, Form, Formik } from "formik";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import productService from "../service/login/product/productService";
 import { useState } from "react";
 import { useEffect } from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../FireBase";
 import Swal from "sweetalert2";
-export default function ProductCreate() {
-
+export default function ProductUpdate() {
   const [producerList, setProducerList] = useState([])
   const [productypeList, setProductType] = useState([])
+  const [productDetail, setProductDetail] = useState()
   const role = localStorage.getItem('role')
   const [listImage, setListImage] = useState([])
   const [selectedFile, setSelectedFile] = useState([]);
+  const [listImageObj, setListImageObj] = useState([])
+  const [showProductErr, setShowProductErr] = useState(false);
   const navigate = useNavigate();
+  const param = useParams()
   const findAllProducer = async () => {
     try {
       const rs = await productService.findAllProducer()
@@ -32,12 +35,38 @@ export default function ProductCreate() {
       console.log(error);
     }
   }
+  const detail = async () => {
+    try {
+      const res = await productService.detail(param.id)
+      setProductDetail(res.data)
+      setShowProductErr(false)
+    } catch (error) {
+      console.log(error);
+      if (error.response.data.message === 'Sản phẩm không tồn tại') {
+        setShowProductErr(true)
+      }
+      if (error.response.data.message === 'Sản phẩm chưa có dữ liệu') {
+        setShowProductErr(true)
+      }
+    }
+  }
+  useEffect(() => {
+    detail()
+  }, [param.id])
   useEffect(() => {
     findAllProducer()
     findAllProductType()
   }, [])
   useEffect(() => {
-    document.title = "Thêm Mới Sản Phẩm";
+    const listImgSet = productDetail?.imageSet.map(element => element.name)
+    setListImage(listImgSet)
+  }, [productDetail?.imageSet])
+  useEffect(() => {
+    const listImgSet = productDetail?.imageSet
+    setListImageObj(listImgSet)
+  }, [productDetail?.imageSet])
+  useEffect(() => {
+    document.title = "Cập Nhật Sản Phẩm";
   }, [])
   const handleFileSelect = (event) => {
     const files = event.target.files;
@@ -79,14 +108,14 @@ export default function ProductCreate() {
   };
   const handleSubmitAsync = async () => {
     return new Promise((resolve, reject) => {
-      if (selectedFile.length === 0) {
-        return Swal.fire({
-          icon: 'error',
-          title: 'Bạn chưa chọn ảnh',
-          showConfirmButton: false,
-          timer: 1500
-        })
-      }
+      // if (selectedFile.length === 0) {
+      //   return Swal.fire({
+      //     icon: 'error',
+      //     title: 'Bạn chưa chọn ảnh',
+      //     showConfirmButton: false,
+      //     timer: 1500
+      //   })
+      // }
       const uploadPromises = selectedFile.map((file) => {
         return new Promise(async (resolve, reject) => {
           const extension = file.name;
@@ -132,10 +161,45 @@ export default function ProductCreate() {
     updatedList.splice(index, 1);
     setListImage(updatedList);
     const updatedListSelectedFile = [...selectedFile];
-    updatedListSelectedFile.splice(index, 1);
+    updatedListSelectedFile.splice(index - listImage.length, 1);
     setSelectedFile(updatedListSelectedFile);
+    const updateListImageObj = [...listImageObj];
+    updateListImageObj.splice(index, 1);
+    setListImageObj(updateListImageObj)
   }
-
+  const convertPathsToImages = (paths) => {
+    return paths.map((path) => {
+      return {
+        id: 0,
+        name: path,
+      };
+    });
+  };
+  const productUpdate = async (value) => {
+    const newImagesFromAsync = await handleSubmitAsync();
+    const newImagesAsObjects = convertPathsToImages(newImagesFromAsync);
+    value.imageSet = [...listImageObj, ...newImagesAsObjects]
+    try {
+      await productService.productUpdate({ ...value, productType: { id: +value.productType }, producer: { id: +value.producer } })
+      navigate('/product')
+      Swal.fire({
+        icon: 'success',
+        title: 'Cập nhật sản phẩm thành công',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const handleSendDataDetailProduct = ()=>{
+    localStorage.setItem('dataCapacity',JSON.stringify(productDetail?.capacityProductSet))
+    navigate(`/product/data-entry/update/${productDetail?.id}/${productDetail?.name}/${encodeURIComponent(productDetail?.imageSet[0].name.replaceAll('%', '*'))}`)
+  }
+  if (!productDetail) {
+    return null
+  }
+  console.log(productDetail);
   return (
     <>
       {
@@ -158,43 +222,29 @@ export default function ProductCreate() {
             <div className="container p-5 shadow-cosmetics-1 mt-3 bg-white">
               <Formik
                 initialValues={{
-                  productTypeId: '',
-                  producerId: '',
-                  addNewDate: '',
-                  name: '',
-                  description: '',
-                  color: '',
-                  imageSet: [],
+                  id: productDetail?.id,
+                  productType: productDetail?.productType.id,
+                  producer: productDetail?.producer.id,
+                  addNewDate: productDetail?.addNewDate,
+                  name: productDetail?.name,
+                  description: productDetail?.description,
+                  color: productDetail?.color,
+                  imageSet: productDetail?.imageSet,
                 }}
                 onSubmit={(value) => {
-                  const productCreate = async () => {
-                    value.imageSet = await handleSubmitAsync()
-                    try {
-                      await productService.productCreate(value)
-                      navigate('/product/not-data')
-                      Swal.fire({
-                        icon: 'success',
-                        title: 'Thêm sản phẩm thành công',
-                        showConfirmButton: false,
-                        timer: 1500
-                      })
-                    } catch (error) {
-                      console.log(error);
-                    }
-                  }
-                  productCreate()
+                  productUpdate(value)
                 }}
               >
                 {({ resetForm }) => (<Form className="row">
                   <div>
-                    <h3 className="text-center text-secondary bg-home py-2">Thêm Mới Sản Phẩm</h3>
+                    <h3 className="text-center text-secondary bg-home py-2">Cập Nhật Sản Phẩm</h3>
                   </div>
                   <div className="col-4">
                     <div className="">
                       <div className="form-group">
-                        <label htmlFor="productTypeId">Phân khúc :</label>
+                        <label htmlFor="productType">Phân khúc :</label>
                         <div className="input-field">
-                          <Field component='select' type="text" className="input-login" name="productTypeId" id="productTypeId" placeholder="">
+                          <Field component='select' type="text" className="input-login" name="productType" id="productType" placeholder="">
                             <option>---Chọn---</option>
                             {
                               productypeList.map((element, index) => (
@@ -230,9 +280,9 @@ export default function ProductCreate() {
                   </div>
                   <div className="col-4">
                     <div className="form-group">
-                      <label htmlFor="">Thương hiệu : </label>
+                      <label htmlFor="producer">Thương hiệu : </label>
                       <div className="input-field">
-                        <Field component='select' type="text" className="input-login" name="producerId" id="producerId" placeholder="">
+                        <Field component='select' type="text" className="input-login" name="producer" id="producer" placeholder="">
                           <option>---Chọn---</option>
                           {
                             producerList.map((element, index) => (
@@ -284,19 +334,18 @@ export default function ProductCreate() {
                         </label>
                         <div className="">
                           <label htmlFor="image" type='button' className="bi bi-upload text-white btn bg-secondary"> Tải ảnh lên</label>
-                          <input type="file" multiple hidden className="" name="image" id="image" onChange={handleFileSelect} />
+                          <input type="file" multiple hidden className="" name="imageSet" id="image" onChange={handleFileSelect} />
                         </div>
                         {
-                          listImage.length === 0 &&
+                          listImage?.length === 0 &&
                           <div>
                             <img className="" src="https://content.hostgator.com/img/weebly_image_sample.png" alt="" />
                           </div>
                         }
-
                       </div>
                     </div>
                     <div className="row">
-                      {listImage.map((element, index) => (
+                      {listImage?.map((element, index) => (
                         <div className="col-4 px-5" key={index}>
                           <div style={{ position: 'relative' }}>
                             <img className="w-100 h-100" src={element} alt="image" />
@@ -311,13 +360,17 @@ export default function ProductCreate() {
                         </div>
                       ))}
                     </div>
+                    <div>
+                    <button onClick={handleSendDataDetailProduct} className={'text-secondary button-buy float-end mt-5 fs-6 text-decoration-none'}><span className="fw-normal fs-6">Cập nhật chi tiết sản phẩm</span></button>
+                    </div>
+                    
                   </div>
                   <div className="row">
                     <div className="col-6 mt-3">
                       <button type='button' className="button-buy float-end" onClick={() => resetForm()}>Hủy nhập</button>
                     </div>
                     <div className="col-6 mt-3">
-                      <button className="button-buy" type="submit">Thêm mới</button>
+                      <button className="button-buy" type="submit">Cập nhật</button>
                     </div>
                   </div>
                 </Form>

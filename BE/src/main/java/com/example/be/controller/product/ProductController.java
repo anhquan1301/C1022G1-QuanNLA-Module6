@@ -1,7 +1,6 @@
 package com.example.be.controller.product;
 
-import com.example.be.dto.product.CapacityProductDTO;
-import com.example.be.dto.product.ProductCreateDTO;
+import com.example.be.dto.product.*;
 import com.example.be.dto.response.ResponseMessage;
 import com.example.be.model.*;
 import com.example.be.service.product.*;
@@ -16,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @RestController
 @CrossOrigin("*")
@@ -67,19 +64,22 @@ public class ProductController {
     }
     @GetMapping("detail")
     public ResponseEntity<?> detailProduct(@RequestParam(required = false)Integer id){
-        if(iProductService.findByProduct(id)==null){
+        Product product = iProductService.findByProduct(id);
+        if(product==null){
             return new ResponseEntity<>(new ResponseMessage("Sản phẩm không tồn tại"),HttpStatus.BAD_REQUEST);
         }
-        try {
-            Integer.parseInt(String.valueOf(id));
-        } catch (NumberFormatException e) {
-            return new ResponseEntity<>(new ResponseMessage("Id không hợp lệ"), HttpStatus.BAD_REQUEST);
+        if(!product.isDataEntry()){
+            return new ResponseEntity<>(new ResponseMessage("Sản phẩm chưa có dữ liệu"),HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(iProductService.findByProduct(id),HttpStatus.OK);
+        return new ResponseEntity<>(product,HttpStatus.OK);
     }
     @GetMapping("sale-list")
     public ResponseEntity<?> productSaleList(){
         return new ResponseEntity<>(iProductService.productSaleList(),HttpStatus.OK);
+    }
+    @GetMapping("/not-data")
+    public ResponseEntity<?> listProductNotData(@PageableDefault(size = 8,sort = {"id"},direction = Sort.Direction.DESC)Pageable pageable){
+        return new ResponseEntity<>(iProductService.productNotData(pageable),HttpStatus.OK);
     }
     @PostMapping("/create")
     public ResponseEntity<?> productCreate(@RequestBody ProductCreateDTO productCreateDTO){
@@ -101,6 +101,7 @@ public class ProductController {
         product.setProductType(productType);
         product.setProducer(producer);
         product.setDelete(false);
+        product.setDataEntry(false);
         Product product1 = iProductService.productCreate(product);
         for ( String imageName : productCreateDTO.getImageSet()) {
             Image image = new Image();
@@ -108,15 +109,103 @@ public class ProductController {
             image.setProduct(product1);
             iImageService.createImage(image);
         }
-        for (CapacityProductDTO capacityProductDTO : productCreateDTO.getCapacityProductDTOS()) {
-            CapacityProduct capacityProduct = new CapacityProduct();
-            BeanUtils.copyProperties(capacityProductDTO,capacityProduct);
-            capacityProduct.setPrice(capacityProductDTO.getPrice().equals("") ? null : capacityProductDTO.getPrice());
-            capacityProduct.setProduct(product1);
-            iCapacityProductService.capacityProductCreate(capacityProduct);
-        }
         return new ResponseEntity<>("Thêm mới thành công",HttpStatus.CREATED);
     }
+    @PutMapping("/update")
+    public ResponseEntity<?> productUpdate(@RequestBody ProductUpdateDTO productUpdateDTO){
+        Product product = iProductService.findByProduct(productUpdateDTO.getId());
+        if (product==null){
+            return new ResponseEntity<>(new ResponseMessage("Sản phẩm không tồn tại"),HttpStatus.BAD_REQUEST);
+        }
+        BeanUtils.copyProperties(productUpdateDTO,product);
+        iProductService.productUpdate(product);
+        for (Image image : product.getImageSet()) {
+            boolean flag = false;
+            for (ImageProductDTO imageProductDTO :productUpdateDTO.getImageSet() ) {
+                if(image.getId()==imageProductDTO.getId()){
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
+                iImageService.deleteImage(image.getId());
+            }
+        }
+        for (ImageProductDTO imageProductDTO : productUpdateDTO.getImageSet()) {
+            if(!iImageService.existsById(imageProductDTO.getId())) {
+                Image image1 = new Image();
+                image1.setName(imageProductDTO.getName());
+                image1.setProduct(product);
+                iImageService.createImage(image1);
+            } else {
+                Image image = iImageService.findByImageId(imageProductDTO.getId());
+                image.setId(imageProductDTO.getId());
+                image.setName(imageProductDTO.getName());
+                image.setProduct(product);
+                iImageService.updateImage(image);
+            }
+        }
+        return new ResponseEntity<>(new ResponseMessage("Cập nhật sản phẩm thành công"),HttpStatus.OK);
+    }
+    @PostMapping("/data-entry")
+    public ResponseEntity<?> dataEntry(@RequestBody DataEntryDTO dataEntryDTO){
+        Product product = iProductService.findByProduct(dataEntryDTO.getProductId());
+        for (CapacityProductDTO capacityProductDTO : dataEntryDTO.getCapacityProductDTOS()) {
+            CapacityProduct capacityProduct = new CapacityProduct();
+            capacityProduct.setQuantity(capacityProductDTO.getQuantity());
+            capacityProduct.setPriceSale(capacityProductDTO.getPriceSale());
+            if(!capacityProductDTO.getPrice().equals("")){
+            capacityProduct.setPrice(capacityProductDTO.getPrice());
+            }
+            capacityProduct.setCapacity(capacityProductDTO.getCapacity());
+            capacityProduct.setProduct(product);
+            iCapacityProductService.capacityProductCreate(capacityProduct);
+        }
+        product.setDataEntry(true);
+        iProductService.productUpdate(product);
+        return new ResponseEntity<>(new ResponseMessage("Nhập dữ liệu sản phẩm thành công"),HttpStatus.OK);
+    }
+    @PutMapping("/data-entry-update")
+    public ResponseEntity<?> dataEntryUpdate(@RequestBody DataEntryDTO dataEntryDTO){
+        Product product = iProductService.findByProduct(dataEntryDTO.getProductId());
+        for ( CapacityProduct capacityProduct : product.getCapacityProductSet()) {
+            boolean flag = false;
+            for ( CapacityProductDTO capacityProductDTO : dataEntryDTO.getCapacityProductDTOS()) {
+                if(capacityProduct.getId()!=capacityProductDTO.getId()){
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag){
+                iCapacityProductService.deleteCapacityProduct(capacityProduct.getId());
+            }
+        }
+        for (CapacityProductDTO capacityProductDTO : dataEntryDTO.getCapacityProductDTOS()) {
+            if(iCapacityProductService.findById(capacityProductDTO.getId())!=null){
+                CapacityProduct capacityProduct = iCapacityProductService.findById(capacityProductDTO.getId());
+                capacityProduct.setQuantity(capacityProductDTO.getQuantity());
+                capacityProduct.setPriceSale(capacityProductDTO.getPriceSale());
+                if(!capacityProductDTO.getPrice().equals("")){
+                    capacityProduct.setPrice(capacityProductDTO.getPrice());
+                }
+                capacityProduct.setCapacity(capacityProductDTO.getCapacity());
+                capacityProduct.setProduct(product);
+                iCapacityProductService.updateQuantityProduct(capacityProduct);
+            }else {
+                CapacityProduct capacityProduct = new CapacityProduct();
+                capacityProduct.setQuantity(capacityProductDTO.getQuantity());
+                capacityProduct.setPriceSale(capacityProductDTO.getPriceSale());
+                if(!capacityProductDTO.getPrice().equals("")){
+                    capacityProduct.setPrice(capacityProductDTO.getPrice());
+                }
+                capacityProduct.setCapacity(capacityProductDTO.getCapacity());
+                capacityProduct.setProduct(product);
+                iCapacityProductService.capacityProductCreate(capacityProduct);
+            }
+        }
+        return new ResponseEntity<>(new ResponseMessage("Cập nhật dữ liệu sản phẩm thành công"),HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteProduct(@RequestParam(required = false) Integer id){
         Product product = iProductService.findByProduct(id);
@@ -126,4 +215,5 @@ public class ProductController {
        iProductService.deleteProduct(product);
        return new ResponseEntity<>(new ResponseMessage("Xóa sản phẩm thành công"),HttpStatus.OK);
     }
+
 }

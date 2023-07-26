@@ -10,7 +10,6 @@ import cartService from "../service/login/cart/cartService"
 import Swal from "sweetalert2"
 import { QuantityContext } from "./QuantityContext"
 
-
 export default function ProductList() {
     const [productList, setProductList] = useState([])
     const [selectRadio, setSelectRadio] = useState('');
@@ -25,16 +24,16 @@ export default function ProductList() {
         productTypeId: '',
         producerId: '',
         minPrice: 0,
-        maxPrice: 3000000
+        maxPrice: 3000000,
+        nameSort:'',
     })
     const sortList = ['Tên: A-Z', 'Tên: Z-A', 'Giá: Giảm dần', 'Giá: Tăng dần']
     const { iconQuantity, setIconQuantity } = useContext(QuantityContext)
     const role = localStorage.getItem('role')
-    const [nameSort, setNameSort] = useState('')
     const navigate = useNavigate()
     const findByName = async () => {
         try {
-            const res = await productService.findByName({ ...valueSearch, name: search }, nameSort)
+            const res = await productService.findByName({ ...valueSearch, name: search })
             console.log(res.data.content);
             setProductList(res.data.content)
             setCurrentPage(res.data.number)
@@ -71,35 +70,25 @@ export default function ProductList() {
     }, [])
     const handleProductType = (id) => {
         setValueSearch({
-            name: valueSearch.name,
+            ...valueSearch,
             productTypeId: id,
-            producerId: valueSearch.producerId,
-            minPrice: valueSearch.minPrice,
-            maxPrice: valueSearch.maxPrice
         })
     }
     const handlePageClick = async (page) => {
         setCurrentPage(page.selected);
-        const res = await productService.findByName(valueSearch, page.selected, nameSort)
+        const res = await productService.findByName(valueSearch, page.selected)
         setProductList(res.data.content)
     };
-
     const handleCancelRadio = (id) => {
         setValueSearch({
-            name: valueSearch.name,
-            productTypeId: valueSearch.productTypeId,
+            ...valueSearch,
             producerId: id,
-            minPrice: valueSearch.minPrice,
-            maxPrice: valueSearch.maxPrice
         })
         if (selectRadio === id) {
             setSelectRadio('');
             setValueSearch({
-                name: valueSearch.name,
-                productTypeId: valueSearch.productTypeId,
+                ...valueSearch,
                 producerId: '',
-                minPrice: valueSearch.minPrice,
-                maxPrice: valueSearch.maxPrice
             })
         } else {
             setSelectRadio(id);
@@ -113,8 +102,8 @@ export default function ProductList() {
         })
     }, 100);
     const handleSortProduct = async (event) => {
-        const res = await productService.findByName(valueSearch, currentPage, event.target.value)
-        setNameSort(event.target.value)
+       setValueSearch({ ...valueSearch, nameSort : event.target.value })
+        const res = await productService.findByName({ ...valueSearch,nameSort : event.target.value }, currentPage)
         setProductList(res.data.content)
     }
     const handleCreateCart = async (price, idCapacityProduct) => {
@@ -172,7 +161,10 @@ export default function ProductList() {
             if (result.isConfirmed) {
                 try {
                     await productService.deleteProduct(id)
-                    findByName()
+                    const res = await productService.findByName(valueSearch, productList.length === 1 ? currentPage - 1 : currentPage)
+                    setCurrentPage(res.data.number)
+                    setPageCount(res.data.totalPages);
+                    setProductList(res.data.content)
                     Swal.fire({
                         title: 'Xóa sản phẩm thành công',
                         icon: 'success',
@@ -200,11 +192,35 @@ export default function ProductList() {
                             <h4>Danh mục</h4>
                         </div>
                         <hr />
+
                         {
-                            role == 'ROLE_ADMIN' && <div>
-                                <NavLink to={'/product/create'} className="text-decoration-none ms-2 fs-5 fw-bold text-danger"
-                                    aria-current="page">Thêm mới sản phẩm</NavLink>
-                            </div>
+                            role == 'ROLE_ADMIN' &&
+                            <>
+                                <div className="accordion-header mt-2 ms-2" id="headingOne">
+                                    <button
+                                        className="accordion-button fs-6 fw-bold"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#managerProduct"
+                                        aria-expanded="true"
+                                        aria-controls="collapseOne">
+                                        Quản lí sản phẩm
+                                    </button>
+                                </div>
+                                <div id="managerProduct"
+                                    className="accordion-collapse collapse show "
+                                    aria-labelledby="headingOne"
+                                    data-bs-parent="#accordionExample">
+                                    <div className="nav-item my-2 ms-4">
+                                        <NavLink to={'/product/create'} className="nav-link link-dark  text-truncate"
+                                            aria-current="page">Thêm mới sản phẩm</NavLink>
+                                    </div>
+                                    <div className="nav-item my-2 ms-4">
+                                        <NavLink to={'/product/not-data'} className="nav-link link-dark  text-truncate"
+                                            aria-current="page">Danh sách chưa nhập liệu</NavLink>
+                                    </div>
+                                </div>
+                            </>
                         }
                         <div className="accordion-header mt-2 ms-2" id="headingOne">
                             <button
@@ -239,11 +255,8 @@ export default function ProductList() {
                                 <button className="nav-link link-dark text-truncate fw-bold"
                                     aria-current="page"
                                     onClick={() => setValueSearch({
-                                        name: valueSearch.name,
-                                        productTypeId: '',
-                                        producerId: valueSearch.producerId,
-                                        minPrice: valueSearch.minPrice,
-                                        maxPrice: valueSearch.maxPrice
+                                        ...valueSearch,
+                                        productTypeId: ''
                                     })}>Tất cả sản phẩm</button>
                             </div>
                         </div>
@@ -344,9 +357,17 @@ export default function ProductList() {
                                                     <div className="cart-icon">
                                                         <i type="button" onClick={() => { handleCreateCart(element.capacityProductSet[0].priceSale, element.capacityProductSet[0].id) }} className="bi bi-cart-plus" aria-hidden="true"></i>
                                                     </div>
-                                                    <div className="trash-icon">
-                                                        <i type='button' onClick={() => { handdleDeleteProduct(element.id, element.imageSet[0].name) }} className="bi bi-trash" />
-                                                    </div>
+                                                    {
+                                                        role === 'ROLE_ADMIN' &&
+                                                        <>
+                                                            <div className="trash-icon">
+                                                                <i type='button' onClick={() => { handdleDeleteProduct(element.id, element.imageSet[0].name) }} className="bi bi-trash" />
+                                                            </div>
+                                                            <div className="edit-icon">
+                                                                <NavLink to={`/product/update/${element.id}`} type='button' className="bi bi-pencil-square text-decoration-none edit-icon-nav" ></NavLink>
+                                                            </div>
+                                                        </>
+                                                    }
                                                     <NavLink to={`detail/${element.id}`} className={'text-decoration-none text-secondary'}>
                                                         <img src={element.imageSet[0].name}
                                                             className="card-img-top" alt="..." width={'100%'} />

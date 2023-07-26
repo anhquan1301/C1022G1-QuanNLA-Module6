@@ -6,6 +6,8 @@ import com.example.be.service.product.IImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
 public class ImageService implements IImageService {
     @Autowired
@@ -20,5 +22,21 @@ public class ImageService implements IImageService {
     public void createImage(Image image) {
         iImageRepository.save(image);
     }
+
+    @Override
+    public void updateImage(Image image) {
+        iImageRepository.save(image);
+    }
+
+    @Override
+    public Boolean existsById(int id) {
+        return iImageRepository.existsById(id);
+    }
+
+    @Override
+    public void deleteImage(int id) {
+        iImageRepository.delete(findByImageId(id));
+    }
+
 
 }

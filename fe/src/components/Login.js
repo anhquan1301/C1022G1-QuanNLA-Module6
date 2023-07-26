@@ -253,7 +253,6 @@ export default function Login() {
                     )}
                 </Formik>
             }
-
             {
                 showOtpModal && <Formik
                     initialValues={{
@@ -363,10 +362,6 @@ export default function Login() {
                     </Form>
                 </Formik>
             }
-
-
-
-
             {
                 showFormResetPass && <Formik
                     initialValues={{

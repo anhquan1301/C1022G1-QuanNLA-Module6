@@ -51,7 +51,6 @@ export default function Header() {
   if(avatarDetail===undefined){
     setAvatarDetail('https://firebasestorage.googleapis.com/v0/b/quannla.appspot.com/o/files%2Fanh-avatar-trang-fb-mac-dinh.jpg?alt=media&token=10a4447c-33df-4390-a5fb-0ccc5d97069a')
   }
-  console.log(avatarDetail);
   return (
     <>
       <header className=''>

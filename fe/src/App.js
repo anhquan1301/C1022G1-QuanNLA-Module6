@@ -17,6 +17,10 @@ import PaymentPaypal from './components/PaymentPaypal';
 import ProductCreate from './components/ProductCreate';
 import File404 from './components/File404';
 import OAuth2 from './components/OAuth2';
+import ListProductNotData from './components/ListProductNotData';
+import DataEntry from './components/DataEntry';
+import ProductUpdate from './components/ProductUpdate';
+import DataEntryUpdate from './components/DataEntryUpdate';
 
 function App() {
   return (
@@ -34,6 +38,10 @@ function App() {
               <Route path='/product' element={<ProductList />} />
               <Route path='/customer/detail' element={<CustomerDetail />} />
               <Route path='/product/create' element={<ProductCreate />} />
+              <Route path='/product/update/:id' element={<ProductUpdate />} />
+              <Route path='/product/not-data' element={<ListProductNotData />} />
+              <Route path='/product/data-entry/:id/:name/:img' element={<DataEntry />} />
+              <Route path='/product/data-entry/update/:id/:name/:img' element={<DataEntryUpdate />} />
               <Route path='/customer/detail/update' element={<CustomerUpdate />} />
               <Route path='*' element={<File404 />} />
             </Route>

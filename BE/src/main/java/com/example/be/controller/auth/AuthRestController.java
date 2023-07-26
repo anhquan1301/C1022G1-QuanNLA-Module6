@@ -216,7 +216,6 @@ public class AuthRestController {
         iEmailService.sendResetPasswordEmail(mailDTO.getEmail(), otp);
         return new ResponseEntity<>(mailDTO.getEmail(), HttpStatus.OK);
     }
-
     @PutMapping("/check-otp")
     public ResponseEntity<?> confirmForgotPassword(@Validated @RequestBody OtpDTO employeeOtpDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

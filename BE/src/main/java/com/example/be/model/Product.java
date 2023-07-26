@@ -37,6 +37,7 @@ public class Product {
     @OrderBy("priceSale ASC")
     private List<CapacityProduct> capacityProductSet = new ArrayList<>();
 
+    private boolean isDataEntry;
     private boolean isDelete;
 
     public Product() {
@@ -137,5 +138,13 @@ public class Product {
 
     public void setImageSet(List<Image> imageSet) {
         this.imageSet = imageSet;
+    }
+
+    public boolean isDataEntry() {
+        return isDataEntry;
+    }
+
+    public void setDataEntry(boolean dataEntry) {
+        isDataEntry = dataEntry;
     }
 }

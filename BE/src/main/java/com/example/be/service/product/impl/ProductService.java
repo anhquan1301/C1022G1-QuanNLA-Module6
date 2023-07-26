@@ -43,8 +43,18 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public Product productUpdate(Product product) {
+        return iProductRepository.save(product);
+    }
+
+    @Override
     public void deleteProduct(Product product) {
         product.setDelete(true);
         iProductRepository.save(product);
+    }
+
+    @Override
+    public Page<Product> productNotData(Pageable pageable) {
+        return iProductRepository.productNotData(pageable);
     }
 }

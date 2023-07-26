@@ -20,6 +20,7 @@ public interface IProductService {
     List<IProductSaleList> productSaleList();
     Integer getTotalCodeAmount();
     Product productCreate(Product product);
-
+    Product productUpdate(Product product);
     void deleteProduct(Product product);
+    Page<Product> productNotData(Pageable pageable);
 }

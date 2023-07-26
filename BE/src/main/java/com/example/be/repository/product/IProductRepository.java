@@ -21,7 +21,7 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
             "           AND (p.product_type_id = :productTypeId OR :productTypeId = '')\n" +
             "        AND (p.producer_id = :producerId OR :producerId = '')\n" +
             "              AND cp.price_sale >= :minPrice\n" +
-            "            AND cp.price_sale <= :maxPrice AND p.is_delete = FALSE\n", nativeQuery = true)
+            "            AND cp.price_sale <= :maxPrice AND p.is_delete = FALSE AND p.is_data_entry = true\n", nativeQuery = true)
     Page<Product> searchProduct(@Param("name") String name,
                                 @Param("productTypeId") String productTypeId,
                                 @Param("producerId") String producerId,
@@ -29,6 +29,8 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
                                 @Param("maxPrice") Long maxPrice,
                                 Pageable pageable);
     Product findById(int id);
+    @Query(value = "SELECT * FROM product where is_delete = false and is_data_entry = false",nativeQuery = true)
+    Page<Product> productNotData(Pageable pageable);
     @Query(value = "SELECT p.id, p.name,\n" +
             "       (SELECT i.name FROM image i WHERE i.product_id = p.id LIMIT 1) AS imageName,\n" +
             "       MIN(cp.price) AS capacityProductPrice, MIN(cp.price_sale) AS capacityProductPriceSale\n" +

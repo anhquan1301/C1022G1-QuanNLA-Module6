@@ -80,7 +80,7 @@ export default function CustomerDetail() {
             modalBody.style.removeProperty('padding-right');
         }
     }
-    console.log(customerDetail);
+    console.log(detailCartList);
     return (
         <>
             {
@@ -120,7 +120,7 @@ export default function CustomerDetail() {
                                                     </tr>
                                                     <tr>
                                                         <th className="th-dieucosmetics">Giới tính :</th>
-                                                        <td>{ customerDetail?.gender ? (customerDetail?.gender === false ? 'Nam' : 'Nữ') : ("(Chưa cập nhật)") }</td>
+                                                        <td>{ customerDetail?.gender !== null ? (customerDetail?.gender === false ? 'Nam' : 'Nữ') : ("(Chưa cập nhật)") }</td>
                                                     </tr>
                                                     <tr>
                                                         <th className="th-dieucosmetics">Ngày sinh :</th>
@@ -204,7 +204,7 @@ export default function CustomerDetail() {
                                                         <tbody>
                                                             <tr>
                                                                 <th className="th-dieucosmetics">Số điện thoại :</th>
-                                                                <td>{customerDetail?.phoneNumber ? customerDetail?.phoneNumber : "(Chưa cập nhật)"}</td>
+                                                                <td>{customerDetail?.phoneNumber ? customerDetail?.phoneNumber.replace(/(\d{4})(\d{3})(\d{3})/, "$1-$2-$3") : "(Chưa cập nhật)"}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th className="th-dieucosmetics ">
@@ -403,7 +403,7 @@ export default function CustomerDetail() {
                                                         <td scope="row" style={{ height: '100px' }}>{index + 1}</td>
                                                         <td><img width={'50px'} src={element.product.imageSet[0].name} /></td>
                                                         <td>{element.product.code}</td>
-                                                        <td>{element.product.capacityProductSet[0].capacity.name}</td>
+                                                        <td>{element?.product?.capacityProductSet[0]?.capacity?.name}</td>
                                                         <td>{(+element.price).toLocaleString(
                                                             "vi-VN",
                                                             { style: "currency", currency: "VND" }

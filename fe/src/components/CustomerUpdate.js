@@ -50,7 +50,7 @@ export default function CustomerUpdate() {
     }, [token])
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
-        if (file instanceof File || file instanceof Blob) {
+        if (file instanceof File || file instanceof Blob) { 
             const extension = file.name
             const isImage = /\.(jpg|jpeg|png|gif)$/i.test(extension);
             !isImage ? setAvatarErr(true) : setAvatarErr(false)
@@ -132,7 +132,6 @@ export default function CustomerUpdate() {
                                 .matches(/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/, 'Nhập đúng định dạng SDT VD: 0903.XXX.XXX (X là chữ số)'),
                             address: Yup.string().required('Không được bỏ trống'),
                             email: Yup.string().required('Không được bỏ trống').email('Nhập đúng định dạng email'),
-                            // avatar: Yup.string().required('Không được bỏ trống').matches(/^.{0,}(.png|.jpg|.jpeg)[?](alt=media&token=).{0,}$/, 'Sai định dạng ảnh, phải có dạng đuôi .jpg, .jpeg, .png')
                         })}
                         onSubmit={(value, { setSubmitting }) => {
                             const editCustomer = async () => {

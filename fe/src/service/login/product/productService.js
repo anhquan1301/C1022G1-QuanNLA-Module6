@@ -7,10 +7,22 @@ const detail = (id)=>{
         console.log(error);
     }
 }
-const findByName = ({name,productTypeId,producerId,minPrice,maxPrice},page,sortType)=>{
-    console.log({ name,productTypeId,producerId,minPrice,maxPrice});
+const findByName = ({name,productTypeId,producerId,minPrice,maxPrice,nameSort},page)=>{
+    console.log({ name,productTypeId,producerId,minPrice,maxPrice,nameSort});
     try {
-        return request.get(`/product?name=${name?name:''}&productTypeId=${productTypeId?productTypeId:''}&producerId=${producerId?producerId:''}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page ? page : 0}&sortType=${sortType}`)
+        return request.get(`/product?name=${name?name:''}&productTypeId=${productTypeId?productTypeId:''}&producerId=${producerId?producerId:''}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page ? page : 0}&sortType=${nameSort}`)
+    } catch (error) {
+        console.log(error);
+    }
+}
+const productListNotData = (page)=>{
+    const token = localStorage.getItem('token')
+    try {
+        return request.get(`/product/not-data?page=${page ? page : 0}`, {
+            headers : {
+                'Authorization': `Bearer ${token}`
+            }
+        })
     } catch (error) {
         console.log(error);
     }
@@ -68,6 +80,47 @@ const deleteProduct = (id)=>{
         console.log(error);
     }
 }
+const dataEntry = (value)=>{
+    const token = localStorage.getItem('token')
+    try {
+        return request.post(`/product/data-entry`,{ ...value }, {
+            headers : {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+const dataEntryUpdate = (value)=>{
+    for (const element of value.capacityProductDTOS) {
+        if(element.price===null){
+          element.price = ''
+        }
+    }
+    const token = localStorage.getItem('token')
+    try {
+        return request.put(`/product/data-entry-update`,{ ...value }, {
+            headers : {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+const productUpdate = (value)=>{
+    const token = localStorage.getItem('token')
+    try {
+        return request.put(`/product/update`,{ ...value }, {
+            headers : {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
 export const productService = {
     detail,
     findByName,
@@ -76,6 +129,10 @@ export const productService = {
     productSaleList,
     fildAllCapacity,
     productCreate,
-    deleteProduct
+    deleteProduct,
+    productListNotData,
+    dataEntry,
+    productUpdate,
+    dataEntryUpdate
 }
 export default productService

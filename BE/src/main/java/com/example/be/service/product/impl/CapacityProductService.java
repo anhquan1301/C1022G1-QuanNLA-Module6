@@ -28,4 +28,9 @@ public class CapacityProductService implements ICapacityProductService {
     public Integer getIdCapacityProduct() {
         return iCapacityProductRepository.getIdCapacityProduct();
     }
+
+    @Override
+    public void deleteCapacityProduct(int id) {
+        iCapacityProductRepository.delete(findById(id));
+    }
 }

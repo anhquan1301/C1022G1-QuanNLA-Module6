@@ -25,7 +25,7 @@ public class CapacityProduct {
     private String priceSale;
     @Column(columnDefinition = "INT")
     private String quantity;
-    @OneToMany
+    @OneToMany(mappedBy = "capacityProduct",cascade = CascadeType.REMOVE)
     @JsonManagedReference(value = "capacityProductCartBackRef")
     @OrderBy("capacityProduct.id ASC")
     private Set<Cart> cartSet = new TreeSet<>();

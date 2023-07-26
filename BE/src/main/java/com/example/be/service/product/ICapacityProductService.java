@@ -7,4 +7,6 @@ public interface ICapacityProductService {
     void updateQuantityProduct (CapacityProduct capacityProduct);
     void capacityProductCreate (CapacityProduct capacityProduct);
     Integer getIdCapacityProduct();
+
+    void deleteCapacityProduct(int id);
 }

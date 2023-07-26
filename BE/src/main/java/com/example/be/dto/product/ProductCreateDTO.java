@@ -13,8 +13,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class ProductCreateDTO {
-    private Integer id;
-
     private String code;
     @NotBlank
     private String name;
@@ -31,17 +29,9 @@ public class ProductCreateDTO {
 
     private Set<String> imageSet = new TreeSet<>();
 
-    private List<CapacityProductDTO> capacityProductDTOS = new ArrayList<>();
+
     public ProductCreateDTO() {
     }
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getCode() {
         return code;
     }
@@ -107,11 +97,4 @@ public class ProductCreateDTO {
         this.imageSet = imageSet;
     }
 
-    public List<CapacityProductDTO> getCapacityProductDTOS() {
-        return capacityProductDTOS;
-    }
-
-    public void setCapacityProductDTOS(List<CapacityProductDTO> capacityProductDTOS) {
-        this.capacityProductDTOS = capacityProductDTOS;
-    }
 }

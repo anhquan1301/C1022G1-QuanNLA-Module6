@@ -33,11 +33,14 @@ export default function Detail() {
         try {
             const res = await productService.detail(param.id)
             setProductDetail(res.data)
-            setCapacityId(res.data.capacityProductSet[0].capacity.id)
+            setCapacityId(res?.data?.capacityProductSet[0]?.capacity?.id)
             setShowProductErr(false)
         } catch (error) {
             console.log(error);
             if (error.response.data.message === 'Sản phẩm không tồn tại') {
+                setShowProductErr(true)
+            }
+            if (error.response.data.message === 'Sản phẩm chưa có dữ liệu') {
                 setShowProductErr(true)
             }
         }
@@ -96,9 +99,7 @@ export default function Detail() {
     }
 
 
-    // if (!productDetail) {
-    //    return null
-    // }
+
     const handleChangeQuantity = (e) => {
         if (+e.target.value + +productDetail?.capacityProductSet[activeButton]?.cartSet
             .filter(element => element.user.id === customerDetail?.id)
@@ -127,7 +128,9 @@ export default function Detail() {
         })
         navigate('/login')
     }
-
+    // if (!productDetail) {
+    //    return null
+    // }
     return (
         <>
             {

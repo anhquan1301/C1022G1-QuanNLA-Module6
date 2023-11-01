@@ -42,8 +42,6 @@ public class CartController {
     @Autowired
     private IUserService iUserService;
     @Autowired
-    private IProductService iProductService;
-    @Autowired
     private ICapacityProductService iCapacityProductService;
     @Autowired
     private IOderDetailService iOderDetailService;

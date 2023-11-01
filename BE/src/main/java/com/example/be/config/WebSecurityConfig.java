@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     @Autowired
-    private CustomOAuth2UserService oauth2UserService;
+    private CustomOAuth2UserService  oauth2UserService;
     @Bean
     public JwtAuthenticationFilter jwtTokenFilter(){
         return new JwtAuthenticationFilter();

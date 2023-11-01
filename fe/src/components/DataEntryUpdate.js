@@ -16,6 +16,7 @@ export default function DataEntryUpdate() {
   const [listData, setListData] = useState(JSON.parse(localStorage.getItem('dataCapacity')))
   const navigate = useNavigate()
   const handleListData = (values, resetForm) => {
+
     if (values.capacity === '' || values.priceSale === '' || values.quantity === '') {
       return Swal.fire({
         icon: 'error',
@@ -23,21 +24,28 @@ export default function DataEntryUpdate() {
         showConfirmButton: false,
         timer: 1500
       })
+      
     }
     const capacity = capacityList.filter(element => +element.id === +values.capacity)
     let flag = false;
+    const foundObj = listData.find(element => +element.capacity.id === +values.capacity)
+    const maxId = listData.reduce((max, obj) => (obj.id > max ? obj.id : max), 0);
+
     for (const element of listData) {
-      if (+element.capacity.id === +values.capacity) {
+      if (+element.id === +values.id) {
+        if (!foundObj && +values.capacity > 0) {
+          element.capacity = capacity[0]
+        }
         element.price = values.price
         element.quantity = values.quantity
-        element.capacity = capacity[0]
         element.priceSale = values.priceSale
         flag = true
       }
     }
-    if (!flag) {
+
+    if (!flag && !foundObj) {
       const newData = {
-        id: 0,
+        id: maxId + 1000,
         capacity: capacity[0],
         quantity: values.quantity,
         price: values.price,
@@ -48,6 +56,8 @@ export default function DataEntryUpdate() {
     }
     resetForm({ values: { ...values, id: '', capacity: '', quantity: '', price: '', priceSale: '' } });
   }
+
+
   const findAllCapacity = async () => {
     try {
       const rs = await productService.fildAllCapacity()
@@ -60,10 +70,9 @@ export default function DataEntryUpdate() {
     findAllCapacity()
   }, [])
   const handleDeleteDataProduct = (id) => {
-    setListData(listData.filter(element => element.capacity.id != id))
+    setListData(listData.filter(element => element.id != id))
   }
   const handleCapacitiesUpdate = (values, id, capacityId, quantity, price, priceSale, resetForm) => {
-
     values.id = id;
     values.capacity = capacityId;
     values.quantity = quantity;
@@ -222,7 +231,7 @@ export default function DataEntryUpdate() {
                                           currency: "VND",
                                         })}</td>
                                         <td><span type='button' className="capacity-delete bi bi-pencil-square text-dieucosmetics fs-5" onClick={() => handleCapacitiesUpdate(values, element.id, element.capacity.id, element.quantity, element.price, element.priceSale, resetForm)}></span></td>
-                                        <td><span type='button' onClick={() => handleDeleteDataProduct(element.capacity.id)} className="capacity-delete bi bi-trash text-dieucosmetics fs-5"></span></td>
+                                        <td><span type='button' onClick={() => handleDeleteDataProduct(element.id)} className="capacity-delete bi bi-trash text-dieucosmetics fs-5"></span></td>
                                       </tr>
                                     ))
                                   }

@@ -13,7 +13,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private IUserRepository iUserRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user  = iUserRepository.findByUserName(username).orElseThrow(()-> new UsernameNotFoundException("Không tìm thấy tên người dùng"+username));

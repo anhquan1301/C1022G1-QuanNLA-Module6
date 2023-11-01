@@ -98,6 +98,7 @@ const dataEntryUpdate = (value)=>{
           element.price = ''
         }
     }
+    console.log(value);
     const token = localStorage.getItem('token')
     try {
         return request.put(`/product/data-entry-update`,{ ...value }, {

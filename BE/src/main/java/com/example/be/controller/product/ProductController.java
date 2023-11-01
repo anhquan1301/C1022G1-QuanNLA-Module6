@@ -168,15 +168,10 @@ public class ProductController {
     @PutMapping("/data-entry-update")
     public ResponseEntity<?> dataEntryUpdate(@RequestBody DataEntryDTO dataEntryDTO){
         Product product = iProductService.findByProduct(dataEntryDTO.getProductId());
-        for ( CapacityProduct capacityProduct : product.getCapacityProductSet()) {
-            boolean flag = false;
-            for ( CapacityProductDTO capacityProductDTO : dataEntryDTO.getCapacityProductDTOS()) {
-                if(capacityProduct.getId()!=capacityProductDTO.getId()){
-                    flag = true;
-                    break;
-                }
-            }
-            if (flag){
+        List<CapacityProduct> uniqueObj = new ArrayList<>(product.getCapacityProductSet());
+        uniqueObj.removeIf(capacityProduct -> dataEntryDTO.getCapacityProductDTOS().stream().anyMatch(capacityProductDTO -> capacityProduct.getId() == capacityProductDTO.getId()));
+        if(!uniqueObj.isEmpty()){
+            for ( CapacityProduct capacityProduct : uniqueObj) {
                 iCapacityProductService.deleteCapacityProduct(capacityProduct.getId());
             }
         }

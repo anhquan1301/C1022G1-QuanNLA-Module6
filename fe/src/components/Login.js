@@ -1,10 +1,11 @@
-import { Formik, Form, Field } from "formik";
+import { Field, Form, Formik } from "formik";
 import { NavLink, useNavigate } from "react-router-dom";
-import loginService from "../service/login/loginService";
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { RotatingLines } from "react-loader-spinner";
+
 import { AvatarContext } from "./AvatarContext";
+import { RotatingLines } from "react-loader-spinner";
+import Swal from "sweetalert2";
+import loginService from "../service/login/loginService";
 import { useContext } from "react";
 
 export default function Login() {
